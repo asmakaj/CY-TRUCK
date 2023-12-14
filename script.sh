@@ -127,19 +127,24 @@ do
    case $option in
         `-d1`)
             echo "Traitement D1..."
-            time progc/executable -d1 "$input_file" temp/result_d1 ;;
+             # Code pour le traitement
+            ;;
         `-d2`)
             echo "Traitement D2..."
-            time progc/executable -d2 "$input_file" temp/result_d2 ;;
+            # Code pour le traitement
+            ;;
         `-l`)
             echo "Traitement L..."
-            time progc/executable -l "$input_file" temp/result_l ;;
+            # Code pour le traitement
+            ;;
         `-t`)
             echo "Traitement T..."
-            time progc/executable -t "$input_file" temp/result_t ;;
+            # Code pour le traitement
+            ;;
         `-s`)
             echo "Traitement S..."
-            time progc/executable -s "$input_file" temp/result_s ;;
+            # Code pour le traitement
+            ;;
         *)
             echo "Option non reconnue."
             exit 1 ;;
