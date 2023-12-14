@@ -1,0 +1,24 @@
+Structure sricpt shell
+
+
+Fonctions :
+
+-	Création des fichiers temp et images
+-	Vérification de l’exécutable c
+-	Traitement -h 
+-	Création des graphiques avec gnuplot
+-	Affichage du temps d’exécution
+
+
+MAIN :
+
+1-	Récupération et vérification (existence et .csv) du fichier.csv
+2-	Création du fichier data et copie du fichier.csv dedans
+3-	Cas du -h
+4-	Vérification des dossier temp et images
+5-	Vérification de l’exécutable c
+6-	Exécutions des différents traitements
+
+Maintenant, le fichier.csv = intput_file et non $1 qui correspond au premier traitement.
+Pour avoir accès au fichier, il faut utiliser la variable intput_file.
+
