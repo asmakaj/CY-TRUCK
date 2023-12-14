@@ -1,6 +1,6 @@
 STRUCTURE DU PROJET
 
-• data > fichier.csv
+• data > fichier.csv (= chemin pour acceder au fichier depuis votre pc) /Users/deeu/Desktop/data.csv
 • progc > source.c (= programe.c)
         > makefile
         > executable (= prog)
