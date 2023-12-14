@@ -1,9 +1,9 @@
 STRUCTURE DU PROJET
 
 • data > fichier.csv
-• progc > source.c
+• progc > source.c (= programe.c)
         > makefile
-        > executable
+        > executable (= prog)
         > fichier.h
 • images
 • temp
