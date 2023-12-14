@@ -10,9 +10,9 @@ file="temp"
 if [ -d "$file" ]
 then
     # Verifier si le dossier n'est pas vide
-    if [ "$(ls -A "$dossier")" ]
+    if [ "$(ls -A "$dossier")" ] # S'arranger pour que ç an'afiche pas ça dans le terminal : ls: : No such file or directory
     then
-        echo "Le dossier n'est pas vide."
+        echo "Le dossier n'est pas vide.\n"
         # Vider le dossier
         rm -rf temp/*
     fi
@@ -25,43 +25,19 @@ mkdir -p temp images
 executable_verification() {
 if [ ! -f progc/prog ]
 then
-    echo "Compilation en cours..."
+    echo "Compilation en cours...\n"
     # On compile
     gcc -o prog progc/programme.c
     # Verifier si la compilation s'est bien deroulee
     if [ $? -ne 0 ]
     then
-        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer.\n"
         exit 1
     fi
 fi
-echo "L'executable C est present. Execution du programme..."
+echo "L'executable C est present. Execution du programme...\n"
 # On ajoute ici le traitement demande en argument (-d1, -l, ...)
 }
-
-h_traitememnt() {
-# Boucle pour parcourir les arguments
-for arg in `$@`
-do
-    # Si l'argument est égal à "-h", alors on affiche l'aide
-    if [ "$arg" == "-h" ]
-    then
-    echo "---------------------------------------------------"
-    echo "Aide : Options possibles"
-    echo "-d1 : Conducteurs avec le plus de trajets"
-    echo "-d2 : Conducteurs et la plus grande distance"
-    echo "-l : Les 10 trajets les plus longs"
-    echo "-t : Les 10 villes les plus traversees "
-    echo "-s : Statistiques sur les etapes"
-    echo "---------------------------------------------------"
-
-    exit 0
-    fi
-
-done
-}
-
-
 
 # Creation du graphique avec gnuplot
 generate_graph() {
@@ -90,13 +66,13 @@ input_file=$1
 # Vérification de l'existence du fichier
 if [ ! -f "$input_file" ]
 then
-    echo "Le fichier $input_file n'existe pas."
+    echo "Le fichier $input_file n'existe pas.\n"
     exit 1
 fi
 # Vérification de l'extension du fichier
 if [[ ! "$input_file" =~ \.csv$ ]]
 then
-    echo "Le fichier $input_file n'est pas un fichier .csv. Veuillez réessayer svp..."
+    echo "Le fichier $input_file n'est pas un fichier .csv. Veuillez réessayer svp...\n"
     exit 1
 fi
 
@@ -104,10 +80,28 @@ fi
 mkdir -p data
 # Copie du fichier CSV dans le dossier data
 cp "$input_file" data/
-echo "Le fichier $input_file a été copié dans le dossier data avec succès."
+echo "Le fichier $input_file a été copié dans le dossier data avec succès.\n"
 
 # Cas du -h
-h_traitememnt
+# Boucle pour parcourir les arguments
+for arg in `$@`
+do
+    # Si l'argument est égal à "-h", alors on affiche l'aide
+    if [ "$arg" == "-h" ]
+    then
+    echo "---------------------------------------------------"
+    echo "Aide : Options possibles"
+    echo "-d1 : Conducteurs avec le plus de trajets"
+    echo "-d2 : Conducteurs et la plus grande distance"
+    echo "-l : Les 10 trajets les plus longs"
+    echo "-t : Les 10 villes les plus traversees "
+    echo "-s : Statistiques sur les etapes"
+    echo "---------------------------------------------------\n"
+
+    exit 0
+    fi
+
+done
 
 # Vérification des dossiers temp et images
 create_directories
@@ -151,4 +145,4 @@ do
     esac
 done
 
-echo "ÇA COMPIILLEEEE HEHEEEE"
+echo "ÇA COMPIILLEEEE HEHEEEE\n"
