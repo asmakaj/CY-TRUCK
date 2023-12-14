@@ -1,6 +1,6 @@
 STRUCTURE DU PROJET
 
-• data > fichier.csv (= chemin pour acceder au fichier depuis votre pc) /Users/deeu/Desktop/data.csv
+• data > fichier.csv (= chemin pour acceder au fichier depuis votre pc car trop lourd pour vscode et github) /Users/deeu/Desktop/data.csv
 • progc > source.c (= programe.c)
         > makefile
         > executable (= prog)
@@ -9,6 +9,8 @@ STRUCTURE DU PROJET
 • temp
 • demo
 • script.sh 
+
+Pour compiler, par ex: ./script.sh /Users/deeu/Desktop/data.csv -d1 -l
 ------------------------------------------------------------------------------------------------
 STRUCTURE DU SCRIPT SHELL
 
