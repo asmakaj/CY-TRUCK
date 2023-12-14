@@ -90,7 +90,7 @@ input_file=$1
 # Vérification de l'existence du fichier
 if [ ! -f "$input_file" ]
 then
-    echo "Le fichier $input_file n'existe pas heheeeeeee."
+    echo "Le fichier $input_file n'existe pas."
     exit 1
 fi
 # Vérification de l'extension du fichier
