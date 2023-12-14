@@ -43,6 +43,20 @@ echo "L'executable C est present. Execution du programme..."
 # On ajoute ici le traitement demande en argument (-d1, -l, ...)
 }
 
+
+# Boucle pour parcourir les arguments
+for arg in "$@"; do
+    # Si l'argument est égal à "-h", sortir de la boucle
+    if [ "$arg" == "-h" ]; then
+        echo "L'option -h a été trouvée. Arrêt de la boucle."
+        break
+    fi
+    
+    # Ajouter ici le traitement à effectuer pour chaque argument
+    echo "Traitement de l'argument : $arg"
+done
+
+
 # Recuperation des arguments
 input_file=$1
 shift
