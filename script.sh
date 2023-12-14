@@ -27,7 +27,7 @@ if [ ! -f progc/prog ]
 then
     echo "Compilation en cours..."
     # On compile
-    gcc -o prog programme.c
+    gcc -o prog progc/programme.c
     # Verifier si la compilation s'est bien deroulee
     if [ $? -ne 0 ]
     then
