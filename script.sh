@@ -122,26 +122,26 @@ input_file=$1
 shift # Décaler les arguments vers la gauche pour exclure le fichier CSV
 
 # Boucle pour traiter chaque option
-for option in `$@`
+for option in "$@"
 do
    case $option in
-        `-d1`)
+        -d1)
             echo "Traitement D1..."
              # Code pour le traitement
             ;;
-        `-d2`)
+        -d2)
             echo "Traitement D2..."
             # Code pour le traitement
             ;;
-        `-l`)
+        -l)
             echo "Traitement L..."
             # Code pour le traitement
             ;;
-        `-t`)
+        -t)
             echo "Traitement T..."
             # Code pour le traitement
             ;;
-        `-s`)
+        -s)
             echo "Traitement S..."
             # Code pour le traitement
             ;;
