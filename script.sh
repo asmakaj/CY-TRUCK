@@ -62,42 +62,10 @@ done
 }
 
 
-# Execution des differents traitements 
-run_data_processing(){
-    local input_file=$1
-    local option=$2
-
-    case $option in
-        -d1)
-            echo "Traitement D1..."
-            time progc/executable -d1 "$input_file" temp/result_d1
-            ;;
-        -d2)
-            echo "Traitement D2..."
-            time progc/executable -d2 "$input_file" temp/result_d2
-            ;;
-        -l)
-            echo "Traitement L..."
-            time progc/executable -l "$input_file" temp/result_l
-            ;;
-        -t)
-            echo "Traitement T..."
-            time progc/executable -t "$input_file" temp/result_t
-            ;;
-        -s)
-            echo "Traitement S..."
-            time progc/executable -s "$input_file" temp/result_s
-            ;;
-        *)
-            echo "Option non reconnue."
-            exit 1
-            ;;
-    esac
-}
-# Execution des traitements : run_data_processing "$input_file" "$1"
 
 # Creation du graphique avec gnuplot
 generate_graph() {
+    # Création de variables locales, visible que dans la fonction
     local input_file=$1
     local output_file=$2
 
@@ -141,5 +109,40 @@ echo "Le fichier $input_file a été copié dans le dossier data avec succès."
 # Cas du -h
 h_traitememnt
 
+# Vérification des dossiers temp et images
+create_directories
 
+# Vérification de l'executable c
+executable_verification
+
+# Execution des différents traitements
+
+# Le premier argument est le fichier CSV
+input_file=$1
+shift # Décaler les arguments vers la gauche pour exclure le fichier CSV
+
+# Boucle pour traiter chaque option
+for option in `$@`
+do
+   case $option in
+        `-d1`)
+            echo "Traitement D1..."
+            time progc/executable -d1 "$input_file" temp/result_d1 ;;
+        `-d2`)
+            echo "Traitement D2..."
+            time progc/executable -d2 "$input_file" temp/result_d2 ;;
+        `-l`)
+            echo "Traitement L..."
+            time progc/executable -l "$input_file" temp/result_l ;;
+        `-t`)
+            echo "Traitement T..."
+            time progc/executable -t "$input_file" temp/result_t ;;
+        `-s`)
+            echo "Traitement S..."
+            time progc/executable -s "$input_file" temp/result_s ;;
+        *)
+            echo "Option non reconnue."
+            exit 1 ;;
+    esac
+done
 
