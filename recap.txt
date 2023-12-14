@@ -1,5 +1,16 @@
-Structure sricpt shell
+STRUCTURE DU PROJET
 
+• data > fichier.csv
+• progc > source.c
+        > makefile
+        > executable
+        > fichier.h
+• images
+• temp
+• demo
+• script.sh 
+------------------------------------------------------------------------------------------------
+STRUCTURE DU SCRIPT SHELL
 
 Fonctions :
 
