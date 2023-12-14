@@ -10,7 +10,8 @@ file="temp"
 if [ -d "$file" ]
 then
     # Verifier si le dossier n'est pas vide
-    if [ "$(ls -A "$dossier")" ]; then
+    if [ "$(ls -A "$dossier")" ]
+    then
         echo "Le dossier n'est pas vide."
         # Vider le dossier
         rm -rf temp/*
@@ -19,11 +20,6 @@ fi
 # Creer les dossiers
 mkdir -p temp images
 }
-
-
-# Copier le fichier de donnees specifie en argument
-cp "$1" data/
-
 
 # Verification de la presence de l'executable C
 executable_verification() {
@@ -43,27 +39,13 @@ echo "L'executable C est present. Execution du programme..."
 # On ajoute ici le traitement demande en argument (-d1, -l, ...)
 }
 
-
+h_traitememnt() {
 # Boucle pour parcourir les arguments
-for arg in "$@"; do
-    # Si l'argument est égal à "-h", sortir de la boucle
-    if [ "$arg" == "-h" ]; then
-        echo "L'option -h a été trouvée. Arrêt de la boucle."
-        break
-    fi
-    
-    # Ajouter ici le traitement à effectuer pour chaque argument
-    echo "Traitement de l'argument : $arg"
-done
-
-
-# Recuperation des arguments
-input_file=$1
-shift
-
-# Affichage de l'aide
-if [ "$input_file" == "-h" ]
-then
+for arg in `$@`
+do
+    # Si l'argument est égal à "-h", alors on affiche l'aide
+    if [ "$arg" == "-h" ]
+    then
     echo "---------------------------------------------------"
     echo "Aide : Options possibles"
     echo "-d1 : Conducteurs avec le plus de trajets"
@@ -74,7 +56,11 @@ then
     echo "---------------------------------------------------"
 
     exit 0
-fi
+    fi
+
+done
+}
+
 
 # Execution des differents traitements 
 run_data_processing(){
@@ -108,7 +94,6 @@ run_data_processing(){
             ;;
     esac
 }
-
 # Execution des traitements : run_data_processing "$input_file" "$1"
 
 # Creation du graphique avec gnuplot
@@ -118,8 +103,43 @@ generate_graph() {
 
     gnuplot -e "input_file='$input_file'" -e "output_file='$output_file'" progc/graph_script.gp
 }
-
-generate_graph "temp/result_$1" "images/graph_$1.png"
+# Appel de la fonction : generate_graph "temp/result_$1" "images/graph_$1.png"
 
 # Affichage du temps d'execution
+execution_time() {
 echo "Temps d'execution : $SECONDS secondes"
+}
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+# MAIN
+
+# Est ce qu'il y aura obligatoirement 1 argument ???? Sinon verifier qu'il y a au moins 1 argument
+
+# Récupération du fichier CSV passé en argument
+input_file=$1
+
+# Vérification de l'existence du fichier
+if [ ! -f "$input_file" ]
+then
+    echo "Le fichier $input_file n'existe pas."
+    exit 1
+fi
+# Vérification de l'extension du fichier
+if [[ ! "$input_file" =~ \.csv$ ]]
+then
+    echo "Le fichier $input_file n'est pas un fichier .csv. Veuillez réessayer svp..."
+    exit 1
+fi
+
+# Création du dossier "data" s'il n'existe pas
+mkdir -p data
+# Copie du fichier CSV dans le dossier data
+cp "$input_file" data/
+echo "Le fichier $input_file a été copié dans le dossier data avec succès."
+
+# Cas du -h
+h_traitememnt
+
+
+
