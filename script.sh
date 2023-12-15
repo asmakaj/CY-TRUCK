@@ -79,7 +79,7 @@ fi
 # Création du dossier "data" s'il n'existe pas
 mkdir -p data
 # Copie du fichier CSV dans le dossier data
-cp "$input_file" data/
+cp "$input_file" data/ # L'ECRASEMENT POSE PROBLEME ?
 echo "Le fichier $input_file a été copié dans le dossier data avec succès.\n"
 
 # Cas du -h
@@ -96,7 +96,7 @@ do
     echo "-l : Les 10 trajets les plus longs"
     echo "-t : Les 10 villes les plus traversees "
     echo "-s : Statistiques sur les etapes"
-    echo "---------------------------------------------------\n"
+    echo "---------------------------------------------------"
 
     exit 0
     fi
