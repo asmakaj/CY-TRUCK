@@ -10,8 +10,9 @@ file="temp"
 if [ -d "$file" ]
 then
     # Verifier si le dossier n'est pas vide
-    if [ "$(ls -A "$dossier")" ]; then
-        echo "Le dossier n'est pas vide."
+    if [ "$(ls -A "$dossier")" ] # S'arranger pour que ç an'afiche pas ça dans le terminal : ls: : No such file or directory
+    then
+        echo "Le dossier n'est pas vide.\n"
         # Vider le dossier
         rm -rf temp/*
     fi
@@ -20,36 +21,74 @@ fi
 mkdir -p temp images
 }
 
-
-# Copier le fichier de donnees specifie en argument
-cp "$1" data/
-
-
 # Verification de la presence de l'executable C
 executable_verification() {
 if [ ! -f progc/prog ]
 then
-    echo "Compilation en cours..."
+    echo "Compilation en cours...\n"
     # On compile
-    gcc -o prog programme.c
+    gcc -o prog progc/programme.c
     # Verifier si la compilation s'est bien deroulee
     if [ $? -ne 0 ]
     then
-        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer.\n"
         exit 1
     fi
 fi
-echo "L'executable C est present. Execution du programme..."
+echo "L'executable C est present. Execution du programme...\n"
 # On ajoute ici le traitement demande en argument (-d1, -l, ...)
 }
 
-# Recuperation des arguments
-input_file=$1
-shift
+# Creation du graphique avec gnuplot
+generate_graph() {
+    # Création de variables locales, visible que dans la fonction
+    local input_file=$1
+    local output_file=$2
 
-# Affichage de l'aide
-if [ "$input_file" == "-h" ]
+    gnuplot -e "input_file='$input_file'" -e "output_file='$output_file'" progc/graph_script.gp
+}
+# Appel de la fonction : generate_graph "temp/result_$1" "images/graph_$1.png"
+
+# Affichage du temps d'execution
+execution_time() {
+echo "Temps d'execution : $SECONDS secondes"
+}
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+# MAIN
+
+# Est ce qu'il y aura obligatoirement 1 argument ???? Sinon verifier qu'il y a au moins 1 argument
+
+# Récupération du fichier CSV passé en argument
+input_file=$1
+
+# Vérification de l'existence du fichier
+if [ ! -f "$input_file" ]
 then
+    echo "Le fichier $input_file n'existe pas.\n"
+    exit 1
+fi
+# Vérification de l'extension du fichier
+if [[ ! "$input_file" =~ \.csv$ ]]
+then
+    echo "Le fichier $input_file n'est pas un fichier .csv. Veuillez réessayer svp...\n"
+    exit 1
+fi
+
+# Création du dossier "data" s'il n'existe pas
+mkdir -p data
+# Copie du fichier CSV dans le dossier data
+cp "$input_file" data/ # L'ECRASEMENT POSE PROBLEME ?
+echo "Le fichier $input_file a été copié dans le dossier data avec succès.\n"
+
+# Cas du -h
+# Boucle pour parcourir les arguments
+for arg in "$@"
+do
+    # Si l'argument est égal à "-h", alors on affiche l'aide
+    if [ "$arg" == "-h" ]
+    then
     echo "---------------------------------------------------"
     echo "Aide : Options possibles"
     echo "-d1 : Conducteurs avec le plus de trajets"
@@ -60,52 +99,50 @@ then
     echo "---------------------------------------------------"
 
     exit 0
-fi
+    fi
 
-# Execution des differents traitements 
-run_data_processing(){
-    local input_file=$1
-    local option=$2
+done
 
-    case $option in
+# Vérification des dossiers temp et images
+create_directories
+
+# Vérification de l'executable c
+executable_verification
+
+# Execution des différents traitements
+
+# Le premier argument est le fichier CSV
+input_file=$1
+shift # Décaler les arguments vers la gauche pour exclure le fichier CSV
+
+# Boucle pour traiter chaque option
+for option in "$@"
+do
+   case $option in
         -d1)
             echo "Traitement D1..."
-            time progc/executable -d1 "$input_file" temp/result_d1
+             # Code pour le traitement
             ;;
         -d2)
             echo "Traitement D2..."
-            time progc/executable -d2 "$input_file" temp/result_d2
+            # Code pour le traitement
             ;;
         -l)
             echo "Traitement L..."
-            time progc/executable -l "$input_file" temp/result_l
+            # Code pour le traitement
             ;;
         -t)
             echo "Traitement T..."
-            time progc/executable -t "$input_file" temp/result_t
+            # Code pour le traitement
             ;;
         -s)
             echo "Traitement S..."
-            time progc/executable -s "$input_file" temp/result_s
+            # Code pour le traitement
             ;;
         *)
             echo "Option non reconnue."
-            exit 1
-            ;;
+            exit 1 ;;
     esac
-}
+done
 
-# Execution des traitements : run_data_processing "$input_file" "$1"
-
-# Creation du graphique avec gnuplot
-generate_graph() {
-    local input_file=$1
-    local output_file=$2
-
-    gnuplot -e "input_file='$input_file'" -e "output_file='$output_file'" progc/graph_script.gp
-}
-
-generate_graph "temp/result_$1" "images/graph_$1.png"
-
-# Affichage du temps d'execution
-echo "Temps d'execution : $SECONDS secondes"
+echo "ÇA COMPIILLEEEE HEHEEEE\n"
