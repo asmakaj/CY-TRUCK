@@ -145,4 +145,4 @@ do
     esac
 done
 
-echo "ÇA COMPIILLEEEE HEHEEEE\n"
+echo "ÇA COMPIILLEEEE HEHEEEE"

@@ -10,7 +10,7 @@ STRUCTURE DU PROJET
 • demo
 • script.sh 
 
-Pour compiler il faut écrire par ex: ./script.sh /Users/deeu/Desktop/data.csv -d1 -l
+Pour compiler il faut écrire par ex: ./script.sh /Users/deeu/Desktop/data.csv -d1 -l <=> ./script.sh fichier.csv -traitement1 -traitement2 ...
 Il faut avant donner les droits d'execution au script.sh : chmod +x script.sh
 Lors du commit, supprimer le data.csv (avec la fleche à coté du plus) avant la validation des modifications, ou ne simplement pas le commit
 ------------------------------------------------------------------------------------------------
@@ -35,4 +35,18 @@ MAIN :
 
 Maintenant, le fichier.csv = intput_file et non $1 qui correspond au premier traitement.
 Pour avoir accès au fichier, il faut utiliser la variable intput_file.
+
+--------------------------------------------------------------------------------------------------
+ORGANISATION DES TRAITEMENTS
+-d1 conducteurs avec le plus de trajets --> Deulyne 
+-d2 conducteurs et la plus grande distance --> Emma
+-l les 10 trajets les plus longs --> Asma
+-t les 10 villes les plus traversées --> Asma
+-s statistiques sur les étapes --> Deulyne 
+
+Pour chaque traitement, il ne faut pas oublier : 
+- l'utilisation des fichiers intermédiare dans 'temp'
+- les résultats d'execution précedente seront dans ‘demo’
+- de créer le graphique montrant les résultats dans 'images'
+- d'afficher la durée de chaque traitement
 
