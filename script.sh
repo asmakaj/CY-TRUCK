@@ -84,7 +84,7 @@ echo "Le fichier $input_file a été copié dans le dossier data avec succès.\n
 
 # Cas du -h
 # Boucle pour parcourir les arguments
-for arg in `$@`
+for arg in "$@"
 do
     # Si l'argument est égal à "-h", alors on affiche l'aide
     if [ "$arg" == "-h" ]
