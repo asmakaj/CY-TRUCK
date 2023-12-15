@@ -12,7 +12,7 @@ STRUCTURE DU PROJET
 
 Pour compiler il faut écrire par ex: ./script.sh /Users/deeu/Desktop/data.csv -d1 -l
 Il faut avant donner les droits d'execution au script.sh : chmod +x script.sh
-Lors du commit, supprimer le data.csv (avec la fleche à coté du plus) avant la validation des modifications
+Lors du commit, supprimer le data.csv (avec la fleche à coté du plus) avant la validation des modifications, ou ne simplement pas le commit
 ------------------------------------------------------------------------------------------------
 STRUCTURE DU SCRIPT SHELL
 
