@@ -121,7 +121,22 @@ do
    case $option in
         -d1)
             echo "Traitement D1..."
-             # Code pour le traitement
+            # Utiliser awk pour compter le nombre de trajets par conducteur
+            awk -F';' '{count[$6]++} END {for (driver in count) print driver ";" count[driver]}' "$input_file" > temp/temp.csv
+
+
+            # Trier la liste par ordre décroissant de nombre de trajets
+            sort -t';' -k2,2nr temp/temp.csv
+
+            # Récupérer les 10 premiers conducteurs
+            10_longest_drivers=$(head -n 10 temp/temp.csv)
+
+            # Créer le graphique de type histogramme horizontal
+            echo "$10_longest_drivers" 
+
+            # Nettoyer les fichiers temporaires
+            rm temp/temp.csv
+
             ;;
         -d2)
             echo "Traitement D2..."
