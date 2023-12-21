@@ -132,6 +132,7 @@ do
             longest_10_drivers=$(head -n 10 temp/sortedfile.csv)
 
             # Créer le graphique de type histogramme horizontal
+            echo "Les 10 conducteurs avec le plus de trajets sont : "
             echo "$longest_10_drivers" 
 
             # Nettoyer les fichiers temporaires

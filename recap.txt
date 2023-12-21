@@ -50,3 +50,10 @@ Pour chaque traitement, il ne faut pas oublier :
 - de créer le graphique montrant les résultats dans 'images'
 - d'afficher la durée de chaque traitement
 
+---------------------------------------------------------------------------------------------------
+
+Traitement [S] : statistiques sur les étapes : option -s
+Pour ce traitement, on cherche à récupérer les distances minimales, maximales et moyennes des étapes, et ce, pour chaque trajet.
+
+
+
