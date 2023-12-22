@@ -115,7 +115,7 @@ executable_verification
 input_file=$1
 shift # Décaler les arguments vers la gauche pour exclure le fichier CSV
 
-# Boucle pour traiter chaque option
+# Boucle pour traiter chaque argument 
 for option in "$@"
 do
    case $option in
@@ -127,7 +127,7 @@ do
 
 
             # Trier la liste par ordre décroissant de nombre de trajets
-            sort -t';' -k2,2nr temp/temp2.csv >> temp/sortedfile.csv 
+            sort -t';' -k2,2 -n -r temp/temp2.csv >> temp/sortedfile.csv 
 
             # Récupérer les 10 premiers conducteurs
             longest_10_drivers=$(head -n 10 temp/sortedfile.csv)
@@ -154,10 +154,16 @@ do
             ;;
         -s)
             echo "Traitement S..."
-            # Code pour le traitement
+            awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
+            #grep ""
+            
+            route=$(head 10 temp/temp.csv)
+
+            echo "$route"
+            rm temp/temp.csv temp/sortedfile.csv
             ;;
         *)
-            echo "Option non reconnue."
+            echo "L'option $option n'est pas reconnue."
             exit 1 ;;
     esac
 done

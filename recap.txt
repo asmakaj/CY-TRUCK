@@ -56,4 +56,16 @@ Traitement [S] : statistiques sur les étapes : option -s
 Pour ce traitement, on cherche à récupérer les distances minimales, maximales et moyennes des étapes, et ce, pour chaque trajet.
 
 
+1- on récupère les différents trajets de chaque conducteurs
+2- puis on recupère les tajets min , max, et moyens
+3- 
 
+
+sort qui récupere les deux trajets;étapes;distances
+
+faire abr qui a pour chainon une structure (ID trajet, distance, min, max, nombre de fois on on est passée danas la ville)
+
+Si id exist alors on update les différents champs
+
+
+recuperer les chaionon de l'abr et les mettre dans l'avl en utilisant un parcours infixe inverse
