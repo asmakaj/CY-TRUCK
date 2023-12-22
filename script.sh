@@ -122,11 +122,12 @@ do
         -d1)
             echo "Traitement D1..."
             # Utiliser awk pour compter le nombre de trajets par conducteur
-            awk -F';' '{count[$6]+=1} END {for (driver in count) print driver ";" count[driver]}' "$input_file" > temp/temp.csv
+            grep ";1;" "$input_file" >> temp/temp.csv
+            awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/temp.csv >> temp/temp2.csv
 
 
             # Trier la liste par ordre décroissant de nombre de trajets
-            sort -t';' -k2,2nr temp/temp.csv > temp/sortedfile.csv 
+            sort -t';' -k2,2nr temp/temp2.csv >> temp/sortedfile.csv 
 
             # Récupérer les 10 premiers conducteurs
             longest_10_drivers=$(head -n 10 temp/sortedfile.csv)
@@ -136,7 +137,7 @@ do
             echo "$longest_10_drivers" 
 
             # Nettoyer les fichiers temporaires
-            rm temp/temp.csv temp/sortedfile.csv
+            rm temp/temp.csv temp/sortedfile.csv temp/temp2.csv
 
             ;;
         -d2)
