@@ -23,7 +23,6 @@ pTree createNode(int route_ID, int step_ID, float distance) {
         exit(1);
     }
 
-
     pNew->route_ID = route_ID;
     pNew->step_ID = step_ID;
     pNew->distance = distance;
@@ -33,40 +32,27 @@ pTree createNode(int route_ID, int step_ID, float distance) {
     pNew->pLeft = NULL;
     pNew->pRight = NULL;
 
+    //printf("Route_ID: %d, Step_ID: %d, Distance: %f, Min: %f, Max: %f, n: %d\n", pNew->route_ID, pNew->step_ID, pNew->distance, pNew->min, pNew->max, pNew->n);
+
     return pNew;
 }
 
-/*
-void insert(Tree** root, int route_ID, int step_ID, float distance) {
-    if (*root == NULL) {
 
-        *root = createNode(route_ID, step_ID, distance);
-    } else {
-        // Parcours l'abre et ajt le chaino au bon endroit
-        if (route_ID < (*root)->route_ID) {
-            insert(&((*root)->pLeft), route_ID, step_ID, distance);
-        } else {
-            insert(&((*root)->pRight), route_ID, step_ID, distance);
-        }
-    }
-}
-*/
-
-void insert(pTree root, int route_ID, int step_ID, float distance) {
-    if (root == NULL) {
+pTree insertABR(pTree root, int route_ID, int step_ID, float distance) {
+    if(root == NULL){
         root = createNode(route_ID, step_ID, distance);
-    } else {
-        // Parcours l'arbre et ajoute le nœud au bon endroit
-        if (route_ID < root->route_ID) {
-            insert(root->pLeft, route_ID, step_ID, distance);
-        } else {
-            insert(root->pRight, route_ID, step_ID, distance);
-        }
     }
+    else if(route_ID < root->route_ID){
+        root->pLeft = insertABR(root->pLeft, route_ID, step_ID, distance);
+    } 
+    else if(route_ID > root->route_ID){
+        root->pRight = insertABR(root->pRight, route_ID, step_ID, distance);
+    }
+    return root;
 }
 
 // Function to read data from CSV and build the tree
-void readCSV(const char* data, pTree root) {
+pTree readCSV(const char* data, pTree root) {
     FILE* file = fopen(data, "r");
     if (file == NULL) {
         perror("Error opening the file");
@@ -75,29 +61,26 @@ void readCSV(const char* data, pTree root) {
 
     int route_ID, step_ID;
     float distance;
-
-    while (fscanf(file, "%d;%d;%f", &route_ID, &step_ID, &distance) == 3) {
+    
+    while(fscanf(file, "%d;%d;%f", &route_ID, &step_ID, &distance) == 3) {
         // Insert the values into the tree
-        insert(root, route_ID, step_ID, distance);
+        root = insertABR(root, route_ID, step_ID, distance);
     }
+    return root;
 
     fclose(file);
 }
 
+
 void infixreverse(pTree p){
-    printf("1111111\n");
     if(p != NULL){
         infixreverse(p->pRight);
-        printf("Route_ID: %d, Step_ID: %d, Distance: %f, Min: %f, Max: %f, n: %d\n", p->route_ID, p->step_ID, p->distance, p->min, p->max, p->n);
-        // printf("[%02d]", p->route_ID);
-        printf("test parcours \n");
+        //printf("Route_ID: %d, Step_ID: %d, Distance: %f, Min: %f, Max: %f, n: %d\n", p->route_ID, p->step_ID, p->distance, p->min, p->max, p->n);
+        printf("[%02d]", p->route_ID);
+
         infixreverse(p->pLeft);
-    } 
-    else{
-        printf("l'arbre est NULL\n");
     }
 }
-
 
 void freeTree(Tree *root) {
     // Si le nœud est NULL, il n'y a rien à libérer, donc return
@@ -121,11 +104,11 @@ int main(int argc, char *argv[]){
     }
     
     pTree root = NULL;
-    readCSV(argv[1], root);
+    root = readCSV(argv[1], root);
 
     infixreverse(root);
+    printf("\n");
 
-    printf("Le main fonctionne\n");
     freeTree(root);
 
     return 0 ;

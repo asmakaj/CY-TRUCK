@@ -157,16 +157,17 @@ do
         -s)
             echo "Traitement S..."
             #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
-            cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
-            route=$(head -n 10 temp/firsttemp.csv)
+            cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
+            route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
+            tail -n +2 temp/firsttemp.csv | head -n 10 > secondtemp.csv
 
 
             echo "Les statistiques sur les étapes sont : "
-            echo "$route"
+            #echo "$route"
 
-            ./progc/prog temp/firsttemp.csv
+            ./progc/prog secondtemp.csv
 
-            rm temp/firsttemp.csv 
+            rm temp/firsttemp.csv secondtemp.csv
             ;;
         *)
             echo "L'option $option n'est pas reconnue. Veuillez réessayer."
