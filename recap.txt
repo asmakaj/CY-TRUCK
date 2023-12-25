@@ -60,10 +60,11 @@ Pour ce traitement, on cherche à récupérer les distances minimales, maxima
 2- puis on recupère les tajets min , max, et moyens
 3- 
 
+cut qui récupere les deux trajets;étapes;distances
+Route ID;Step ID;Distance
 
-sort qui récupere les deux trajets;étapes;distances
 
-faire abr qui a pour chainon une structure (ID trajet, distance, min, max, nombre de fois on on est passée danas la ville)
+faire abr qui a pour chainon une structure (ID trajet, distance, min, max, (somme ?),nombre de fois on on est passée danas la ville)
 
 Si id exist alors on update les différents champs
 
