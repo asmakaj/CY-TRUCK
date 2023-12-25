@@ -160,12 +160,12 @@ do
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
             route=$(head -n 10 temp/firsttemp.csv)
 
-            ./progc/prog  temp/firsttemp.csv
 
+            echo "Les statistiques sur les étapes sont : "
+            echo "$route"
 
+            ./progc/prog temp/firsttemp.csv
 
-            #echo "Les statistiques sur les étapes sont : "
-            #echo "$route"
             rm temp/firsttemp.csv 
             ;;
         *)
