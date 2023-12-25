@@ -28,7 +28,7 @@ then
         exit 1
     fi
 fi
-echo "L'executable C est present."
+# echo "L'executable C est present."
 }
 
 # À SUPPRIMER QUAND ON AURA FINI DE TOUT CODER
@@ -42,15 +42,15 @@ compilation() {
 }
 
 # Creation du graphique avec gnuplot
-generate_graph() {
+#generate_graph() {
     # À FAIRE
-}
+#}
 # Appel de la fonction : generate_graph "temp/result_$1" "images/graph_$1.png"
 
 # Affichage du temps d'execution
-execution_time() {
+#execution_time() {
     # À FAIRE
-}
+#}
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ fi
 mkdir -p data
 # Copie du fichier CSV dans le dossier data
 cp "$input_file" data/ # L'ECRASEMENT POSE PROBLEME ?
-echo "Le fichier $input_file a été copié dans le dossier data avec succès."
+# echo "Le fichier $input_file a été copié dans le dossier data avec succès."
 
 # Cas du -h
 # Boucle pour parcourir les arguments
@@ -129,17 +129,17 @@ do
 
 
             # Trier la liste par ordre décroissant de nombre de trajets
-            sort -t';' -k2,2 -n -r temp/temp2.csv >> temp/sortedfile.csv 
+            sort -t';' -k2,2 -n -r temp/temp2.csv >> temp/finaltemp.csv 
 
             # Récupérer les 10 premiers conducteurs
-            longest_10_drivers=$(head -n 10 temp/sortedfile.csv)
+            longest_10_drivers=$(head -n 10 temp/finaltemp.csv)
 
             # Créer le graphique de type histogramme horizontal
             echo "Les 10 conducteurs avec le plus de trajets sont : "
             echo "$longest_10_drivers" 
 
             # Nettoyer les fichiers temporaires
-            rm temp/temp.csv temp/sortedfile.csv temp/temp2.csv
+            rm temp/temp.csv temp/finaltemp.csv temp/temp2.csv
 
             ;;
         -d2)
@@ -160,11 +160,12 @@ do
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
             route=$(head -n 10 temp/firsttemp.csv)
 
+            echo "Les statistiques sur les étapes sont : "
             echo "$route"
             rm temp/firsttemp.csv 
             ;;
         *)
-            echo "L'option $option n'est pas reconnue."
+            echo "L'option $option n'est pas reconnue. Veuillez réessayer."
             exit 1 ;;
     esac
 done
