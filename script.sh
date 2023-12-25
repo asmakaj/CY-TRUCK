@@ -20,7 +20,7 @@ executable_verification() {
 if [ ! -f progc/prog ]
 then
     # On compile
-    gcc -o prog progc/programme.c
+    gcc -o progc/prog progc/programme.c
     # Verifier si la compilation s'est bien deroulee
     if [ $? -ne 0 ]
     then
@@ -33,7 +33,7 @@ fi
 
 # À SUPPRIMER QUAND ON AURA FINI DE TOUT CODER
 compilation() {
-    gcc -o prog progc/programme.c
+    gcc -o progc/prog progc/programme.c
     if [ $? -ne 0 ]
     then
         echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
@@ -160,8 +160,12 @@ do
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
             route=$(head -n 10 temp/firsttemp.csv)
 
-            echo "Les statistiques sur les étapes sont : "
-            echo "$route"
+            ./progc/prog  temp/firsttemp.csv
+
+
+
+            #echo "Les statistiques sur les étapes sont : "
+            #echo "$route"
             rm temp/firsttemp.csv 
             ;;
         *)

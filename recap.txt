@@ -69,4 +69,4 @@ faire abr qui a pour chainon une structure (ID trajet, distance, min, max, (somm
 Si id exist alors on update les différents champs
 
 
-recuperer les chaionon de l'abr et les mettre dans l'avl en utilisant un parcours infixe inverse
+recuperer les chainons de l'abr et les mettre dans l'avl en utilisant un parcours infixe inverse
