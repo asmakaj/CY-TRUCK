@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Fonctions
-
+# FONCTIONS
 # Creation des dossiers temp et images
 create_directories() {
 # Nom du dossier a verifier
@@ -9,13 +8,8 @@ file="temp"
 # Verifier si le dossier existe
 if [ -d "$file" ]
 then
-    # Verifier si le dossier n'est pas vide
-    if [ "$(ls -A "$dossier")" ] # S'arranger pour que ç an'afiche pas ça dans le terminal : ls: : No such file or directory
-    then
-        echo "Le dossier n'est pas vide.\n"
-        # Vider le dossier
-        rm -rf temp/*
-    fi
+    # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
+    find temp -mindepth 1 -delete 
 fi
 # Creer les dossiers
 mkdir -p temp images
@@ -25,33 +19,37 @@ mkdir -p temp images
 executable_verification() {
 if [ ! -f progc/prog ]
 then
-    echo "Compilation en cours...\n"
     # On compile
     gcc -o prog progc/programme.c
     # Verifier si la compilation s'est bien deroulee
     if [ $? -ne 0 ]
     then
-        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer.\n"
+        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
         exit 1
     fi
 fi
-echo "L'executable C est present. Execution du programme...\n"
-# On ajoute ici le traitement demande en argument (-d1, -l, ...)
+echo "L'executable C est present."
+}
+
+# À SUPPRIMER QUAND ON AURA FINI DE TOUT CODER
+compilation() {
+    gcc -o prog progc/programme.c
+    if [ $? -ne 0 ]
+    then
+        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+        exit 1
+    fi
 }
 
 # Creation du graphique avec gnuplot
 generate_graph() {
-    # Création de variables locales, visible que dans la fonction
-    local input_file=$1
-    local output_file=$2
-
-    gnuplot -e "input_file='$input_file'" -e "output_file='$output_file'" progc/graph_script.gp
+    # À FAIRE
 }
 # Appel de la fonction : generate_graph "temp/result_$1" "images/graph_$1.png"
 
 # Affichage du temps d'execution
 execution_time() {
-echo "Temps d'execution : $SECONDS secondes"
+    # À FAIRE
 }
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -66,13 +64,13 @@ input_file=$1
 # Vérification de l'existence du fichier
 if [ ! -f "$input_file" ]
 then
-    echo "Le fichier $input_file n'existe pas.\n"
+    echo "Le fichier $input_file n'existe pas."
     exit 1
 fi
 # Vérification de l'extension du fichier
 if [[ ! "$input_file" =~ \.csv$ ]]
 then
-    echo "Le fichier $input_file n'est pas un fichier .csv. Veuillez réessayer svp...\n"
+    echo "Le fichier $input_file n'est pas un fichier .csv. Veuillez réessayer svp..."
     exit 1
 fi
 
@@ -80,7 +78,7 @@ fi
 mkdir -p data
 # Copie du fichier CSV dans le dossier data
 cp "$input_file" data/ # L'ECRASEMENT POSE PROBLEME ?
-echo "Le fichier $input_file a été copié dans le dossier data avec succès.\n"
+echo "Le fichier $input_file a été copié dans le dossier data avec succès."
 
 # Cas du -h
 # Boucle pour parcourir les arguments
@@ -108,12 +106,16 @@ create_directories
 
 # Vérification de l'executable c
 executable_verification
+#compilation
+compilation
 
-# Execution des différents traitements
+# EXECUTION DES DIFFÉRENTS TRAITEMENTS
 
 # Le premier argument est le fichier CSV
 input_file=$1
-shift # Décaler les arguments vers la gauche pour exclure le fichier CSV
+shift
+# On a décalé les arguments vers la gauche pour exclure le fichier CSV, le premier argument est maintenant le premier traintement
+# Pour avoir accès a data.csv, il faut faire appel à la varible $input_file
 
 # Boucle pour traiter chaque argument 
 for option in "$@"
