@@ -154,13 +154,12 @@ do
             ;;
         -s)
             echo "Traitement S..."
-            awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
-            #grep ""
-            
-            route=$(head 10 temp/temp.csv)
+            #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
+            cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
+            route=$(head -n 10 temp/firsttemp.csv)
 
             echo "$route"
-            rm temp/temp.csv temp/sortedfile.csv
+            rm temp/firsttemp.csv 
             ;;
         *)
             echo "L'option $option n'est pas reconnue."
