@@ -1,12 +1,19 @@
-_semaine du 11 décembre_
+__semaine du 11 décembre__
 découverte du sujet, premier script sur les validations et sécurité
 
-_semaine du 18 décembre_
-traitement -d1 done
+__semaine du 18 décembre__
+traitement -D2 (in progress...)
 
-_semaine du 25 décembre_
+22/12 :
+traitement -D1 done
+
+__semaine du 25 décembre__
+25/12 :
 traitement T et L (in progress...)
+traitement S (in progress...) // ABR fonctionnel
 
-_semaine du 1er janvier_
+
+__semaine du 1er janvier__
+
 
 deadline rendu : 28/01/2024
