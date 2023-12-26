@@ -156,7 +156,7 @@ do
                         #ajoute la distance extraite de la ligne actuelle au conducteur spécifié.
                         conducteur_distances["$conducteur"]=$(( ${conducteur_distances["$conducteur"]} + distance ))
                     done < "$input_file"
-            fi
+            
             # Trier les distances par ordre décroissant
             Trier_distances=($(for conducteur in "${!conducteur_distances[@]}"; do
             echo "$conducteur ${conducteur_distances["$conducteur"]}"
@@ -168,6 +168,8 @@ do
                 distance=${item#* }
                  echo "$conducteur : $distance"
             done
+            fi
+            
             ;;
         -l)
             echo "Traitement L..."
