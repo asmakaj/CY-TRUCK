@@ -191,8 +191,10 @@ do
             #echo "$route"
 
             ./progc/prog secondtemp.csv
+            cat temp/output.csv
 
-            rm temp/firsttemp.csv secondtemp.csv
+
+            rm temp/firsttemp.csv secondtemp.csv temp/output.csv
             ;;
         *)
             echo "L'option $option n'est pas reconnue. Veuillez réessayer."

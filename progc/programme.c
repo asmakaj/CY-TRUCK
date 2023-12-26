@@ -15,7 +15,7 @@ typedef struct tree{
 
 typedef Tree* pTree;
 
-pTree createNode(int route_ID, int step_ID, float distance) {
+pTree createNode(int route_ID, int step_ID, float distance, float min, float max){
     pTree pNew = malloc(sizeof(Tree));
     // NE PAS OUBLIER DE FREE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if (pNew == NULL) {
@@ -28,7 +28,7 @@ pTree createNode(int route_ID, int step_ID, float distance) {
     pNew->distance = distance;
     pNew->min = 0;
     pNew->max = 0;
-    pNew->n = 1;
+    pNew->n = 1 ;
     pNew->pLeft = NULL;
     pNew->pRight = NULL;
 
@@ -38,9 +38,10 @@ pTree createNode(int route_ID, int step_ID, float distance) {
 }
 
 
-pTree insertABR(pTree root, int route_ID, int step_ID, float distance) {
+pTree insertABR(pTree root, int route_ID, int step_ID, float distance){
+
     if(root == NULL){
-        root = createNode(route_ID, step_ID, distance);
+        root = createNode(route_ID, step_ID, distance, distance, distance);
     }
     else if(route_ID < root->route_ID){
         root->pLeft = insertABR(root->pLeft, route_ID, step_ID, distance);
@@ -48,6 +49,18 @@ pTree insertABR(pTree root, int route_ID, int step_ID, float distance) {
     else if(route_ID > root->route_ID){
         root->pRight = insertABR(root->pRight, route_ID, step_ID, distance);
     }
+    else if(route_ID == root->route_ID){
+        root->n++;
+
+        if(distance > root->max){
+            root->max = distance;
+        }
+
+        if(distance < root->min){
+            root->min = distance;
+        }
+    }
+
     return root;
 }
 
@@ -72,13 +85,13 @@ pTree readCSV(const char* data, pTree root) {
 }
 
 
-void infixreverse(pTree p){
+void infixreverse(pTree p, FILE* file){
     if(p != NULL){
-        infixreverse(p->pRight);
+        infixreverse(p->pRight, file);
         //printf("Route_ID: %d, Step_ID: %d, Distance: %f, Min: %f, Max: %f, n: %d\n", p->route_ID, p->step_ID, p->distance, p->min, p->max, p->n);
-        printf("[%02d]", p->route_ID);
-
-        infixreverse(p->pLeft);
+        //printf("[%02d]", p->route_ID);
+        fprintf(file, "%d;%d;%f;%f;%f;%d\n", p->route_ID, p->step_ID, p->distance, p->min, p->max, p->n);
+        infixreverse(p->pLeft, file);
     }
 }
 
@@ -102,11 +115,17 @@ int main(int argc, char *argv[]){
         printf("Il y a plus d'un argument pour le programme.c");
         exit (1);
     }
-    
+
     pTree root = NULL;
     root = readCSV(argv[1], root);
 
-    infixreverse(root);
+    // Ouvrir un fichier en écriture
+    FILE *file = fopen("temp/output.csv", "w");
+    if (file == NULL) {
+        perror("Erreur lors de l'ouverture du fichier");
+        exit(EXIT_FAILURE);
+    }
+    infixreverse(root, file);
     printf("\n");
 
     freeTree(root);
