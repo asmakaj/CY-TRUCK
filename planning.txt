@@ -11,7 +11,8 @@ __semaine du 25 décembre__
 25/12 :
 traitement T et L (in progress...)
 traitement S (in progress...) // ABR fonctionnel
-
+26/12 :
+traitement L done
 
 __semaine du 1er janvier__
 
