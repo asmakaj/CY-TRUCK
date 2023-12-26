@@ -153,7 +153,7 @@ do
            
             # récupérer les distances totales pour chaque trajet (meme route ID)
             cat "$input_file" >> temp/temp.csv
-           awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.5f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
+           awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
 
 
            
@@ -164,15 +164,15 @@ do
             head -n 10 temp/tempcorrected.csv >> temp/tempfinal.csv
            
             #trier les 10 trajets par numéro d'identification croissant
-            sort -t ';' -k1,1 -n -r temp/tempfinal.csv
-            longest_10_trajects=$(head -n 10 temp/tempfinal.csv)
+            sort -t ';' -k1,1 -n -r temp/tempfinal.csv >> temp/tempdone.csv
+            longest_10_trajects=$(head -n 10 temp/tempdone.csv)
 
             # Créer le graphique de type histogramme
-            #echo "Les 10 trajets les plus longs sont : "
-            #echo "$longest_10_trajects"
+            echo "Les 10 trajets les plus longs sont : "
+            echo "$longest_10_trajects"
 
             # Nettoyer les fichiers temporaires
-            #rm temp/temp.csv temp/sortedfile.csv temp/templ.csv
+            rm temp/temp.csv temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
            
             ;;
            
