@@ -51,7 +51,7 @@ pTree insertABR(pTree root, int route_ID, int step_ID, float distance) {
     return root;
 }
 
-// Function to read data from CSV and build the tree
+// Function to read data from CSV
 pTree readCSV(const char* data, pTree root) {
     FILE* file = fopen(data, "r");
     if (file == NULL) {
@@ -63,7 +63,7 @@ pTree readCSV(const char* data, pTree root) {
     float distance;
     
     while(fscanf(file, "%d;%d;%f", &route_ID, &step_ID, &distance) == 3) {
-        // Insert the values into the tree
+        // Remplissage de l'arbre
         root = insertABR(root, route_ID, step_ID, distance);
     }
     return root;
