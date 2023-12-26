@@ -144,7 +144,30 @@ do
             ;;
         -d2)
             echo "Traitement D2..."
-            # Code pour le traitement
+            if [ -f "data.csv" ]
+            then
+                 #tab assosiatif avec conducteur suivi de la distance 
+                declare -A conducteur_distances
+                   while read -r ligne
+                   do
+                        conducteur=$(echo "$ligne" | cut -d ' ' -f 6)
+                        distance=$(echo "$ligne" | cut -d ' ' -f 5)
+                        #accumuler la distance totale parcourue dans le tab cree si le conducteur a déjà une distance enregistrée, cette ligne ajoute la distance actuelle à la distance existante
+                        #ajoute la distance extraite de la ligne actuelle au conducteur spécifié.
+                        conducteur_distances["$conducteur"]=$(( ${conducteur_distances["$conducteur"]} + distance ))
+                    done < "data.csv"
+            fi
+            # Trier les distances par ordre décroissant
+            Trier_distances=($(for conducteur in "${!conducteur_distances[@]}"; do
+            echo "$conducteur ${conducteur_distances["$conducteur"]}"
+                done | sort -k2,2nr))
+            # Afficher les 10 plus grandes distances
+            echo "Les 10 plus grandes distances :"
+            for item in "${Trier_distances[@]}"; do
+                conducteur=${item%% *}
+                distance=${item#* }
+                 echo "$conducteur : $distance"
+            done
             ;;
         -l)
             echo "Traitement L..."
