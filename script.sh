@@ -153,7 +153,8 @@ do
            
             # récupérer les distances totales pour chaque trajet (meme route ID)
             cat "$input_file" >> temp/temp.csv
-            awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) print traject ";" sum[traject] }' temp/temp.csv >> temp/templ.csv
+           awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.5f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
+
 
            
             # trier les plus longs trajets
