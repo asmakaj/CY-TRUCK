@@ -144,7 +144,7 @@ do
             ;;
         -d2)
             echo "Traitement D2..."
-            if [ -f "data.csv" ]
+            if [ -f "$input_file" ]
             then
                  #tab assosiatif avec conducteur suivi de la distance 
                 declare -A conducteur_distances
@@ -155,7 +155,7 @@ do
                         #accumuler la distance totale parcourue dans le tab cree si le conducteur a déjà une distance enregistrée, cette ligne ajoute la distance actuelle à la distance existante
                         #ajoute la distance extraite de la ligne actuelle au conducteur spécifié.
                         conducteur_distances["$conducteur"]=$(( ${conducteur_distances["$conducteur"]} + distance ))
-                    done < "data.csv"
+                    done < "$input_file"
             fi
             # Trier les distances par ordre décroissant
             Trier_distances=($(for conducteur in "${!conducteur_distances[@]}"; do
