@@ -155,8 +155,6 @@ do
             cat "$input_file" >> temp/temp.csv
            awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
 
-
-           
             # trier les plus longs trajets
             sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv  
            
