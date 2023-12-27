@@ -171,7 +171,27 @@ do
             ;;
         -l)
             echo "Traitement L..."
-            # Code pour le traitement
+                        # récupérer les distances totales pour chaque trajet (meme route ID)
+            cat "$input_file" >> temp/temp.csv
+           awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
+
+            # trier les plus longs trajets
+            sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv  
+           
+            # Récupérer les 10 premiers trajets
+            head -n 10 temp/tempcorrected.csv >> temp/tempfinal.csv
+           
+            #trier les 10 trajets par numéro d'identification croissant
+            sort -t ';' -k1,1 -n -r temp/tempfinal.csv >> temp/tempdone.csv
+            longest_10_trajects=$(head -n 10 temp/tempdone.csv)
+
+            # Créer le graphique de type histogramme
+            echo "Les 10 trajets les plus longs sont : "
+            echo "$longest_10_trajects"
+
+            # Nettoyer les fichiers temporaires
+            rm temp/temp.csv temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
+           
             ;;
         -t)
             echo "Traitement T..."
@@ -182,8 +202,8 @@ do
             #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
             cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
-            tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            #tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
+            #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
+            tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
 
             echo "Les statistiques sur les étapes sont : "
 
@@ -198,7 +218,7 @@ do
             echo "Les 50 premiers sont : "
             echo "$(head -n 50 temp/output.csv)" 
 
-            rm temp/firsttemp.csv temp/secondtemp.csv
+            rm temp/firsttemp.csv temp/secondtemp.csv temp/output.csv
             ;;
         *)
             echo "L'option $option n'est pas reconnue. Veuillez réessayer."

@@ -16,7 +16,7 @@ traitement S (in progress...) // ABR fonctionnel
 traitement L done
 traitement S (in progress...) // AVL quasi-fonctionnel
 27/12:
-traitement S (in progress...) // Les AVL auront ma peau
+traitement S (in progress...) // Les AVL auront ma peau, fonctionnel mais pas sur l'ensemble de data.csv, que sur les 100000ère lignes
 
 
 __semaine du 1er janvier__
