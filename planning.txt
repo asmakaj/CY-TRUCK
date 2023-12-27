@@ -1,5 +1,6 @@
 __semaine du 11 décembre__
 découverte du sujet, premier script sur les validations et sécurité
+Mise en place de github
 
 __semaine du 18 décembre__
 traitement -D2 (in progress...)

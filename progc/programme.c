@@ -39,8 +39,8 @@ pTree createNodeABR(int route_ID, int step_ID, float distance, float min, float 
     pNew->route_ID = route_ID;
     pNew->step_ID = step_ID;
     pNew->distance = distance;
-    pNew->min = 0;
-    pNew->max = 0;
+    pNew->min = distance;
+    pNew->max = distance;
     pNew->n = 1 ;
     pNew->pLeft = NULL;
     pNew->pRight = NULL;
@@ -299,7 +299,7 @@ int main(int argc, char *argv[]){
     infixreverse(avl, file);
     printf("\n");
 
-
+    fclose(file);
 
     freeABR(abr);
     freeAVL(avl);
