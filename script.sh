@@ -171,7 +171,7 @@ do
             ;;
         -l)
             echo "Traitement L..."
-                        # récupérer les distances totales pour chaque trajet (meme route ID)
+            # récupérer les distances totales pour chaque trajet (meme route ID)
             cat "$input_file" >> temp/temp.csv
            awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
 
@@ -203,21 +203,18 @@ do
             cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
             #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
+            tail -n +3 temp/firsttemp.csv > temp/secondtemp.csv
 
             echo "Les statistiques sur les étapes sont : "
 
             ./progc/prog temp/secondtemp.csv
-
             #route=$(head -n 50 temp/output.csv)
             #echo "$route"           
             #cat temp/output.csv
 
             # Récupérer les 50 premiers 
-
             echo "Les 50 premiers sont : "
             echo "$(head -n 50 temp/output.csv)" 
-
             rm temp/firsttemp.csv temp/secondtemp.csv temp/output.csv
             ;;
         *)

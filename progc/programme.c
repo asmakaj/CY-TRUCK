@@ -79,8 +79,8 @@ pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
 
 // Function to read data from CSV
 pTree readCSV(const char* data, pTree abr) {
-    FILE* file = fopen(data, "r");
-    if (file == NULL) {
+    FILE* file1 = fopen(data, "r");
+    if (file1 == NULL) {
         perror("Error opening the file");
         exit(EXIT_FAILURE);
     }
@@ -88,21 +88,21 @@ pTree readCSV(const char* data, pTree abr) {
     int route_ID, step_ID;
     float distance;
     
-    while(fscanf(file, "%d;%d;%f", &route_ID, &step_ID, &distance) == 3) {
+    while(fscanf(file1, "%d;%d;%f", &route_ID, &step_ID, &distance) == 3) {
         // Remplissage de l'arbre
         abr = insertABR(abr, route_ID, step_ID, distance);
     }
     return abr;
 
-    fclose(file);
+    fclose(file1);
 }
 
-void infixreverse(spTree avl, FILE* file) {
+void infixreverse(spTree avl, FILE* file2) {
     if (avl != NULL) {
-        infixreverse(avl->pRight, file);
+        infixreverse(avl->pRight, file2);
         //printf("[%02d]", avl->route_ID);
-        fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff, avl->eq);
-        infixreverse(avl->pLeft, file);
+        fprintf(file2, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff, avl->eq);
+        infixreverse(avl->pLeft, file2);
     }
 }
 
@@ -132,6 +132,7 @@ void infixtestAVL(spTree p){
 
 
 spTree createNodeAVL(pTree abr){
+    
     spTree new = malloc(sizeof(AVL_Tree));
     if (new == NULL) {
         printf("Erreur au niveau du malloc");
@@ -161,6 +162,7 @@ int max2(int a, int b){
     return (a > b) ? a : b;
 }
 
+// issu du cours
 spTree leftRotation(spTree avl){
     spTree pivot;
     int eq_a, eq_p;
@@ -189,6 +191,7 @@ int max3(int a, int b, int c) {
     return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
 }
 
+// issu du cours
 spTree rightRotation(spTree avl){
     spTree pivot;
     int eq_a, eq_p;
@@ -207,16 +210,17 @@ spTree rightRotation(spTree avl){
     return avl;
 }
 
+// issu du cours
 spTree doubleLeftRotation(spTree avl){
     avl->pRight = rightRotation(avl->pRight);
     return leftRotation(avl);
 }
-
+// issu du cours
 spTree doubleRightRotation(spTree avl){
     avl->pLeft = leftRotation(avl->pLeft);
     return rightRotation(avl);
 }
-
+// issu du cours
 spTree equilibrageAVL(spTree avl){
     if(avl->eq > 1){
         if(avl->pRight->eq >= 0){
@@ -236,7 +240,7 @@ spTree equilibrageAVL(spTree avl){
     }
     return avl;
 }
-
+// issu du cours
 spTree insertAVL(spTree avl, int* h, pTree abr){
     spTree new = createNodeAVL(abr);
 
@@ -332,7 +336,7 @@ int main(int argc, char *argv[]){
     int h = 0;
     avl = fillAVL(abr, avl, h);
     //infixtestAVL(avl);
-    printf("\n\n");
+    //printf("\n\n");
 
     // Ouvrir un fichier en écriture
     FILE *file = fopen("temp/output.csv", "w");
