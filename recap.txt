@@ -38,11 +38,11 @@ Pour avoir accès au fichier, il faut utiliser la variable intput_file.
 
 --------------------------------------------------------------------------------------------------
 ORGANISATION DES TRAITEMENTS
--d1 conducteurs avec le plus de trajets --> Deulyne 
+-d1 conducteurs avec le plus de trajets --> Deulyne (fait)
 -d2 conducteurs et la plus grande distance --> Emma
--l les 10 trajets les plus longs --> Asma
+-l les 10 trajets les plus longs --> Asma (fait)
 -t les 10 villes les plus traversées --> Asma
--s statistiques sur les étapes --> Deulyne 
+-s statistiques sur les étapes --> Deulyne (fait)
 
 Pour chaque traitement, il ne faut pas oublier : 
 - l'utilisation des fichiers intermédiare dans 'temp'
@@ -55,54 +55,14 @@ Pour chaque traitement, il ne faut pas oublier :
 Traitement [S] : statistiques sur les étapes : option -s
 Pour ce traitement, on cherche à récupérer les distances minimales, maximales et moyennes des étapes, et ce, pour chaque trajet.
 
-
 1- on récupère les différents trajets de chaque conducteurs
 cut qui récupere les deux trajets;étapes;distances
 Route ID;Step ID;Distance
 2- puis on recupère les tajets min , max, et moyens
 faire abr qui a pour chainon une structure (route ID, step ID, distance(somme ?), min, max,nombre de fois on on est passée danas la ville)
 Si id exist alors on update les différents champs 
-
 3- Ces données seront triées par «distance_maxi – distance_mini» par ordre décroissant, avec AVL
 et on ne conservera que les 50 premières valeurs.
 recuperer les chainons de l'abr et les mettre dans l'avl puis afficher en utilisant un parcours infixe inverse
-
 - COMMENTER CHAQUE FONCTIONS
 Les fonctions avl ont été récupérer du cours
-
-
-typedef struct ABR{
-  int route_ID;
-  int step_ID;
-  float distance;
-  float min;
-  float max;
-  int n;
-  struct ABR* pLeft;
-  struct ABR* pRight;
-}ABR_Tree;
-
-typedef ABR_Tree* pTree;
-
-typedef struct AVL{
-    int route_ID;
-    float min;
-    float max;
-    float moy;
-    float diff;
-    int eq;
-    struct AVL* pLeft;
-    struct AVL* pRight;
-}AVL_Tree;
-
-typedef AVL_Tree* spTree;
-
-Faire ABR
-readCSV(data.csv, abr){
-  insertABR(abr, elmt){
-    createNodeABR(elmt){
-    }
-  }
-}
-
-Faire AVL
