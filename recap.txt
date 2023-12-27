@@ -57,16 +57,42 @@ Pour ce traitement, on cherche à récupérer les distances minimales, maxima
 
 
 1- on récupère les différents trajets de chaque conducteurs
-2- puis on recupère les tajets min , max, et moyens
-3- 
-
 cut qui récupere les deux trajets;étapes;distances
 Route ID;Step ID;Distance
-
-
+2- puis on recupère les tajets min , max, et moyens
 faire abr qui a pour chainon une structure (route ID, step ID, distance(somme ?), min, max,nombre de fois on on est passée danas la ville)
+Si id exist alors on update les différents champs 
 
-Si id exist alors on update les différents champs
+3- Ces données seront triées par «distance_maxi – distance_mini» par ordre décroissant, avec AVL
+et on ne conservera que les 50 premières valeurs.
+recuperer les chainons de l'abr et les mettre dans l'avl puis afficher en utilisant un parcours infixe inverse
+
+- COMMENTER CHAQUE FONCTIONS
+Les fonctions avl ont été récupérer du cours
 
 
-recuperer les chainons de l'abr et les mettre dans l'avl en utilisant un parcours infixe inverse
+typedef struct ABR{
+  int route_ID;
+  int step_ID;
+  float distance;
+  float min;
+  float max;
+  int n;
+  struct ABR* pLeft;
+  struct ABR* pRight;
+}ABR_Tree;
+
+typedef ABR_Tree* pTree;
+
+typedef struct AVL{
+    int route_ID;
+    float min;
+    float max;
+    float moy;
+    float diff;
+    int eq;
+    struct AVL* pLeft;
+    struct AVL* pRight;
+}AVL_Tree;
+
+typedef AVL_Tree* spTree;

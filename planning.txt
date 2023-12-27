@@ -5,7 +5,7 @@ __semaine du 18 décembre__
 traitement -D2 (in progress...)
 
 22/12 :
-traitement -D1 done
+traitement D1 done
 
 __semaine du 25 décembre__
 25/12 :
@@ -13,6 +13,8 @@ traitement T et L (in progress...)
 traitement S (in progress...) // ABR fonctionnel
 26/12 :
 traitement L done
+traitement S (in progress...) // AVL quasi-fonctionnel
+
 
 __semaine du 1er janvier__
 
