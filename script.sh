@@ -184,17 +184,17 @@ do
             #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
             cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
-            #tail -n +2 temp/firsttemp.csv | head -n 10 > temp/secondtemp.csv
-            tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
+            tail -n +2 temp/firsttemp.csv | head -n 10 > temp/secondtemp.csv
+            #tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
 
             echo "Les statistiques sur les étapes sont : "
 
 
             ./progc/prog temp/secondtemp.csv
 
-            route=$(head -n 50 temp/output.csv)
-            echo "$route"           
-            #cat temp/output.csv
+            #route=$(head -n 50 temp/output.csv)
+            #echo "$route"           
+            cat temp/output.csv
 
 
             rm temp/firsttemp.csv temp/secondtemp.csv temp/output.csv

@@ -39,8 +39,8 @@ pTree createNodeABR(int route_ID, int step_ID, float distance, float min, float 
     pNew->route_ID = route_ID;
     pNew->step_ID = step_ID;
     pNew->distance = distance;
-    pNew->min = distance;
-    pNew->max = distance;
+    pNew->min = min;
+    pNew->max = max;
     pNew->n = 1 ;
     pNew->pLeft = NULL;
     pNew->pRight = NULL;
@@ -97,17 +97,39 @@ pTree readCSV(const char* data, pTree abr) {
     fclose(file);
 }
 
-
-void infixreverse(spTree p, FILE* file){
-    if(p != NULL){
+void infixreverse(spTree p, FILE* file) {
+    if (p != NULL) {
         infixreverse(p->pRight, file);
-        //printf("Route_ID: %d, Step_ID: %d, Distance: %f, Min: %f, Max: %f, n: %d\n", p->route_ID, p->step_ID, p->distance, p->min, p->max, p->n);
         printf("[%02d]", p->route_ID);
         fprintf(file, "%d;%f;%f;%f;%f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
-        //insertAVL(avl, 0, p);
         infixreverse(p->pLeft, file);
     }
 }
+
+void infixtestABR(pTree p){
+    printf("ABR\n");
+    if(p != NULL){
+        
+    infixtestABR(p->pRight);
+    printf("[%02d]", p->route_ID);
+    //fprintf(file, "%d;%f;%f;%f;%f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
+    //insertAVL(avl, 0, p);
+    infixtestABR(p->pLeft);
+    }
+}
+
+void infixtestAVL(spTree p){
+    printf("AVL\n");
+    if(p != NULL){
+        
+    infixtestAVL(p->pRight);
+    printf("[%02d]", p->route_ID);
+    //fprintf(file, "%d;%f;%f;%f;%f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
+    //insertAVL(avl, 0, p);
+    infixtestAVL(p->pLeft);
+    }
+}
+
 
 spTree createNodeAVL(pTree abr){
     spTree new = malloc(sizeof(AVL_Tree));
@@ -219,7 +241,7 @@ spTree insertAVL(spTree avl, int* h, pTree abr){
 
     if(avl ==  NULL){
         *h = 1;
-        return createNodeAVL(abr);
+        return new;
     }
     else if(new->diff < avl->diff){
         avl->pLeft = insertAVL(avl->pLeft, h, abr);
@@ -246,6 +268,22 @@ spTree insertAVL(spTree avl, int* h, pTree abr){
     }
     return avl;
 }
+
+
+// Parcours de l'ABR et insertion dans l'AVL
+spTree fillAVL(pTree abr, spTree avl, int eq){
+    if(abr != NULL){
+        // Insérer la valeur actuelle de l'ABR dans l'AVL
+        avl = insertAVL(avl, &eq, abr);
+        
+        // Continuer le parcours en ordre dans l'ABR
+        avl = fillAVL(abr->pLeft, avl, eq);
+        avl = fillAVL(abr->pRight, avl, eq);
+    } 
+    return avl;
+}
+
+
 
 void freeABR(pTree abr) {
     // Si le nœud est NULL, il n'y a rien à libérer, donc return
@@ -274,6 +312,8 @@ void freeAVL(spTree avl){
     // Libérer le nœud actuel
     free(avl);
 }
+
+
 int main(int argc, char *argv[]){
      // Vérifier si le nombre d'arguments est correct
     if (argc != 2) {
@@ -283,13 +323,16 @@ int main(int argc, char *argv[]){
 
     pTree abr = NULL;
     abr = readCSV(argv[1], abr);
+    infixtestABR(abr);
+    printf("\n\n");
 
- 
     spTree avl = NULL;
     int eq = 0;
-    avl = insertAVL(avl, &eq, abr);
+    avl = fillAVL(abr, avl, eq);
+    infixtestAVL(avl);
+    printf("\n\n");
 
-   // Ouvrir un fichier en écriture
+    // Ouvrir un fichier en écriture
     FILE *file = fopen("temp/output.csv", "w");
     if (file == NULL) {
         perror("Erreur lors de l'ouverture du fichier");
