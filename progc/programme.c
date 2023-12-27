@@ -45,7 +45,7 @@ pTree createNodeABR(int route_ID, int step_ID, float distance, float min, float 
     pNew->pLeft = NULL;
     pNew->pRight = NULL;
 
-    //printf("Route_ID: %d, Step_ID: %d, Distance: %f, Min: %f, Max: %f, n: %d\n", pNew->route_ID, pNew->step_ID, pNew->distance, pNew->min, pNew->max, pNew->n);
+    //printf("Route_ID: %d, Step_ID: %d, Distance: %.3f, Min: %.3f, Max: %.3f, n: %d\n", pNew->route_ID, pNew->step_ID, pNew->distance, pNew->min, pNew->max, pNew->n);
 
     return pNew;
 }
@@ -97,12 +97,12 @@ pTree readCSV(const char* data, pTree abr) {
     fclose(file);
 }
 
-void infixreverse(spTree p, FILE* file) {
-    if (p != NULL) {
-        infixreverse(p->pRight, file);
-        printf("[%02d]", p->route_ID);
-        fprintf(file, "%d;%f;%f;%f;%f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
-        infixreverse(p->pLeft, file);
+void infixreverse(spTree avl, FILE* file) {
+    if (avl != NULL) {
+        infixreverse(avl->pRight, file);
+        //printf("[%02d]", avl->route_ID);
+        fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff, avl->eq);
+        infixreverse(avl->pLeft, file);
     }
 }
 
@@ -111,8 +111,8 @@ void infixtestABR(pTree p){
     if(p != NULL){
         
     infixtestABR(p->pRight);
-    printf("[%02d]", p->route_ID);
-    //fprintf(file, "%d;%f;%f;%f;%f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
+    printf("[%02d], %d;%.3f;%.3f;%.3f;%d", p->route_ID, p->step_ID, p->min, p->max, p->distance, p->n);
+    //fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
     //insertAVL(avl, 0, p);
     infixtestABR(p->pLeft);
     }
@@ -124,7 +124,7 @@ void infixtestAVL(spTree p){
         
     infixtestAVL(p->pRight);
     printf("[%02d]", p->route_ID);
-    //fprintf(file, "%d;%f;%f;%f;%f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
+    //fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
     //insertAVL(avl, 0, p);
     infixtestAVL(p->pLeft);
     }
@@ -149,6 +149,7 @@ spTree createNodeAVL(pTree abr){
 
     return new;
 }
+
 
 // Fonction pour trouver le minimum entre trois entiers
 int min3(int a, int b, int c){
@@ -271,14 +272,14 @@ spTree insertAVL(spTree avl, int* h, pTree abr){
 
 
 // Parcours de l'ABR et insertion dans l'AVL
-spTree fillAVL(pTree abr, spTree avl, int eq){
+spTree fillAVL(pTree abr, spTree avl, int h){
     if(abr != NULL){
         // Insérer la valeur actuelle de l'ABR dans l'AVL
-        avl = insertAVL(avl, &eq, abr);
+        avl = insertAVL(avl, &h, abr);
         
         // Continuer le parcours en ordre dans l'ABR
-        avl = fillAVL(abr->pLeft, avl, eq);
-        avl = fillAVL(abr->pRight, avl, eq);
+        avl = fillAVL(abr->pLeft, avl, h);
+        avl = fillAVL(abr->pRight, avl, h);
     } 
     return avl;
 }
@@ -323,13 +324,14 @@ int main(int argc, char *argv[]){
 
     pTree abr = NULL;
     abr = readCSV(argv[1], abr);
-    infixtestABR(abr);
-    printf("\n\n");
+    //infixtestABR(abr);
+    //printf("\n\n");
 
     spTree avl = NULL;
-    int eq = 0;
-    avl = fillAVL(abr, avl, eq);
-    infixtestAVL(avl);
+    //hauteur
+    int h = 0;
+    avl = fillAVL(abr, avl, h);
+    //infixtestAVL(avl);
     printf("\n\n");
 
     // Ouvrir un fichier en écriture

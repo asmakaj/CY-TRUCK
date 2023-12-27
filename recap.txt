@@ -96,3 +96,13 @@ typedef struct AVL{
 }AVL_Tree;
 
 typedef AVL_Tree* spTree;
+
+Faire ABR
+readCSV(data.csv, abr){
+  insertABR(abr, elmt){
+    createNodeABR(elmt){
+    }
+  }
+}
+
+Faire AVL
