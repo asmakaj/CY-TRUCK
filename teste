@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # FONCTIONS
@@ -98,7 +97,7 @@ do
     echo "---------------------------------------------------"
 
     exit 0
-    fi
+    
 
 done
 
@@ -141,6 +140,50 @@ do
 
             # Nettoyer les fichiers temporaires
             rm temp/temp.csv temp/finaltemp.csv temp/temp2.csv
-            
 
             ;;
+        -d2)
+            echo "Traitement D2..."
+          awk -F';' '/;1;/ {count[$6]++; distance[$6] += $5} END {for (driver in count) print driver ";" count[driver] ";" distance[driver]}' "$input_file" > temp/temp2.csv
+        
+            Trier_distances=($(awk -F';' '{print $0}' temp/temp2.csv | sort -k2,2nr))
+
+            echo "Les 10 plus grandes distances :"
+            for item in "${Trier_distances[@]}"; do
+                 conducteur=${item%%;*}
+                count=${item#*;}
+                distance=${item##*;}
+                echo "$conducteur : $count trajets, distance totale : $distance"
+            done
+           
+            ;;
+        -l)
+            echo "Traitement L..."
+            # Code pour le traitement
+            ;;
+        -t)
+            echo "Traitement T..."
+            # Code pour le traitement
+            ;;
+        -s)
+            echo "Traitement S..."
+            #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
+            cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
+            route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
+            tail -n +2 temp/firsttemp.csv | head -n 10 > secondtemp.csv
+
+
+            echo "Les statistiques sur les étapes sont : "
+            #echo "$route"
+
+            ./progc/prog secondtemp.csv
+
+            rm temp/firsttemp.csv secondtemp.csv
+            ;;
+        *)
+            echo "L'option $option n'est pas reconnue. Veuillez réessayer."
+            exit 1 ;;
+    esac
+done
+
+echo "ÇA COMPIILLEEEE HEHEEEE"
