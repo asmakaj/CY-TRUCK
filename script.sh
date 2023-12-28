@@ -124,6 +124,7 @@ do
         -d1)
             echo "Traitement D1..."
             # Utiliser awk pour compter le nombre de trajets par conducteur
+            #cat "$input_file" >> temp/temp.csv ?????
             grep ";1;" "$input_file" >> temp/temp.csv
             awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/temp.csv >> temp/temp2.csv
 
@@ -173,7 +174,7 @@ do
             echo "Traitement L..."
             # récupérer les distances totales pour chaque trajet (meme route ID)
             cat "$input_file" >> temp/temp.csv
-           awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
+            awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
 
             # trier les plus longs trajets
             sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv  

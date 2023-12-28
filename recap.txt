@@ -39,10 +39,12 @@ Pour avoir accès au fichier, il faut utiliser la variable intput_file.
 --------------------------------------------------------------------------------------------------
 ORGANISATION DES TRAITEMENTS
 -d1 conducteurs avec le plus de trajets --> Deulyne (fait)
+
 -d2 conducteurs et la plus grande distance --> Emma
 -l les 10 trajets les plus longs --> Asma (fait)
 -t les 10 villes les plus traversées --> Asma
 -s statistiques sur les étapes --> Deulyne (fait)
+Route ID;
 
 Pour chaque traitement, il ne faut pas oublier : 
 - l'utilisation des fichiers intermédiare dans 'temp'
