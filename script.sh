@@ -198,6 +198,7 @@ do
             echo "$(head -n 50 temp/output.csv)" 
             rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv 
             ;;
+            
         *)
             echo "L'option $option n'est pas reconnue. Veuillez réessayer."
             exit 1 ;;
