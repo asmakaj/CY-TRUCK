@@ -143,32 +143,14 @@ do
             ;;
         -d2)
             echo "Traitement D2..."
-            if [ -f "$input_file" ]
-            then
-                 #tab assosiatif avec conducteur suivi de la distance 
-                declare -A conducteur_distances
-                   while read -r ligne
-                   do
-                        conducteur=$(echo "$ligne" | cut -d ' ' -f 6)
-                        distance=$(echo "$ligne" | cut -d ' ' -f 5)
-                        #accumuler la distance totale parcourue dans le tab cree si le conducteur a déjà une distance enregistrée, cette ligne ajoute la distance actuelle à la distance existante
-                        #ajoute la distance extraite de la ligne actuelle au conducteur spécifié.
-                        conducteur_distances["$conducteur"]=$(( ${conducteur_distances["$conducteur"]} + distance ))
-                    done < "$input_file"
-            
-            # Trier les distances par ordre décroissant
-            Trier_distances=($(for conducteur in "${!conducteur_distances[@]}"; do
-            echo "$conducteur ${conducteur_distances["$conducteur"]}"
-                done | sort -k2,2nr))
-            # Afficher les 10 plus grandes distances
-            echo "Les 10 plus grandes distances :"
-            for item in "${Trier_distances[@]}"; do
-                conducteur=${item%% *}
-                distance=${item#* }
-                 echo "$conducteur : $distance"
-            done
-            fi
-            
+            #Recupérer 
+            awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" > temp/temp.csv
+            # Trier la liste par ordre décroissant des distances totales
+            sort -t';' -k2,2 -n -r temp/temp.csv > temp/finaltemp.csv 
+            longest_10_distances=$(head -n 10 temp/finaltemp.csv)
+            echo "Les 10 conducteurs avec les plus grandes distances sont : "
+            echo "$longest_10_distances" 
+            rm temp/temp.csv temp/finaltemp.csv
             ;;
         -l)
             echo "Traitement L..."
@@ -204,19 +186,17 @@ do
             cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
             #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            tail -n +3 temp/firsttemp.csv > temp/secondtemp.csv
+            tail -n +3 temp/firsttemp.csv > temp/secondtemp.csv 
+            # DEMANDER A LA PROF 
 
             echo "Les statistiques sur les étapes sont : "
 
             ./progc/prog temp/secondtemp.csv
-            #route=$(head -n 50 temp/output.csv)
-            #echo "$route"           
-            #cat temp/output.csv
 
             # Récupérer les 50 premiers 
             echo "Les 50 premiers sont : "
             echo "$(head -n 50 temp/output.csv)" 
-            rm temp/firsttemp.csv temp/secondtemp.csv temp/output.csv
+            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv 
             ;;
         *)
             echo "L'option $option n'est pas reconnue. Veuillez réessayer."

@@ -17,7 +17,11 @@ traitement L done
 traitement S (in progress...) // AVL quasi-fonctionnel
 27/12:
 traitement S (in progress...) // AVL fonctionnel mais pas sur l'ensemble de data.csv, que sur les 100000ère lignes
-traitement S done 
+traitement S done // Pour tout le fichier sauf les deux premieèes lignes
+28/12:
+traitement D2 done
+
+
 
 __semaine du 1er janvier__
 
