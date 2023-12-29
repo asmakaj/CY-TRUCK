@@ -227,7 +227,7 @@ xdg-open "images/$output_file"
 
 
             # Nettoyer les fichiers temporaires
-            #rm temp/temp.csv temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
+            rm temp/temp.csv temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
            
             ;;
            
