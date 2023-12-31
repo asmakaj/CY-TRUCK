@@ -16,30 +16,48 @@ mkdir -p temp images
 }
 
 # Verification de la presence de l'executable C
-executable_verification() {
-if [ ! -f progc/prog ]
-then
-    # On compile
-    gcc -o progc/prog progc/programme.c
-    # Verifier si la compilation s'est bien deroulee
-    if [ $? -ne 0 ]
-    then
-        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-        exit 1
-    fi
-fi
+executable_verification(){
+    case $1 in
+        -t)
+        if [ ! -f progc/progt ]
+        then
+            gcc -o progc/progt progc/programmet.c
+            # Verifier si la compilation s'est bien deroulee
+            if [ $? -ne 0 ]
+            then
+                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                exit 1
+            fi
+        fi
+        ;;
+        -s)
+        if [ ! -f progc/progs ]
+        then
+            gcc -o progc/progs progc/programmes.c
+            # Verifier si la compilation s'est bien deroulee
+            if [ $? -ne 0 ]
+            then
+                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                exit 1
+            fi
+        fi
+        ;;
+         *)
+            echo "L'option $option n'est pas reconnue. Veuillez réessayer."
+            exit 1 ;;
+    esac
 # echo "L'executable C est present."
 }
 
 # À SUPPRIMER QUAND ON AURA FINI DE TOUT CODER
-compilation() {
-    gcc -o progc/prog progc/programme.c
-    if [ $? -ne 0 ]
-    then
-        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-        exit 1
-    fi
-}
+#compilation() {
+ #   gcc -o progc/prog progc/programme.c
+#    if [ $? -ne 0 ]
+#    then
+#       echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+#        exit 1
+#    fi
+#}
 
 # Creation du graphique avec gnuplot
 #generate_graph() {
@@ -104,11 +122,6 @@ done
 # Vérification des dossiers temp et images
 create_directories
 
-# Vérification de l'executable c
-executable_verification
-#compilation
-compilation
-
 # EXECUTION DES DIFFÉRENTS TRAITEMENTS
 
 # Le premier argument est le fichier CSV
@@ -124,6 +137,7 @@ do
         -d1)
             echo "Traitement D1..."
             # Utiliser awk pour compter le nombre de trajets par conducteur
+            #cat "$input_file" >> temp/temp.csv ?????
             grep ";1;" "$input_file" >> temp/temp.csv
             awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/temp.csv >> temp/temp2.csv
 
@@ -142,13 +156,20 @@ do
             ;;
         -d2)
             echo "Traitement D2..."
-            # Code pour le traitement
+            #Recupérer 
+            awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" > temp/temp.csv
+            # Trier la liste par ordre décroissant des distances totales
+            sort -t';' -k2,2 -n -r temp/temp.csv > temp/finaltemp.csv 
+            longest_10_distances=$(head -n 10 temp/finaltemp.csv)
+            echo "Les 10 conducteurs avec les plus grandes distances sont : "
+            echo "$longest_10_distances" 
+            rm temp/temp.csv temp/finaltemp.csv
             ;;
         -l)
             echo "Traitement L..."
             # récupérer les distances totales pour chaque trajet (meme route ID)
             cat "$input_file" >> temp/temp.csv
-           awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
+            awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
 
             # trier les plus longs trajets
             sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv  
@@ -170,12 +191,31 @@ do
             ;;
         -t)
             echo "Traitement T..."
+            # Vérification de l'executable c
+            executable_verification "$option"
             # Code pour le traitement
             ;;
         -s)
             echo "Traitement S..."
-            # Code pour le traitement
+            # Vérification de l'executable c
+            executable_verification "$option"
+            #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
+            cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
+            #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
+            #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
+            tail -n +3 temp/firsttemp.csv > temp/secondtemp.csv 
+            # DEMANDER A LA PROF 
+
+            echo "Les statistiques sur les étapes sont : "
+
+            ./progc/progs temp/secondtemp.csv
+
+            # Récupérer les 50 premiers 
+            echo "Les 50 premiers sont : "
+            echo "$(head -n 50 temp/output.csv)" 
+            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv 
             ;;
+
         *)
             echo "L'option $option n'est pas reconnue. Veuillez réessayer."
             exit 1 ;;
