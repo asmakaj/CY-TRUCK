@@ -40,7 +40,11 @@ executable_verification(){
                 echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
                 exit 1
             fi
+        fi
         ;;
+         *)
+            echo "L'option $option n'est pas reconnue. Veuillez réessayer."
+            exit 1 ;;
     esac
 # echo "L'executable C est present."
 }
