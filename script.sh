@@ -136,11 +136,9 @@ do
    case $option in
         -d1)
             echo "Traitement D1..."
-            # Utiliser awk pour compter le nombre de trajets par conducteur
-            #cat "$input_file" >> temp/temp.csv ?????
+            #cat "$input_file" >> temp/temp.csv
             grep ";1;" "$input_file" >> temp/temp.csv
             awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/temp.csv >> temp/temp2.csv
-
 
             # Trier la liste par ordre décroissant de nombre de trajets
             sort -t';' -k2,2 -n -r temp/temp2.csv >> temp/finaltemp.csv 
