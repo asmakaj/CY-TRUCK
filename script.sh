@@ -21,7 +21,7 @@ executable_verification(){
         -t)
         if [ ! -f progc/progt ]
         then
-            gcc -o progc/progt progc/programmet.c
+            gcc -o progc/progt progc/programme_t.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
@@ -33,7 +33,7 @@ executable_verification(){
         -s)
         if [ ! -f progc/progs ]
         then
-            gcc -o progc/progs progc/programmes.c
+            gcc -o progc/progs progc/programme_s.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
@@ -200,11 +200,13 @@ do
             # Vérification de l'executable c
             executable_verification "$option"
             #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
-            cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
+            cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
             #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            tail -n +3 temp/firsttemp.csv > temp/secondtemp.csv 
+            #tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
             # DEMANDER A LA PROF 
+            awk 'NR > 1' temp/firsttemp.csv > temp/secondtemp.csv
+
 
             echo "Les statistiques sur les étapes sont : "
 
