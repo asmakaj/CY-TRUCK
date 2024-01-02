@@ -203,9 +203,8 @@ do
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
             #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            #tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
+            tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
             # DEMANDER A LA PROF 
-            awk 'NR > 1' temp/firsttemp.csv > temp/secondtemp.csv
 
 
             echo "Les statistiques sur les étapes sont : "
@@ -215,7 +214,8 @@ do
             # Récupérer les 50 premiers 
             echo "Les 50 premiers sont : "
             echo "$(head -n 50 temp/output.csv)" 
-            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv 
+            # echo "$(head -n 50 temp/output1.csv)" 
+            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv
             ;;
 
         *)
