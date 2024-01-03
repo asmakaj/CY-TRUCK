@@ -78,7 +78,7 @@ pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
     return abr;
 }
 
-// Function to read data from CSV from chatgpt
+// Function to read data from CSV 
 pTree readCSV(const char* data, pTree abr) {
     //printf("okinread\n");
     FILE* file1 = fopen(data, "r");

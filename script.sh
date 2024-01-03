@@ -31,9 +31,10 @@ executable_verification(){
         fi
         ;;
         -s)
-        if [ ! -f progc/progs ]
+        if [ ! -f progc/progs2 ]
         then
-            gcc -o progc/progs progc/programme_s.c
+            #gcc -o progc/progs progc/programme_s.c
+            gcc -o progc/progs2 progc/programme_s2.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
@@ -205,16 +206,50 @@ do
             # Vérification de l'executable c
             executable_verification "$option"
             #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
-            cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
-            #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
-            #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
-            # DEMANDER A LA PROF 
+            cut -d';' -f1,5 "$input_file" | tail -n +2 > temp/firsttemp.csv
+
+            awk -F ';' '
+    BEGIN {
+        # Initialisation des variables
+        FS=";"
+        OFS=";"
+    }
+
+    # Fonction pour mettre à jour les statistiques
+
+    function update_distances(route_ID, distance){
+        if (!(route_ID in min) || distance < min[route_ID]) {
+            min[route_ID] = distance
+        }
+        if (!(route_ID in max) || distance > max[route_ID]) {
+            max[route_ID] = distance
+        }
+        total_distance[route_ID] += distance
+        count[route_ID]++
+    }
+
+    # Traitement de chaque ligne
+    {
+        route_ID = $1
+        distance = $2
+        update_distances(route_ID, distance)
+    }
+
+    # À la fin de la lecture du fichier, afficher les résultats
+    END {
+        for (route_ID in min) {
+            moyenne = total_distance[route_ID] / count[route_ID]
+            difference = max[route_ID] - min[route_ID]
+            print route_ID, min[route_ID], max[route_ID], moyenne, difference
+        }
+    }
+' temp/firsttemp.csv > temp/secondtemp.csv 
+
 
 
             echo "Les statistiques sur les étapes sont : "
-
-            ./progc/progs temp/secondtemp.csv
+            
+            ./progc/progs2 temp/secondtemp.csv 
 
             # Récupérer les 50 premiers 
             head -n 50 temp/output.csv >> temp/finaltemp.csv
@@ -222,7 +257,7 @@ do
             # route_id, min, max, moy, diff
             cat temp/finaltemp.csv
             
-            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv temp/finaltemp.csv
+            #rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv temp/finaltemp.csv
             ;;
 
         *)
