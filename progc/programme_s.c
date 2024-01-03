@@ -52,7 +52,7 @@ pTree createNodeABR(int route_ID, int step_ID, float distance, float min, float 
 
 
 pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
-    printf("okinseert\n");
+    //printf("okinseert\n");
 
     if(abr == NULL){
         abr = createNodeABR(route_ID, step_ID, distance, distance, distance);
@@ -80,7 +80,7 @@ pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
 
 // Function to read data from CSV from chatgpt
 pTree readCSV(const char* data, pTree abr) {
-    printf("okinread\n");
+    //printf("okinread\n");
     FILE* file1 = fopen(data, "r");
     if (file1 == NULL) {
         perror("Error opening the file");
