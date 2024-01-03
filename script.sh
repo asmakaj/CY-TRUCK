@@ -221,7 +221,7 @@ do
             echo "Les 50 premiers sont : "
             cat temp/finaltemp.csv
             
-            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv
+            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv temp/finaltemp.csv
             ;;
 
         *)
