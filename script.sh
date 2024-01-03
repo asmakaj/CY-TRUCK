@@ -136,34 +136,39 @@ do
    case $option in
         -d1)
             echo "Traitement D1..."
-            # Utiliser awk pour compter le nombre de trajets par conducteur
-            #cat "$input_file" >> temp/temp.csv ?????
-            grep ";1;" "$input_file" >> temp/temp.csv
-            awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/temp.csv >> temp/temp2.csv
-
+            #cat "$input_file" >> temp/temp.csv
+            grep ";1;" "$input_file" > temp/firsttemp.csv
+            awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/firsttemp.csv >> temp/secondtemp.csv
 
             # Trier la liste par ordre décroissant de nombre de trajets
-            sort -t';' -k2,2 -n -r temp/temp2.csv >> temp/finaltemp.csv 
+            sort -t';' -k2,2 -n -r temp/secondtemp.csv >> temp/thirdtemp.csv 
 
-            # Récupérer les 10 premiers conducteurs
-            longest_10_drivers=$(head -n 10 temp/finaltemp.csv)
+            # Récupérer les 10 premiers conducteurs au choix fichier finaltemp.csv ou dansla variable
+            # longest_10_drivers=$(head -n 10 temp/thirdtemp.csv)
+            head -n 10 temp/thirdtemp.csv >> temp/finaltemp.csv
+
             echo "Les 10 conducteurs avec le plus de trajets sont : "
-            echo "$longest_10_drivers" 
+            cat temp/finaltemp.csv
 
             # Nettoyer les fichiers temporaires
-            rm temp/temp.csv temp/finaltemp.csv temp/temp2.csv
+            rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
 
             ;;
         -d2)
             echo "Traitement D2..."
             #Recupérer 
-            awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" > temp/temp.csv
+            awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" >> temp/firsttemp.csv
+           
             # Trier la liste par ordre décroissant des distances totales
-            sort -t';' -k2,2 -n -r temp/temp.csv > temp/finaltemp.csv 
-            longest_10_distances=$(head -n 10 temp/finaltemp.csv)
+            sort -t';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv 
+            
+            #longest_10_distances=$(head -n 10 temp/finaltemp.csv)
+            head -n 10 temp/secondtemp.csv >> temp/finaltemp.csv
+            
             echo "Les 10 conducteurs avec les plus grandes distances sont : "
-            echo "$longest_10_distances" 
-            rm temp/temp.csv temp/finaltemp.csv
+            cat temp/finaltemp.csv
+            
+            rm temp/firsttemp.csv temp/finaltemp.csv temp/secondtemp.csv
             ;;
         -l)
             echo "Traitement L..."
@@ -200,20 +205,23 @@ do
             # Vérification de l'executable c
             executable_verification "$option"
             #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
-            cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
+            cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
             #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            tail -n +3 temp/firsttemp.csv > temp/secondtemp.csv 
+            tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
             # DEMANDER A LA PROF 
+
 
             echo "Les statistiques sur les étapes sont : "
 
             ./progc/progs temp/secondtemp.csv
 
             # Récupérer les 50 premiers 
+            head -n 50 temp/output.csv >> temp/finaltemp.csv
             echo "Les 50 premiers sont : "
-            echo "$(head -n 50 temp/output.csv)" 
-            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv 
+            cat temp/finaltemp.csv
+            
+            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv temp/finaltemp.csv
             ;;
 
         *)
