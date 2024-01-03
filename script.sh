@@ -219,6 +219,7 @@ do
             # Récupérer les 50 premiers 
             head -n 50 temp/output.csv >> temp/finaltemp.csv
             echo "Les 50 premiers sont : "
+            # route_id, min, max, moy, diff
             cat temp/finaltemp.csv
             
             rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv temp/finaltemp.csv
