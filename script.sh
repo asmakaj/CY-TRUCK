@@ -206,13 +206,17 @@ do
             executable_verification "$option"
 
             # Partie du awk qui ne fonctionne pas (nombre de trajets qui parcourent chaque ville)
-            #awk -F';' '{count[$3]+= 1} END {for (city in count) print city ";" count[city]}' "$input_file" >> temp/firsttemp.csv
+            awk -F';' '{count[$4]+= 1} END {for (city in count) print city ";" count[city]}' "$input_file" >> temp/firsttemp.csv
+            #awk -F';' '{ count[$3] += 1; count[$4] += 1 } END { for (item in count) print item ";" count[item] }' "$input_file" >> temp/firsttemp.csv
+            #awk -F';' '{count[$3] += 1; if ($4 in count) count[$4] += 1 sinon crée count[$4] =+ 1} END { for (item in count) print item ";" count[item] }' temp/temp.csv >> temp/firsttemp.csv
+            #awk -F';' '{count[$3] += 1; if ($4 in count) count[$4] += 1; else count[$4] = 1} END { for (item in count) print item ";" count[item] }' "$input_file" >> temp/firsttemp.csv
 
-            awk -F';' '{ count[$3] += 1; if ($2 == 1) departure_city[$3] += 1 } 
-            END {  
-                for (city in count) 
-                    printf "%s;%d;%d\n", city, count[city], departure_city[city]
-            }' "$input_file" >> temp/firsttemp.csv
+
+            #awk -F';' '{ count[$3] += 1; if ($2 == 1) departure_city[$3] += 1 } 
+            #END {  
+            #    for (city in count) 
+            #        printf "%s;%d;%d\n", city, count[city], departure_city[city]
+            #}' "$input_file" >> temp/firsttemp.csv
             # "City;Total;departure_city"
 
 
@@ -220,12 +224,12 @@ do
             #awk -F';' '$2 == 1 {departure_city[$3]+=1} END {for (city in departure_city) print city ";" departure_city[city]}' "$input_file" >> temp/firsttemp.csv
 
 
-            sort -t ';' -k2,2 -n -r  temp/firsttemp.csv >> temp/secondtemp.csv
+            sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
             head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
-            #sort -t ';' -k2,1 -d temp/thirdtemp.csv >> temp/finaltemp.csv
+            sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
 
-            cat temp/thirdtemp.csv
-            rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv temp/thirdtemp.csv
+            cat temp/finaltemp.csv
+            rm temp/temp.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv temp/thirdtemp.csv
 
             ;;
         -s)
