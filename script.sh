@@ -221,8 +221,9 @@ do
 
             awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
 
+            ./progc/progt temp/firsttemp.csv
 
-            sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
+            
             head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
             sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
 
