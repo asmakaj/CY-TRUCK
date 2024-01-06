@@ -219,16 +219,20 @@ do
             #awk -F';' '$2 == 1 {departure_city[$3]+=1 et count[$3]++ } END {for (city in departure_city) print city ";" departure_city[city]}' "$input_file" >> temp/firsttemp.csv
 
 
-            awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
+            #awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
+            awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" (city in departure_city ? departure_city[city] : 0) }' "$input_file" >> temp/firsttemp.csv
 
-            ./progc/progt temp/firsttemp.csv
+
+            tail -n +2 temp/firsttemp.csv > temp/temp.csv
+            gcc -o progc/progt progc/programme_t.c
+            ./progc/progt temp/temp.csv
 
             
-            head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
+            head -n 20 temp/secondtemp.csv >> temp/thirdtemp.csv
             sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
 
             cat temp/finaltemp.csv
-            rm temp/temp.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv temp/thirdtemp.csv
+            rm temp/firsttemp.csv temp/finaltemp.csv temp/thirdtemp.csv temp/temp.csv
 
             ;;
         -s)
@@ -309,7 +313,7 @@ awk -F ';' '
 
 
             echo "Les statistiques sur les étapes sont : "
-            
+            gcc -o progc/prog2 progc/programme_s.c
             ./progc/progs2 temp/thirdtemp.csv
 
             # Récupérer les 50 premiers 

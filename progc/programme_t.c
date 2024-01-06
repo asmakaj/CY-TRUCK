@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct AVL{
     char* city;
@@ -12,36 +13,34 @@ typedef struct AVL{
 
 typedef AVL_Tree* spTree;
 
-void infixtestAVL(spTree p){
-    printf("AVL\n");
+void infixtestAVL(spTree p, int n){
     if(p != NULL){
-        
-    infixtestAVL(p->pRight);
-    printf("[%02d]", p->crossed);
-    //fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
-    //insertAVL1(avl, 0, p);
-    infixtestAVL(p->pLeft);
+        infixtestAVL(p->pRight,n);
+        printf("[%02d]", p->crossed);
+        //fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
+        //insertAVL1(avl, 0, p);
+    infixtestAVL(p->pLeft,n);
     }
 }
 
 void infixreverse(spTree avl, FILE* file) {
     if (avl != NULL) {
         infixreverse(avl->pRight, file);
-        //printf("[%02d]", avl->route_ID);
         fprintf(file, "%s;%d;%d\n", avl->city, avl->crossed, avl->departure_city);
         infixreverse(avl->pLeft, file);
     }
 }
 
-spTree createNodeAVL(char* city, int crossed, int departure_city){
-    
+
+//ok
+spTree createNodeAVL(const char* city, int crossed, int departure_city){
     spTree new = malloc(sizeof(AVL_Tree));
     if (new == NULL) {
         printf("Erreur au niveau du malloc");
         exit(3);
     }
 
-    new->city = city;
+    new->city = strdup(city); // Alloue de la mémoire et copie la ville
     new->crossed = crossed;
     new->departure_city = departure_city;
     new->eq = 0;
@@ -160,14 +159,19 @@ spTree equilibrageAVL(spTree avl){
     return avl;
 }
 // issu du cours
-spTree insertAVL1(spTree avl, int* h, char* city, int crossed, int departure_city){
+spTree insertAVL1(spTree avl, int* h, const char* city, int crossed, int departure_city){
     spTree new = createNodeAVL(city, crossed, departure_city);
+
+    if(new == NULL){
+        printf("Erreur, le nouveau est NULL");
+        exit(10);
+    }
 
     if(avl ==  NULL){
         *h = 1;
         return new;
     }
-    else if(new->crossed < avl->crossed){
+    else if(new->crossed <= avl->crossed){
         avl->pLeft = insertAVL1(avl->pLeft, h,city, crossed, departure_city);
         *h = -(*h);
     }
@@ -175,7 +179,7 @@ spTree insertAVL1(spTree avl, int* h, char* city, int crossed, int departure_cit
         avl->pRight = insertAVL1(avl->pRight, h, city, crossed, departure_city);
     }
     else{
-        *h = 0;
+        h = 0;
         return avl;
     }
 
@@ -190,6 +194,7 @@ spTree insertAVL1(spTree avl, int* h, char* city, int crossed, int departure_cit
         }
 
     }
+
     return avl;
 }
 
@@ -202,17 +207,15 @@ spTree fillAVL(const char* data, spTree avl) {
         exit(EXIT_FAILURE);
     }
 
-    char* city;
+    char city[50];
     int h = 0;
-    int crossed, departure_city;
-    
-    while(fscanf(file1, "%d;%f;%f;%f;%f", &city, &crossed, &departure_city) == 3) {
-        // Remplissage de l'arbre
+    int crossed = 0, departure_city = 0;
+
+    while (fscanf(file1, "%49[^;];%d;%d", city, &crossed, &departure_city) == 3) {
         avl = insertAVL1(avl, &h, city, crossed, departure_city);
     }
-    return avl;
-
     fclose(file1);
+    return avl;
 }
 
 void freeAVL(spTree avl){
@@ -240,8 +243,6 @@ int main(int argc, char *argv[]){
 
     spTree avl = NULL;
     avl = fillAVL(argv[1], avl);
-    infixtestAVL(avl);
-    printf("testt\n");
 
     // Ouvrir un fichier en écriture
     FILE *file = fopen("temp/secondtemp.csv", "w");
@@ -251,11 +252,10 @@ int main(int argc, char *argv[]){
     }
 
     infixreverse(avl, file);
-    printf("\n");
 
     fclose(file);
-
     freeAVL(avl);
+
 
     return 0 ;
 }
