@@ -101,7 +101,7 @@ void infixreverse(spTree avl, FILE* file2) {
     if (avl != NULL) {
         infixreverse(avl->pRight, file2);
         //printf("[%02d]", avl->route_ID);
-        fprintf(file2, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff, avl->eq);
+        fprintf(file2, "%d;%.3f;%.3f;%.3f;%.3f\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff);
         infixreverse(avl->pLeft, file2);
     }
 }
