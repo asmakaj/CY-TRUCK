@@ -201,7 +201,18 @@ do
             echo "Traitement T..."
             # Vérification de l'executable c
             executable_verification "$option"
-            # Code pour le traitement
+
+            # Recupère le nombre de trajets qui parcourent chaque ville, ainsi que le nombre de fois où ces villes ont été des villes de départ de trajets.
+            awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
+
+
+            sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
+            head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
+            sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
+
+            cat temp/finaltemp.csv
+            rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv temp/thirdtemp.csv
+
             ;;
         -s)
             echo "Traitement S..."
