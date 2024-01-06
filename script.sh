@@ -206,22 +206,18 @@ do
             executable_verification "$option"
 
             # Partie du awk qui ne fonctionne pas (nombre de trajets qui parcourent chaque ville)
-            awk -F';' '{count[$4]+= 1} END {for (city in count) print city ";" count[city]}' "$input_file" >> temp/firsttemp.csv
+            #awk -F';' '{count[$4]+= 1} END {for (city in count) print city ";" count[city]}' "$input_file" >> temp/firsttemp.csv
+
+
             #awk -F';' '{ count[$3] += 1; count[$4] += 1 } END { for (item in count) print item ";" count[item] }' "$input_file" >> temp/firsttemp.csv
             #awk -F';' '{count[$3] += 1; if ($4 in count) count[$4] += 1 sinon crée count[$4] =+ 1} END { for (item in count) print item ";" count[item] }' temp/temp.csv >> temp/firsttemp.csv
             #awk -F';' '{count[$3] += 1; if ($4 in count) count[$4] += 1; else count[$4] = 1} END { for (item in count) print item ";" count[item] }' "$input_file" >> temp/firsttemp.csv
 
-
-            #awk -F';' '{ count[$3] += 1; if ($2 == 1) departure_city[$3] += 1 } 
-            #END {  
-            #    for (city in count) 
-            #        printf "%s;%d;%d\n", city, count[city], departure_city[city]
-            #}' "$input_file" >> temp/firsttemp.csv
-            # "City;Total;departure_city"
-
-
             # Partie du awk qui compte departure city -> les valeurs sont bonnes
-            #awk -F';' '$2 == 1 {departure_city[$3]+=1} END {for (city in departure_city) print city ";" departure_city[city]}' "$input_file" >> temp/firsttemp.csv
+            #awk -F';' '$2 == 1 {departure_city[$3]+=1 et count[$3]++ } END {for (city in departure_city) print city ";" departure_city[city]}' "$input_file" >> temp/firsttemp.csv
+
+
+            awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
 
 
             sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
