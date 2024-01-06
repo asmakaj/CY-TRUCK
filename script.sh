@@ -161,6 +161,8 @@ do
             #awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" >> temp/firsttemp.csv
             #awk -F';' '{count[$6]+=$5} END {for (driver in count) printf "%s;%.2f\n", driver, count[driver]}' "$input_file" >> temp/firsttemp.csv
             LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" >> temp/firsttemp.csv
+            #LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {asorti(count, sorted_indices); for (i in sorted_indices) printf "%s;%.6f\n", sorted_indices[i], count[sorted_indices[i]]}' "$input_file" >> temp/firsttemp.csv
+
 
 
             # Trier la liste par ordre décroissant des distances totales
