@@ -8,39 +8,57 @@ file="temp"
 # Verifier si le dossier existe
 if [ -d "$file" ]
 then
-   # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
-   find temp -mindepth 1 -delete
+    # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
+    find temp -mindepth 1 -delete 
 fi
 # Creer les dossiers
 mkdir -p temp images
 }
-#et images pourquoi seulement temp??
 
 # Verification de la presence de l'executable C
-executable_verification() {
-if [ ! -f progc/prog ]
-then
-   # On compile
-   gcc -o progc/prog progc/programme.c
-   # Verifier si la compilation s'est bien deroulee
-   if [ $? -ne 0 ]
-   then
-echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-exit 1
-   fi
-fi
+executable_verification(){
+    case $1 in
+        -t)
+        if [ ! -f progc/progt ]
+        then
+            gcc -o progc/progt progc/programme_t.c
+            # Verifier si la compilation s'est bien deroulee
+            if [ $? -ne 0 ]
+            then
+                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                exit 1
+            fi
+        fi
+        ;;
+        -s)
+        if [ ! -f progc/progs2 ]
+        then
+            #gcc -o progc/progs progc/programme_s.c
+            gcc -o progc/progs2 progc/programme_s2.c
+            # Verifier si la compilation s'est bien deroulee
+            if [ $? -ne 0 ]
+            then
+                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                exit 1
+            fi
+        fi
+        ;;
+         *)
+            echo "L'option $option n'est pas reconnue. Veuillez réessayer."
+            exit 1 ;;
+    esac
 # echo "L'executable C est present."
 }
 
 # À SUPPRIMER QUAND ON AURA FINI DE TOUT CODER
-/compilation() {
-    gcc -o progc/prog progc/programme.c
-    if [ $? -ne 0 ]
-    then
-        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-        exit 1
-    fi
-}//
+#compilation() {
+ #   gcc -o progc/prog progc/programme.c
+#    if [ $? -ne 0 ]
+#    then
+#       echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+#        exit 1
+#    fi
+#}
 
 # Creation du graphique avec gnuplot
 #generate_graph() {
@@ -105,11 +123,6 @@ done
 # Vérification des dossiers temp et images
 create_directories
 
-# Vérification de l'executable c
-executable_verification
-#compilation
-compilation
-
 # EXECUTION DES DIFFÉRENTS TRAITEMENTS
 
 # Le premier argument est le fichier CSV
@@ -118,38 +131,75 @@ shift
 # On a décalé les arguments vers la gauche pour exclure le fichier CSV, le premier argument est maintenant le premier traintement
 # Pour avoir accès a data.csv, il faut faire appel à la varible $input_file
 
-# Boucle pour traiter chaque argument
+# Boucle pour traiter chaque argument 
 for option in "$@"
 do
    case $option in
         -d1)
-            echo "Traitement D1..."
-            # Utiliser awk pour compter le nombre de trajets par conducteur
-            grep ";1;" "$input_file" >> temp/temp.csv
-            awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/temp.csv >> temp/temp2.csv
+        # Enregistrez le temps de début
+            start_time=$(date +%s.%N)
 
+            echo "Traitement D1..."
+            #cat "$input_file" >> temp/temp.csv
+            grep ";1;" "$input_file" > temp/firsttemp.csv
+            awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/firsttemp.csv >> temp/secondtemp.csv
 
             # Trier la liste par ordre décroissant de nombre de trajets
-            sort -t';' -k2,2 -n -r temp/temp2.csv >> temp/finaltemp.csv
+            sort -t';' -k2,2 -n -r temp/secondtemp.csv >> temp/thirdtemp.csv 
 
-            # Récupérer les 10 premiers conducteurs
-            longest_10_drivers=$(head -n 10 temp/finaltemp.csv)
+            # Récupérer les 10 premiers conducteurs au choix fichier finaltemp.csv ou dansla variable
+            # longest_10_drivers=$(head -n 10 temp/thirdtemp.csv)
+            head -n 10 temp/thirdtemp.csv >> temp/finaltemp.csv
 
-            # Créer le graphique de type histogramme horizontal
             echo "Les 10 conducteurs avec le plus de trajets sont : "
-            echo "$longest_10_drivers"
+            cat temp/finaltemp.csv
 
             # Nettoyer les fichiers temporaires
-            #rm temp/temp.csv temp/finaltemp.csv temp/temp2.csv
+            rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+
+            # Enregistrez le temps de fin
+            end_time=$(date +%s.%N)
+
+            # Calculez la durée totale d'exécution
+            execution_time=$(echo "$end_time - $start_time" | bc)
+
+            echo "Le temps d'exécution est de $execution_time secondes."
 
             ;;
-        -d2)
+            -d2)
+            # Enregistrez le temps de début
+            start_time=$(date +%s.%N)
+
             echo "Traitement D2..."
-            # Code pour le traitement
-            ;;
+            #Recupérer 
+            #awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" >> temp/firsttemp.csv
+            LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" >> temp/firsttemp.csv
+
            
-        -l)
-            echo "Traitement L in progress..."
+            # Trier la liste par ordre décroissant des distances totales
+            sort -t';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv 
+            
+            #longest_10_distances=$(head -n 10 temp/finaltemp.csv)
+            head -n 10 temp/secondtemp.csv >> temp/finaltemp.csv
+            
+            echo "Les 10 conducteurs avec les plus grandes distances sont : "
+            cat temp/finaltemp.csv
+            
+            rm temp/firsttemp.csv temp/finaltemp.csv temp/secondtemp.csv
+            # Enregistrez le temps de fin
+            end_time=$(date +%s.%N)
+
+            # Calculez la durée totale d'exécution
+            execution_time=$(echo "$end_time - $start_time" | bc)
+
+            echo "Le temps d'exécution est de $execution_time secondes."
+        
+            ;;
+                -l)
+                # Enregistrez le temps de début
+                start_time=$(date +%s.%N)
+
+                  echo "Traitement L in progress..."
            
              # récupérer les distances totales pour chaque trajet (meme route ID)
             cat "$input_file" >> temp/temp.csv
@@ -182,7 +232,7 @@ gnuplot <<EOF
  
   # Fichier de sortie du gnuplot
   set output '$output_file'
- 
+  
   # Le plot sera un histogramme
   set style data histograms
  
@@ -228,14 +278,29 @@ xdg-open "images/$output_file"
 
             # Nettoyer les fichiers temporaires
             rm temp/temp.csv temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
+
+            # Calculez la durée totale d'exécution
+            execution_time=$(echo "$end_time - $start_time" | bc)
+
+            echo "Le temps d'exécution est de $execution_time secondes."
            
             ;;
            
         -t)
+         # Enregistrez le temps de début
+        start_time=$(date +%s.%N)
             echo "Traitement T..."
             # Code pour le traitement
+
+             # Calculez la durée totale d'exécution
+            execution_time=$(echo "$end_time - $start_time" | bc)
+
+            echo "Le temps d'exécution est de $execution_time secondes."
             ;;
         -s)
+          # Enregistrez le temps de début
+            start_time=$(date +%s.%N)
+
             echo "Traitement S..."
             #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
             cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
@@ -249,9 +314,15 @@ xdg-open "images/$output_file"
             ./progc/prog secondtemp.csv
 
             rm temp/firsttemp.csv secondtemp.csv
+
+            # Calculez la durée totale d'exécution
+            execution_time=$(echo "$end_time - $start_time" | bc)
+
+            echo "Le temps d'exécution est de $execution_time secondes."
             ;;
         *)
             echo "L'option $option n'est pas reconnue. Veuillez réessayer."
             exit 1 ;;
-    esac
+            esac
 done
+echo "ÇA COMPIILLEEEE HEHEEEE"
