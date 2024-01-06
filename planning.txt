@@ -21,6 +21,14 @@ traitement S done // Pour tout le fichier sauf les deux premieèes lignes
 28/12:
 traitement D2 done
 
+Gnuplot in progress
+
+05/01:
+Ajout du temps
+
+06/01:
+tratement -t (in progress...) // fonctionne mais sans les AVL
+
 
 
 __semaine du 1er janvier__
