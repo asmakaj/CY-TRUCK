@@ -159,7 +159,9 @@ do
             echo "Traitement D2..."
             #Recupérer 
             #awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" >> temp/firsttemp.csv
-            awk -F';' '{count[$6]+=$5} END {for (driver in count) printf "%s;%.2f\n", driver, count[driver]}' "$input_file" >> temp/firsttemp.csv
+            #awk -F';' '{count[$6]+=$5} END {for (driver in count) printf "%s;%.2f\n", driver, count[driver]}' "$input_file" >> temp/firsttemp.csv
+            LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" >> temp/firsttemp.csv
+
 
             # Trier la liste par ordre décroissant des distances totales
             sort -t';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv 
@@ -176,7 +178,9 @@ do
             echo "Traitement L..."
             # récupérer les distances totales pour chaque trajet (meme route ID)
             #cat "$input_file" >> temp/temp.csv
-            awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
+            #awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
+            LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
+
 
             # trier les plus longs trajets
             sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv  
