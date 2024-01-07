@@ -8,39 +8,56 @@ file="temp"
 # Verifier si le dossier existe
 if [ -d "$file" ]
 then
-   # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
-   find temp -mindepth 1 -delete
+    # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
+    find temp -mindepth 1 -delete
 fi
 # Creer les dossiers
 mkdir -p temp images
 }
-#et images pourquoi seulement temp??
 
 # Verification de la presence de l'executable C
-executable_verification() {
-if [ ! -f progc/prog ]
-then
-   # On compile
-   gcc -o progc/prog progc/programme.c
-   # Verifier si la compilation s'est bien deroulee
-   if [ $? -ne 0 ]
-   then
-echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-exit 1
-   fi
-fi
+executable_verification(){
+    case $1 in
+        -t)
+        if [ ! -f progc/progt ]
+        then
+            gcc -o progc/progt progc/programmet.c
+            # Verifier si la compilation s'est bien deroulee
+            if [ $? -ne 0 ]
+            then
+                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                exit 1
+            fi
+        fi
+        ;;
+        -s)
+        if [ ! -f progc/progs ]
+        then
+            gcc -o progc/progs progc/programmes.c
+            # Verifier si la compilation s'est bien deroulee
+            if [ $? -ne 0 ]
+            then
+                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                exit 1
+            fi
+        fi
+        ;;
+         *)
+            echo "L'option $option n'est pas reconnue. Veuillez réessayer."
+            exit 1 ;;
+    esac
 # echo "L'executable C est present."
 }
 
 # À SUPPRIMER QUAND ON AURA FINI DE TOUT CODER
-compilation() {
-    gcc -o progc/prog progc/programme.c
-    if [ $? -ne 0 ]
-    then
-        echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-        exit 1
-    fi
-}
+#compilation() {
+ #   gcc -o progc/prog progc/programme.c
+#    if [ $? -ne 0 ]
+#    then
+#       echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+#        exit 1
+#    fi
+#}
 
 # Creation du graphique avec gnuplot
 #generate_graph() {
@@ -105,11 +122,6 @@ done
 # Vérification des dossiers temp et images
 create_directories
 
-# Vérification de l'executable c
-executable_verification
-#compilation
-compilation
-
 # EXECUTION DES DIFFÉRENTS TRAITEMENTS
 
 # Le premier argument est le fichier CSV
@@ -124,132 +136,161 @@ do
    case $option in
         -d1)
             echo "Traitement D1..."
-            # Utiliser awk pour compter le nombre de trajets par conducteur
-            grep ";1;" "$input_file" >> temp/temp.csv
-            awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/temp.csv >> temp/temp2.csv
-
+            #cat "$input_file" >> temp/temp.csv
+            grep ";1;" "$input_file" > temp/firsttemp.csv
+            awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/firsttemp.csv >> temp/secondtemp.csv
 
             # Trier la liste par ordre décroissant de nombre de trajets
-            sort -t';' -k2,2 -n -r temp/temp2.csv >> temp/finaltemp.csv
+            sort -t';' -k2,2 -n -r temp/secondtemp.csv >> temp/thirdtemp.csv
 
-            # Récupérer les 10 premiers conducteurs
-            longest_10_drivers=$(head -n 10 temp/finaltemp.csv)
+            # Récupérer les 10 premiers conducteurs au choix fichier finaltemp.csv ou dansla variable
+            # longest_10_drivers=$(head -n 10 temp/thirdtemp.csv)
+            head -n 10 temp/thirdtemp.csv >> temp/finaltemp.csv
+           
+           # Nom du fichier de sortie du graphique
+output_file="Traitement1.png"
 
-            # Créer le graphique de type histogramme horizontal
-            echo "Les 10 conducteurs avec le plus de trajets sont : "
-            echo "$longest_10_drivers"
+# Commande Gnuplot
+gnuplot <<EOF
+set terminal pngcairo enhanced font 'arial,12'
+set output '$output_file'
+set boxwidth 0.8
+set style fill solid 0.5
+set yrange [0:*]
+set xlabel 'Nombre de routes'
+set ylabel 'Conducteurs'
+set title 'Histogramme Vertical'
+set datafile separator ';'
+plot '< head -n 10 temp/finaltemp.csv' using 2:xticlabels(1) notitle with boxes lc rgb '#800080'
+EOF
 
-            # Nettoyer les fichiers temporaires
-            #rm temp/temp.csv temp/finaltemp.csv temp/temp2.csv
+#convert -rotate 90 Traitement1.png Traitementd1.png
+# Placer l'image dans le dossier images
+mv "$output_file" images/
+# Ouvrir l'image
+xdg-open "images/$output_file"
+
+# Nettoyer les fichiers temporaires
+rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+
 
             ;;
         -d2)
             echo "Traitement D2..."
-            # Code pour le traitement
+            #Recupérer
+            #awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" >> temp/firsttemp.csv
+            LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" >> temp/firsttemp.csv
+
+           
+            # Trier la liste par ordre décroissant des distances totales
+            sort -t';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
+           
+            #longest_10_distances=$(head -n 10 temp/finaltemp.csv)
+            head -n 10 temp/secondtemp.csv >> temp/finaltemp.csv
+           
+            echo "Les 10 conducteurs avec les plus grandes distances sont : "
+            cat temp/finaltemp.csv
+           
+            rm temp/firsttemp.csv temp/finaltemp.csv temp/secondtemp.csv
             ;;
-           
         -l)
-            echo "Traitement L in progress..."
-           
-             # récupérer les distances totales pour chaque trajet (meme route ID)
-            cat "$input_file" >> temp/temp.csv
-           LC_NUMERIC=C awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { total=sprintf("%.6f", sum[traject]); print traject ";" total } }' temp/temp.csv >> temp/templ.csv
+            echo "Traitement L..."
+            # récupérer les distances totales pour chaque trajet (meme route ID)
+            LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
 
-
-         
-            # trier l'ordre avec les plus longs trajets
-            sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv  
-           
+            # trier les plus longs trajets
+            sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv
             # Récupérer les 10 premiers trajets
             head -n 10 temp/tempcorrected.csv >> temp/tempfinal.csv
-           
             #trier les 10 trajets par numéro d'identification croissant
             sort -t ';' -k1,1 -n -r temp/tempfinal.csv >> temp/tempdone.csv
             longest_10_trajects=$(head -n 10 temp/tempdone.csv)
-
-            # Créer le graphique de type histogramme
-            echo "Les 10 trajets les plus longs sont : "
-            echo "$longest_10_trajects"
            
-         
-            # Nom du fichier de sortie de l'histogramme
-output_file="TraitementL.png"
+            # Nom du fichier de sortie du graphique
+output_file="TraitemenentL.png"
 
-# Commande Gnuplot
-gnuplot <<EOF
-  # Police du graphique
-  set terminal pngcairo enhanced font 'Verdana,12'
- 
-  # Fichier de sortie du gnuplot
-  set output '$output_file'
- 
-  # Le plot sera un histogramme
-  set style data histograms
- 
-  # Remplissage
-  set style fill solid border -1
- 
-  # Largeur des cases
-  set boxwidth 0.8
- 
-  # Titre du graphique
-  set title 'Option -l : Distance = f(Trajet)'
- 
-  # Axe des x horizontal
-  set xlabel 'Numéro identifiant de trajet'
- 
-  # Axe des y vertical
-  set ylabel 'Distance en km'
- 
-  # Utiliser ';' comme séparateur
-  set datafile separator ';'
- 
-  # Définir l'intervalle de l'axe des y et l'incrément des graduations
-  set yrange [0:3000]
-  set ytics 500
- 
-  # Rotation des étiquettes de l'axe des x
-  set xtics rotate by -45
- 
-  # Plotting the top 10 data without legend
-  plot '< head -n 10 temp/tempdone.csv' using 2:xtic(1) notitle with boxes
+            # Commande Gnuplot
+            gnuplot <<EOF
+            # Police du graphique
+            set terminal pngcairo enhanced font 'Verdana,12'
+            # Fichier de sortie du gnuplot
+            set output '$output_file'
+            # Le plot sera un histogramme
+            set style data histograms
+            # Remplissage
+            set style fill solid border -1
+            # Largeur des cases
+            set boxwidth 0.8
+            # Titre du graphique
+            set title 'Option -l : Distance = f(Trajet)'
+            # Axe des x horizontal
+            set xlabel 'Numéro identifiant de trajet'
+            # Axe des y vertical
+            set ylabel 'Distance en km'
+            # Utiliser ';' comme séparateur
+            set datafile separator ';'
+            # Définir l'intervalle de l'axe des y et l'incrément des graduations
+            set yrange [0:3000]
+            set ytics 500
+            # Rotation des étiquettes de l'axe des x
+            set xtics rotate by -45
+            # Plotting the top 10 data without legend
+            plot '< head -n 10 temp/tempdone.csv' using 2:xtic(1) notitle with boxes
 EOF
-
-
-
-
+           
 # Placer l'image dans le dossier images
 mv "$output_file" images/
-
 # Ouvrir l'image
 xdg-open "images/$output_file"
-
-
-
+ 
             # Nettoyer les fichiers temporaires
-            rm temp/temp.csv temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
-           
+            rm temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
             ;;
-           
         -t)
             echo "Traitement T..."
-            # Code pour le traitement
+            # Vérification de l'executable c
+            #executable_verification "$option"
+
+            # Recupère le nombre de trajets qui parcourent chaque ville, ainsi que le nombre de fois où ces villes ont été des villes de départ de trajets.
+            #awk -F';' 'BEGIN { OFS=";"; } { count[$3] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
+
+awk -F';' 'BEGIN { OFS=";"; } { count[$3] += 1; count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; } else { departure_city[$4] += 1; } } END { for (city in count) print city, count[city], departure_city[city] }' "$input_file" >> temp/firsttemp.csv
+
+
+
+            sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
+            head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
+            sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
+
+            cat temp/finaltemp.csv
+            rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv temp/thirdtemp.csv
+
             ;;
         -s)
             echo "Traitement S..."
+            # Vérification de l'executable c
+            executable_verification "$option"
             #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
-            cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
-            route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
-            tail -n +2 temp/firsttemp.csv | head -n 10 > secondtemp.csv
+            cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
+            #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
+            #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
+            tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv
+            # DEMANDER A LA PROF
 
 
             echo "Les statistiques sur les étapes sont : "
-            #echo "$route"
 
-            ./progc/prog secondtemp.csv
+            ./progc/progs temp/secondtemp.csv
 
-            rm temp/firsttemp.csv secondtemp.csv
+            # Récupérer les 50 premiers
+            head -n 50 temp/output.csv >> temp/finaltemp.csv
+            echo "Les 50 premiers sont : "
+            # route_id, min, max, moy, diff
+            cat temp/finaltemp.csv
+           
+            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv temp/finaltemp.csv
             ;;
+
         *)
             echo "L'option $option n'est pas reconnue. Veuillez réessayer."
             exit 1 ;;
