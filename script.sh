@@ -172,19 +172,22 @@ do
             
             rm temp/firsttemp.csv temp/finaltemp.csv temp/secondtemp.csv
             ;;
-        -l)
+       -l)
             echo "Traitement L..."
             # récupérer les distances totales pour chaque trajet (meme route ID)
             LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
-
+            
             # trier les plus longs trajets
-            sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv 
+            sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv
             # Récupérer les 10 premiers trajets
             head -n 10 temp/tempcorrected.csv >> temp/tempfinal.csv
             #trier les 10 trajets par numéro d'identification croissant
             sort -t ';' -k1,1 -n -r temp/tempfinal.csv >> temp/tempdone.csv
             longest_10_trajects=$(head -n 10 temp/tempdone.csv)
-
+            
+            # Nom du fichier de sortie du graphique
+            output_file="TraitemenentL.png"
+            
             # Commande Gnuplot
             gnuplot <<EOF
             # Police du graphique
@@ -212,7 +215,7 @@ do
             set xtics rotate by -45
             # Plotting the top 10 data without legend
             plot '< head -n 10 temp/tempdone.csv' using 2:xtic(1) notitle with boxes
-            EOF
+EOF
             
             # Placer l'image dans le dossier images
             mv "$output_file" images/
@@ -220,7 +223,7 @@ do
             xdg-open "images/$output_file"
             
             # Nettoyer les fichiers temporaires
-            rm temp/temp.csv temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
+            rm temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
             ;;
         -t)
             echo "Traitement T..."
