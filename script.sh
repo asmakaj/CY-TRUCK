@@ -175,27 +175,52 @@ do
         -l)
             echo "Traitement L..."
             # récupérer les distances totales pour chaque trajet (meme route ID)
-            cat "$input_file" >> temp/temp.csv
-            #awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' temp/temp.csv >> temp/templ.csv
             LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
 
             # trier les plus longs trajets
-            sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv  
-           
+            sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv 
             # Récupérer les 10 premiers trajets
             head -n 10 temp/tempcorrected.csv >> temp/tempfinal.csv
-           
             #trier les 10 trajets par numéro d'identification croissant
             sort -t ';' -k1,1 -n -r temp/tempfinal.csv >> temp/tempdone.csv
             longest_10_trajects=$(head -n 10 temp/tempdone.csv)
 
-            # Créer le graphique de type histogramme
-            echo "Les 10 trajets les plus longs sont : "
-            echo "$longest_10_trajects"
-
+            # Commande Gnuplot
+            gnuplot <<EOF
+            # Police du graphique
+            set terminal pngcairo enhanced font 'Verdana,12'
+            # Fichier de sortie du gnuplot
+            set output '$output_file'
+            # Le plot sera un histogramme
+            set style data histograms
+            # Remplissage
+            set style fill solid border -1
+            # Largeur des cases
+            set boxwidth 0.8
+            # Titre du graphique
+            set title 'Option -l : Distance = f(Trajet)'
+            # Axe des x horizontal
+            set xlabel 'Numéro identifiant de trajet'
+            # Axe des y vertical
+            set ylabel 'Distance en km'
+            # Utiliser ';' comme séparateur
+            set datafile separator ';'
+            # Définir l'intervalle de l'axe des y et l'incrément des graduations
+            set yrange [0:3000]
+            set ytics 500
+            # Rotation des étiquettes de l'axe des x
+            set xtics rotate by -45
+            # Plotting the top 10 data without legend
+            plot '< head -n 10 temp/tempdone.csv' using 2:xtic(1) notitle with boxes
+            EOF
+            
+            # Placer l'image dans le dossier images
+            mv "$output_file" images/
+            # Ouvrir l'image
+            xdg-open "images/$output_file"
+            
             # Nettoyer les fichiers temporaires
             rm temp/temp.csv temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
-           
             ;;
         -t)
             echo "Traitement T..."
