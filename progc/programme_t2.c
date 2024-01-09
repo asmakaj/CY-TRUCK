@@ -13,16 +13,13 @@ typedef struct AVL{
 
 typedef AVL_Tree* spTree;
 
-void infixtestAVL(spTree p, int n){
-    if(n==11)
-        return;
-        n++;
+void infixtestAVL(spTree p){
     if(p != NULL){
-        infixtestAVL(p->pRight,n);
+        infixtestAVL(p->pRight);
         printf("[%02d]", p->crossed);
         //fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
         //insertAVL1(avl, 0, p);
-    infixtestAVL(p->pLeft,n);
+    infixtestAVL(p->pLeft);
     }
 }
 
@@ -174,11 +171,13 @@ spTree insertAVL1(spTree avl, int* h, const char* city, int crossed, int departu
         *h = 1;
         return new;
     }
-    else if(new->crossed <= avl->crossed){
+    int result = strcmp(new->city, avl->city);
+
+    if(result > 0){
         avl->pLeft = insertAVL1(avl->pLeft, h,city, crossed, departure_city);
         *h = -(*h);
     }
-    else if(new->crossed > avl->crossed){
+    else if(result < 0){
         avl->pRight = insertAVL1(avl->pRight, h, city, crossed, departure_city);
     }
     else{
@@ -210,14 +209,15 @@ spTree fillAVL(const char* data, spTree avl) {
         exit(EXIT_FAILURE);
     }
 
-    char city[50];
+    char* city = malloc(30);
     int h = 0;
     int crossed = 0, departure_city = 0;
 
-    while (fscanf(file1, "%49[^;];%d;%d", city, &crossed, &departure_city) == 3) {
+    while (fscanf(file1, "%[^;];%d;%d", city, &crossed, &departure_city) == 3) {
         avl = insertAVL1(avl, &h, city, crossed, departure_city);
     }
     fclose(file1);
+    free(city);
     return avl;
 }
 
@@ -247,9 +247,8 @@ int main(int argc, char *argv[]){
     spTree avl = NULL;
     avl = fillAVL(argv[1], avl);
 
-
     // Ouvrir un fichier en écriture
-    FILE *file = fopen("temp/secondtemp.csv", "w");
+    FILE *file = fopen("temp/finaltemp.csv", "w");
     if (file == NULL) {
         perror("Erreur lors de l'ouverture du fichier");
         exit(EXIT_FAILURE);
