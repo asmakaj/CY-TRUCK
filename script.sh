@@ -147,13 +147,56 @@ do
             # longest_10_drivers=$(head -n 10 temp/thirdtemp.csv)
             head -n 10 temp/thirdtemp.csv >> temp/finaltemp.csv
 
-            echo "Les 10 conducteurs avec le plus de trajets sont : "
-            cat temp/finaltemp.csv
-
+            # Commande Gnuplot
+            gnuplot << EOF
+            #Définition du style de sortie avec rotation
+            set terminal pngcairo enhanced font 'arial,15' size 1100,1000
+            set output 'images/Traitement1.png'
+            
+            #Séparateur pour le using
+            set datafile separator ";"
+            
+            #Titre du graphique
+            set ylabel 'Option -d1 : Nb routes = f(Driver)'
+            
+            #Style de la barre
+            set style data histogram
+            set style fill solid border -1
+            
+            #Enlever la légende
+            unset key
+            
+            #Ajustement de la largeur des colonnes et positionnement à gauche
+            set style histogram cluster gap 1
+            set boxwidth 1.6
+            
+            #Axe X
+            set xlabel 'DRIVER NAMES' rotate by 180
+            set y2label 'NB ROUTES'
+            
+            #Ajustement des xtics
+            set xtics rotate
+            set y2range [0:250]
+            
+            #Ajustement des y2tics
+            set y2tics rotate
+            unset ytics;set y2tics mirror
+            
+            #Charger les données depuis le fichier temporaire
+            plot 'temp/finaltemp.csv' using 2:xticlabels(1) axes x1y2 notitle linecolor 2 lt 1
+EOF
+            convert -rotate 90 images/Traitement1.png images/Traitement1.png
+            
+            
+            # Placer l'image dans le dossier images
+            mv "$output_file" images/
+            # Ouvrir l'image
+            xdg-open "images/$output_file"
+            
             # Nettoyer les fichiers temporaires
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
-
             ;;
+            
         -d2)
             echo "Traitement D2..."
             #Recupérer 
