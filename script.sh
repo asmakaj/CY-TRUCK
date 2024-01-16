@@ -241,85 +241,20 @@ do
 
             ;;
         -s)
-            echo "Traitement S..."
+           echo "Traitement S..."
             # Vérification de l'executable c
             executable_verification "$option"
             #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
-            cut -d';' -f1,2,5 "$input_file" | tail -n +2 > temp/firsttemp.csv
-awk -F ';' '
-    BEGIN {
-        FS=";"
-        OFS=";"
-    }
-
-    # Fonction pour traiter chaque ligne
-    function process_line(route_ID, etape, distance) {
-        if (!(route_ID in trajets)) {
-            trajets[route_ID] = ""
-        }
-        trajets[route_ID] = trajets[route_ID] route_ID OFS etape OFS distance ORS
-    }
-
-    # Traitement de chaque ligne
-    {
-        route_ID = $1
-        etape = $2
-        distance = $3
-        process_line(route_ID, etape, distance)
-    }
-
-    # À la fin de la lecture du fichier, afficher les résultats
-    END {
-        for (route_ID in trajets) {
-            print trajets[route_ID]
-        }
-    }
-' temp/firsttemp.csv > temp/secondtemp.csv
-
-
-            # Script 1: Calcul de min, max et moyenne
-awk -F ';' '
-    BEGIN {
-        # Initialisation des variables
-        FS=";"
-        OFS=";"
-    }
-
-    # Fonction pour mettre à jour les statistiques
-    function update_distances(route_ID, distance){
-
-        if (distance < min[route_ID] || !(route_ID in min)) {
-            min[route_ID] = distance
-        }
-        if (!(route_ID in max) || distance > max[route_ID]) {
-            max[route_ID] = distance
-        }
-        total_distance[route_ID] += distance
-        count[route_ID]++
-    }
-
-    # Traitement de chaque ligne
-    {
-        route_ID = $1
-        distance = $3
-        update_distances(route_ID, distance)
-    }
-
-    # À la fin de la lecture du fichier, afficher les résultats
-    END {
-        for (route_ID in min) {
-            moyenne = total_distance[route_ID] / count[route_ID]
-            print route_ID, min[route_ID], max[route_ID], moyenne
-        }
-    }
-' temp/secondtemp.csv > temp/thirdtemp.csv
-
-
+            cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
+            #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
+            #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
+            tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
+            # DEMANDER A LA PROF 
 
 
             echo "Les statistiques sur les étapes sont : "
-            gcc -o progc/prog2 progc/programme_s.c
-            ./progc/progs2 temp/thirdtemp.csv
+
+            ./progc/progs temp/secondtemp.csv
 
             # Récupérer les 50 premiers 
             head -n 50 temp/output.csv >> temp/finaltemp.csv
@@ -327,7 +262,7 @@ awk -F ';' '
             # route_id, min, max, moy, diff
             cat temp/finaltemp.csv
             
-            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv temp/finaltemp.csv temp/thirdtemp.csv
+            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv temp/finaltemp.csv
             ;;
 
         *)
