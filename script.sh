@@ -361,7 +361,8 @@ EOF
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
             #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
+            #tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
+            tail -n +2 temp/firsttemp.csv | head -n -1 > temp/secondtemp.csv 
             # DEMANDER A LA PROF 
 
 
