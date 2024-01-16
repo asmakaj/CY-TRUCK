@@ -305,7 +305,7 @@ EOF
             ./progc/progt2 temp/thirdtemp.csv
 
             cat temp/finaltemp.csv
-            rm temp/firsttemp.csv temp/thirdtemp.csv
+            rm temp/firsttemp.csv temp/thirdtemp.csv temp/secondtemp.csv temp/finaltemp.csv
 
             ;;
         -s)
