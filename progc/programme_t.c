@@ -29,7 +29,7 @@ void infixtestAVL(spTree p, int n){
 void infixreverse(spTree avl, FILE* file) {
     if (avl != NULL) {
         infixreverse(avl->pRight, file);
-        fprintf(file, "%s;%d;%d\n", avl->city, avl->crossed, avl->departure_city);
+        fprintf(file, "%s;%d;%d", avl->city, avl->crossed, avl->departure_city);
         infixreverse(avl->pLeft, file);
     }
 }

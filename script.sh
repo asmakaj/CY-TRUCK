@@ -228,7 +228,7 @@ do
             #sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
 
             
-            head -n 20 temp/secondtemp.csv >> temp/thirdtemp.csv
+            head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
             #awk 'NF{printf "%s", $0; getline; print}' temp/thirdtemp.csv > temp/ok.csv
 
             gcc -o progc/progt2 progc/programme_t2.c
@@ -237,7 +237,7 @@ do
             #sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
 
             cat temp/finaltemp.csv
-            rm temp/firsttemp.csv temp/temp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+            rm temp/firsttemp.csv temp/thirdtemp.csv
 
             ;;
         -s)
