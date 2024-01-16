@@ -135,6 +135,10 @@ for option in "$@"
 do
    case $option in
         -d1)
+
+           # Enregistrez le temps de début
+            start_time=$(date +%s.%N)
+
             echo "Traitement D1..."
             #cat "$input_file" >> temp/temp.csv
             grep ";1;" "$input_file" > temp/firsttemp.csv
@@ -195,6 +199,11 @@ EOF
             
             # Nettoyer les fichiers temporaires
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+
+             # Calculez la durée totale d'exécution
+            execution_time=$(echo "$end_time - $start_time" | bc)
+
+            echo "Le temps d'exécution est de $execution_time secondes."
             ;;
             
         -d2)
