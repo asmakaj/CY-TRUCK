@@ -21,7 +21,17 @@ executable_verification(){
         -t)
         if [ ! -f progc/progt ]
         then
-            gcc -o progc/progt progc/programmet.c
+            gcc -o progc/progt progc/programme_t.c
+            # Verifier si la compilation s'est bien deroulee
+            if [ $? -ne 0 ]
+            then
+                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                exit 1
+            fi
+        fi
+        if [ ! -f progc/progt2 ]
+        then
+            gcc -o progc/progt2 progc/programme_t2.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
@@ -33,7 +43,7 @@ executable_verification(){
         -s)
         if [ ! -f progc/progs ]
         then
-            gcc -o progc/progs progc/programmes.c
+            gcc -o progc/progs progc/programme_s.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
