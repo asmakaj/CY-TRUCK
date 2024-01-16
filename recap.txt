@@ -68,3 +68,14 @@ et on ne conservera que les 50 premières valeurs.
 recuperer les chainons de l'abr et les mettre dans l'avl puis afficher en utilisant un parcours infixe inverse
 - COMMENTER CHAQUE FONCTIONS
 Les fonctions avl ont été récupérer du cours
+
+
+-------------------------------------------------------------------------------------------------------
+
+Traitement [T] : 
+
+Paris - Marseille - Paris
+Paris n'est pas traversé alors que Marseille oui 
+Paris est une ville de depart
+
+J'ai que 9 villes
