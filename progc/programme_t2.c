@@ -13,6 +13,7 @@ typedef struct AVL{
 
 typedef AVL_Tree* spTree;
 
+/*
 void infixtestAVL(spTree p){
     if(p != NULL){
         infixtestAVL(p->pRight);
@@ -22,6 +23,7 @@ void infixtestAVL(spTree p){
     infixtestAVL(p->pLeft);
     }
 }
+*/
 
 void infixreverse(spTree avl, FILE* file) {
     if (avl != NULL) {

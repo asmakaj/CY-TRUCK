@@ -29,6 +29,16 @@ executable_verification(){
                 exit 1
             fi
         fi
+        if [ ! -f progc/progt2 ]
+        then
+            gcc -o progc/progt2 progc/programme_t2.c
+            # Verifier si la compilation s'est bien deroulee
+            if [ $? -ne 0 ]
+            then
+                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                exit 1
+            fi
+        fi
         ;;
         -s)
         if [ ! -f progc/progs2 ]
@@ -224,20 +234,14 @@ do
 
             gcc -o progc/progt progc/programme_t.c
             ./progc/progt temp/firsttemp.csv
-
-            #sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
-
             
             head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
-            #awk 'NF{printf "%s", $0; getline; print}' temp/thirdtemp.csv > temp/ok.csv
 
             gcc -o progc/progt2 progc/programme_t2.c
-            ./progc/progt2 temp/thirdtemp.csv
-
-            #sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
+            ./progc/progt2 temp/thirdtemp.csv 
 
             cat temp/finaltemp.csv
-            rm temp/firsttemp.csv temp/thirdtemp.csv
+            rm temp/firsttemp.csv temp/thirdtemp.csv temp/secondtemp.csv temp/finaltemp.csv
 
             ;;
         -s)
