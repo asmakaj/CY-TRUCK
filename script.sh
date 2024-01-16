@@ -195,7 +195,7 @@ EOF
             # Placer l'image dans le dossier images
             mv "$output_file" images/
             # Ouvrir l'image
-            xdg-open "images/$output_file"
+            xdg-open "images/Traitement1.png"
             
             # Nettoyer les fichiers temporaires
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
