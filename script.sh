@@ -286,12 +286,16 @@ EOF
             awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
 
 
-            sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
+            gcc -o progc/progt progc/programme_t.c
+            ./progc/progt temp/firsttemp.csv
+            
             head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
-            sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
+
+            gcc -o progc/progt2 progc/programme_t2.c
+            ./progc/progt2 temp/thirdtemp.csv
 
             cat temp/finaltemp.csv
-            rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv temp/thirdtemp.csv
+            rm temp/firsttemp.csv temp/thirdtemp.csv
 
             ;;
         -s)
