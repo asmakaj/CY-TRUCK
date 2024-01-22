@@ -103,7 +103,7 @@ void infixreverse(spTree avl, FILE* file2) {
     if (avl != NULL) {
         infixreverse(avl->pRight, file2);
         //printf("[%02d]", avl->route_ID);
-        fprintf(file2, "%d;%.3f;%.3f;%.3f;%.3f\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff);
+        fprintf(file2, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff, avl->eq);
         infixreverse(avl->pLeft, file2);
     }
 }
@@ -342,13 +342,11 @@ void freeAVL(spTree avl){
 
 
 int main(int argc, char *argv[]){
-        printf("test1\n");
      // Vérifier si le nombre d'arguments est correct
     if (argc != 2) {
         printf("Il y a plus d'un argument pour le programme.c");
         exit (1);
     }
-    printf("test\n");
 
     pTree abr = NULL;
     abr = readCSV(argv[1], abr);

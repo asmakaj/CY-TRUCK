@@ -41,10 +41,10 @@ executable_verification(){
         fi
         ;;
         -s)
-        if [ ! -f progc/progs2 ]
+        if [ ! -f progc/progs ]
         then
             #gcc -o progc/progs progc/programme_s.c
-            gcc -o progc/progs2 progc/programme_s2.c
+            gcc -o progc/progs progc/programme_s.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
@@ -233,6 +233,17 @@ do
             
             awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" (city in departure_city ? departure_city[city] : 0) }' "$input_file" >> temp/firsttemp.csv
 
+            gcc -o progc/progt progc/programme_t.c
+            ./progc/progt temp/firsttemp.csv
+            
+            head -n 11 temp/secondtemp.csv >> temp/thirdtemp.csv
+
+            gcc -o progc/progt2 progc/programme_t2.c
+            ./progc/progt2 temp/thirdtemp.csv
+
+            cat temp/finaltemp.csv
+            rm temp/firsttemp.csv temp/thirdtemp.csv temp/secondtemp.csv temp/finaltemp.csv
+
            ;;
         -s)
            echo "Traitement S..."
@@ -246,10 +257,12 @@ do
 
             #tail -n +2 temp/firsttemp.csv | head -n -1 > temp/secondtemp.csv 
 
-            awk 'NR>1{print p} {p=$0}' temp/firsttemp.csv > temp/secondtemp.csv
+           awk 'NR>1{print p} {p=$0}' temp/firsttemp.csv > temp/secondtemp.csv
 
 
             echo "Les statistiques sur les étapes sont : "
+
+            gcc -o progc/progs progc/programme_s.c
 
             ./progc/progs temp/secondtemp.csv
 
@@ -259,7 +272,7 @@ do
             # route_id, min, max, moy, diff
             cat temp/finaltemp.csv
             
-            rm temp/output.csv temp/finaltemp.csv
+            rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv
             ;;
 
         *)
