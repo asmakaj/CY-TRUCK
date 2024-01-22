@@ -21,7 +21,17 @@ executable_verification(){
         -t)
         if [ ! -f progc/progt ]
         then
-            gcc -o progc/progt progc/programmet.c
+            gcc -o progc/progt progc/programme_t.c
+            # Verifier si la compilation s'est bien deroulee
+            if [ $? -ne 0 ]
+            then
+                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                exit 1
+            fi
+        fi
+        if [ ! -f progc/progt2 ]
+        then
+            gcc -o progc/progt2 progc/programme_t2.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
@@ -33,7 +43,7 @@ executable_verification(){
         -s)
         if [ ! -f progc/progs ]
         then
-            gcc -o progc/progs progc/programmes.c
+            gcc -o progc/progs progc/programme_s.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
@@ -195,7 +205,7 @@ EOF
             # Placer l'image dans le dossier images
             mv "$output_file" images/
             # Ouvrir l'image
-            xdg-open "images/$output_file"
+            xdg-open "images/Traitement1.png"
             
             # Nettoyer les fichiers temporaires
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
@@ -206,24 +216,69 @@ EOF
             echo "Le temps d'exécution est de $execution_time secondes."
             ;;
             
-        -d2)
+            -d2)
             echo "Traitement D2..."
-            #Recupérer 
+            #Recupérer
             #awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" >> temp/firsttemp.csv
             LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" >> temp/firsttemp.csv
 
-           
             # Trier la liste par ordre décroissant des distances totales
-            sort -t';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv 
+            sort -t';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
             
             #longest_10_distances=$(head -n 10 temp/finaltemp.csv)
             head -n 10 temp/secondtemp.csv >> temp/finaltemp.csv
             
-            echo "Les 10 conducteurs avec les plus grandes distances sont : "
-            cat temp/finaltemp.csv
+            # Commande Gnuplot
+            gnuplot << EOF
+            #Définition du style de sortie avec rotation
+            set terminal pngcairo enhanced font 'arial,15' size 1100,1000
+            set output 'images/Traitement2.png'
             
-            rm temp/firsttemp.csv temp/finaltemp.csv temp/secondtemp.csv
-            ;;
+            #Séparateur pour le using
+            set datafile separator ";"
+            
+            #Titre du graphique
+            set ylabel 'Option -d2 : Distance = f(Driver)'
+            
+            #Style de la barre
+            set style data histogram
+            set style fill solid border -1
+            
+            #Enlever la légende
+            unset key
+            
+            #Ajustement de la largeur des colonnes et positionnement à gauche
+            set style histogram cluster gap 1
+            set boxwidth 1.6
+            
+            #Axe X
+            set xlabel 'DISTANCE (Km)' rotate by 180
+            set y2label 'DRIVER NAMES'
+            
+            #Ajustement des xtics
+            set xtics rotate
+            set y2range [0:160000]
+            
+            #Ajustement des y2tics
+            set y2tics rotate
+            unset ytics;set y2tics mirror
+            
+            #Charger les données depuis le fichier temporaire
+            plot 'temp/finaltemp.csv' using 2:xticlabels(1) axes x1y2 notitle linecolor 2 lt 1
+EOF
+            convert -rotate 90 images/Traitement2.png images/Traitement2.png
+            
+            
+            # Placer l'image dans le dossier images
+            mv "$output_file" images/
+            # Ouvrir l'image
+            xdg-open "images/Traitement2.png"
+            
+            # Nettoyer les fichiers temporaires
+            rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+            
+        ;;
+
        -l)
             echo "Traitement L..."
             # récupérer les distances totales pour chaque trajet (meme route ID)
@@ -286,12 +341,16 @@ EOF
             awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
 
 
-            sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
+            gcc -o progc/progt progc/programme_t.c
+            ./progc/progt temp/firsttemp.csv
+            
             head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
-            sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
+
+            gcc -o progc/progt2 progc/programme_t2.c
+            ./progc/progt2 temp/thirdtemp.csv
 
             cat temp/finaltemp.csv
-            rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv temp/thirdtemp.csv
+            rm temp/firsttemp.csv temp/thirdtemp.csv temp/secondtemp.csv temp/finaltemp.csv
 
             ;;
         -s)
@@ -302,7 +361,8 @@ EOF
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
             #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
+            #tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
+            tail -n +2 temp/firsttemp.csv | head -n -1 > temp/secondtemp.csv 
             # DEMANDER A LA PROF 
 
 
