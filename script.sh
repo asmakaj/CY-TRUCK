@@ -253,12 +253,9 @@ do
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
             #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
             #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-
-
             #tail -n +2 temp/firsttemp.csv | head -n -1 > temp/secondtemp.csv 
 
-           awk 'NR>1{print p} {p=$0}' temp/firsttemp.csv > temp/secondtemp.csv
-
+            tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
 
             echo "Les statistiques sur les étapes sont : "
 
@@ -272,7 +269,7 @@ do
             # route_id, min, max, moy, diff
             cat temp/finaltemp.csv
             
-            rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv
+            rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
             ;;
 
         *)

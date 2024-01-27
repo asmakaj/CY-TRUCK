@@ -103,20 +103,20 @@ void infixreverse(spTree avl, FILE* file2) {
     if (avl != NULL) {
         infixreverse(avl->pRight, file2);
         //printf("[%02d]", avl->route_ID);
-        fprintf(file2, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff, avl->eq);
+        fprintf(file2, "%d;%.3f;%.3f;%.3f;%.3f\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff);
         infixreverse(avl->pLeft, file2);
     }
 }
 
-void infixtestABR(pTree p, FILE* file){
+void infixtestABR(pTree p){
     printf("ABR\n");
     if(p != NULL){
         
-    infixtestABR(p->pRight, file);
+    infixtestABR(p->pRight);
     printf("[%02d], %d;%.3f;%.3f;%.3f;%d", p->route_ID, p->step_ID, p->min, p->max, p->distance, p->n);
     //fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
     //insertAVL(avl, 0, p);
-    infixtestABR(p->pLeft, file);
+    infixtestABR(p->pLeft);
     }
 }
 
@@ -282,7 +282,7 @@ spTree insertAVL(spTree avl, int* h, pTree abr){
         return avl;
     }
 
-    if(h != 0){
+    if(*h != 0){
         avl->eq = avl->eq + *h;
         avl = equilibrageAVL(avl);
         if(avl->eq == 0){
