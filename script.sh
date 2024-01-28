@@ -357,17 +357,10 @@ EOF
             echo "Traitement S..."
             # Vérification de l'executable c
             executable_verification "$option"
-            #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
-            #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
-            #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            #tail -n +3 temp/firsttemp.csv >> temp/secondtemp.csv 
-            tail -n +2 temp/firsttemp.csv | head -n -1 > temp/secondtemp.csv 
-            # DEMANDER A LA PROF 
-
-
+            tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
             echo "Les statistiques sur les étapes sont : "
-
+            gcc -o progc/progs progc/programme_s.c
             ./progc/progs temp/secondtemp.csv
 
             # Récupérer les 50 premiers 
@@ -376,7 +369,7 @@ EOF
             # route_id, min, max, moy, diff
             cat temp/finaltemp.csv
             
-            rm temp/firsttemp.csv temp/output.csv temp/secondtemp.csv temp/finaltemp.csv
+            rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
             ;;
 
         *)
