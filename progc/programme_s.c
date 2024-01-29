@@ -52,6 +52,7 @@ pTree createNodeABR(int route_ID, int step_ID, float distance, float min, float 
 
 
 pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
+    //printf("okinseert\n");
 
     if(abr == NULL){
         abr = createNodeABR(route_ID, step_ID, distance, distance, distance);
@@ -77,8 +78,9 @@ pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
     return abr;
 }
 
-// Function to read data from CSV
+// Function to read data from CSV 
 pTree readCSV(const char* data, pTree abr) {
+    //printf("okinread\n");
     FILE* file1 = fopen(data, "r");
     if (file1 == NULL) {
         perror("Error opening the file");
@@ -101,7 +103,7 @@ void infixreverse(spTree avl, FILE* file2) {
     if (avl != NULL) {
         infixreverse(avl->pRight, file2);
         //printf("[%02d]", avl->route_ID);
-        fprintf(file2, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff, avl->eq);
+        fprintf(file2, "%d;%.3f;%.3f;%.3f;%.3f\n", avl->route_ID, avl->min, avl->max, avl->moy, avl->diff);
         infixreverse(avl->pLeft, file2);
     }
 }
@@ -164,6 +166,10 @@ int max2(int a, int b){
 
 // issu du cours
 spTree leftRotation(spTree avl){
+    if(avl == NULL){
+        printf("L'arbre est null\n");
+        exit(4);
+    }
     spTree pivot;
     int eq_a, eq_p;
 
@@ -193,6 +199,10 @@ int max3(int a, int b, int c) {
 
 // issu du cours
 spTree rightRotation(spTree avl){
+    if(avl == NULL){
+        printf("L'arbre est null\n");
+        exit(5);
+    }
     spTree pivot;
     int eq_a, eq_p;
 
@@ -212,16 +222,28 @@ spTree rightRotation(spTree avl){
 
 // issu du cours
 spTree doubleLeftRotation(spTree avl){
+    if(avl == NULL){
+        printf("L'arbre est null\n");
+        exit(6);
+    }
     avl->pRight = rightRotation(avl->pRight);
     return leftRotation(avl);
 }
 // issu du cours
 spTree doubleRightRotation(spTree avl){
+        if(avl == NULL){
+        printf("L'arbre est null\n");
+        exit(7);
+    }
     avl->pLeft = leftRotation(avl->pLeft);
     return rightRotation(avl);
 }
 // issu du cours
 spTree equilibrageAVL(spTree avl){
+        if(avl == NULL){
+        printf("L'arbre est null\n");
+        exit(8);
+    }
     if(avl->eq > 1){
         if(avl->pRight->eq >= 0){
             return leftRotation(avl);
@@ -330,7 +352,13 @@ int main(int argc, char *argv[]){
     abr = readCSV(argv[1], abr);
     //infixtestABR(abr);
     //printf("\n\n");
-
+ /*   FILE *file1 = fopen("temp/output1.csv", "w");
+    if (file1 == NULL) {
+        perror("Erreur lors de l'ouverture du fichier");
+        exit(EXIT_FAILURE);
+    }
+    infixtestABR(abr, file1);
+*/
     spTree avl = NULL;
     //hauteur
     int h = 0;
