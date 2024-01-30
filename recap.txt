@@ -78,6 +78,9 @@ Paris - Marseille - Paris
 Paris n'est pas traversé alors que Marseille oui 
 Paris est une ville de depart
 
+1- cut on recupere colonne 1,3,4;
+1- Faire un ABR par Route_ID Chainon:(Route ID, pointeur sur ville, ville arrivée, ville de depart)
+2- 
 
-
-J'ai 10 villes mais avec un sau t de lignes au debut 
+- printf dans un fichier : 
+ville; nb de fois traversées; nb de fois ville de depart

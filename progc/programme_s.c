@@ -262,7 +262,8 @@ spTree equilibrageAVL(spTree avl){
     }
     return avl;
 }
-// issu du cours
+
+
 spTree insertAVL(spTree avl, int* h, pTree abr){
     spTree new = createNodeAVL(abr);
 

@@ -19,9 +19,9 @@ mkdir -p temp images
 executable_verification(){
     case $1 in
         -t)
-        if [ ! -f progc/progt ]
+        if [ ! -f progc/progt0 ]
         then
-            gcc -o progc/progt progc/programme_t.c
+            gcc -o progc/progt0 progc/programme_t0.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
@@ -216,51 +216,37 @@ do
             echo "Traitement T..."
             # Vérification de l'executable c
             executable_verification "$option"
+            tail -n +2 "$input_file" > temp/firsttemp.csv
+            cut -d';' -f1,2,3,4 temp/firsttemp.csv >> temp/temp.csv
+            head -n 200 temp/temp.csv > temp/secondtemp.csv
 
-            # Partie du awk qui ne fonctionne pas (nombre de trajets qui parcourent chaque ville)
-            #awk -F';' '{count[$4]+= 1} END {for (city in count) print city ";" count[city]}' "$input_file" >> temp/firsttemp.csv
 
-
-            #awk -F';' '{ count[$3] += 1; count[$4] += 1 } END { for (item in count) print item ";" count[item] }' "$input_file" >> temp/firsttemp.csv
-            #awk -F';' '{count[$3] += 1; if ($4 in count) count[$4] += 1 sinon crée count[$4] =+ 1} END { for (item in count) print item ";" count[item] }' temp/temp.csv >> temp/firsttemp.csv
-            #awk -F';' '{count[$3] += 1; if ($4 in count) count[$4] += 1; else count[$4] = 1} END { for (item in count) print item ";" count[item] }' "$input_file" >> temp/firsttemp.csv
-
-            # Partie du awk qui compte departure city -> les valeurs sont bonnes
+            gcc -o progc/progt0 progc/programme_t0.c
+            ./progc/progt0 temp/secondtemp.csv
+            
+            #awk avec ville de depart
             #awk -F';' '$2 == 1 {departure_city[$3]+=1 et count[$3]++ } END {for (city in departure_city) print city ";" departure_city[city]}' "$input_file" >> temp/firsttemp.csv
 
 
-            #awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
-            
-            awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" (city in departure_city ? departure_city[city] : 0) }' "$input_file" >> temp/firsttemp.csv
+            #programme_t.csv A AJOUTER
 
-            gcc -o progc/progt progc/programme_t.c
-            ./progc/progt temp/firsttemp.csv
-            
-            head -n 11 temp/secondtemp.csv >> temp/thirdtemp.csv
+            head -n 10 temp/thirdtemp.csv > temp/fourthtemp.csv
 
             gcc -o progc/progt2 progc/programme_t2.c
-            ./progc/progt2 temp/thirdtemp.csv
+            ./progc/progt2 temp/fourthtemp.csv
 
             cat temp/finaltemp.csv
-            rm temp/firsttemp.csv temp/thirdtemp.csv temp/secondtemp.csv temp/finaltemp.csv
+            rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv temp/temp.csv
 
            ;;
         -s)
            echo "Traitement S..."
             # Vérification de l'executable c
             executable_verification "$option"
-            #awk -F';' '{count[$1]++} END {for (route in count) print route ";" count[route]}' "$input_file" >> temp/temp.csv
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
-            #route=$(tail -n +2 temp/firsttemp.csv | head -n 10)
-            #tail -n +2 temp/firsttemp.csv | head -n 100000 > temp/secondtemp.csv
-            #tail -n +2 temp/firsttemp.csv | head -n -1 > temp/secondtemp.csv 
-
             tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
-
             echo "Les statistiques sur les étapes sont : "
-
             gcc -o progc/progs progc/programme_s.c
-
             ./progc/progs temp/secondtemp.csv
 
             # Récupérer les 50 premiers 

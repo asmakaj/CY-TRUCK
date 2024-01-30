@@ -13,17 +13,6 @@ typedef struct AVL{
 
 typedef AVL_Tree* spTree;
 
-/*
-void infixtestAVL(spTree p){
-    if(p != NULL){
-        infixtestAVL(p->pRight);
-        printf("[%02d]", p->crossed);
-        //fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
-        //insertAVL1(avl, 0, p);
-    infixtestAVL(p->pLeft);
-    }
-}
-*/
 
 void infixreverse(spTree avl, FILE* file) {
     if (avl != NULL) {
@@ -33,8 +22,6 @@ void infixreverse(spTree avl, FILE* file) {
     }
 }
 
-
-//ok
 spTree createNodeAVL(const char* city, int crossed, int departure_city){
     spTree new = malloc(sizeof(AVL_Tree));
     if (new == NULL) {
