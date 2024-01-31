@@ -226,7 +226,7 @@ spTree insertAVL(spTree avl, int* h, const char* city, int crossed, int departur
 spTree fillAVL(const char* data, spTree avl) {
     FILE* file = fopen(data, "r");
     if (file == NULL) {
-        perror("Error opening the file");
+        perror("Error opening the file... \n");
         exit(EXIT_FAILURE);
     }
 
@@ -272,8 +272,8 @@ int main(int argc, char *argv[]){
     
     // Check if the number of arguments is correct
     if (argc != 2) {
-        printf("Il y a plus d'un argument pour le programme.c");
-        exit (1);
+        printf("There is more than one argument for the program. c\n");
+        exit (8);
     }
 
     // Sort in decreasing order the cities by the number of times they have been crossed 
@@ -283,7 +283,7 @@ int main(int argc, char *argv[]){
     // Write the information contained in the avl in an output csv file
     FILE *file = fopen("temp/secondtemp.csv", "w");
     if (file == NULL) {
-        perror("Erreur lors de l'ouverture du fichier");
+        perror("Error when opening the file...\n");
         exit(EXIT_FAILURE);
     }
     infixreverse(avl, file);
