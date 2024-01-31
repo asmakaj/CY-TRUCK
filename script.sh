@@ -1,27 +1,27 @@
 #!/bin/bash
 
 # FONCTIONS
+
 # Creation des dossiers temp et images
-create_directories() {
-# Nom du dossier a verifier
-file="temp"
-# Verifier si le dossier existe
-if [ -d "$file" ]
-then
-    # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
-    find temp -mindepth 1 -delete 
-fi
-# Creer les dossiers
-mkdir -p temp images
+create_directories(){
+    file="temp"
+    # Verifier si le dossier existe
+    if [ -d "$file" ]
+    then
+        # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
+        find temp -mindepth 1 -delete 
+    fi
+    # Creer les dossiers
+    mkdir -p temp images
 }
 
 # Verification de la presence de l'executable C
 executable_verification(){
     case $1 in
         -t)
-        if [ ! -f progc/progt0 ]
+        if [ ! -f progc/progt ]
         then
-            gcc -o progc/progt0 progc/programme_t0.c
+            gcc -o progc/progt progc/programme_t.c
             # Verifier si la compilation s'est bien deroulee
             if [ $? -ne 0 ]
             then
@@ -60,32 +60,9 @@ executable_verification(){
 # echo "L'executable C est present."
 }
 
-# À SUPPRIMER QUAND ON AURA FINI DE TOUT CODER
-#compilation() {
- #   gcc -o progc/prog progc/programme.c
-#    if [ $? -ne 0 ]
-#    then
-#       echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-#        exit 1
-#    fi
-#}
-
-# Creation du graphique avec gnuplot
-#generate_graph() {
-    # À FAIRE
-#}
-# Appel de la fonction : generate_graph "temp/result_$1" "images/graph_$1.png"
-
-# Affichage du temps d'execution
-#execution_time() {
-    # À FAIRE
-#}
-
 #--------------------------------------------------------------------------------------------------------------------------------------------------
 
 # MAIN
-
-# Est ce qu'il y aura obligatoirement 1 argument ???? Sinon verifier qu'il y a au moins 1 argument
 
 # Récupération du fichier CSV passé en argument
 input_file=$1
@@ -106,8 +83,7 @@ fi
 # Création du dossier "data" s'il n'existe pas
 mkdir -p data
 # Copie du fichier CSV dans le dossier data
-cp "$input_file" data/ # L'ECRASEMENT POSE PROBLEME ?
-# echo "Le fichier $input_file a été copié dans le dossier data avec succès."
+cp "$input_file" data/ #
 
 # Cas du -h
 # Boucle pour parcourir les arguments
@@ -138,8 +114,7 @@ create_directories
 # Le premier argument est le fichier CSV
 input_file=$1
 shift
-# On a décalé les arguments vers la gauche pour exclure le fichier CSV, le premier argument est maintenant le premier traintement
-# Pour avoir accès a data.csv, il faut faire appel à la varible $input_file
+
 
 # Boucle pour traiter chaque argument 
 for option in "$@"
@@ -153,9 +128,6 @@ do
 
             # Trier la liste par ordre décroissant de nombre de trajets
             sort -t';' -k2,2 -n -r temp/secondtemp.csv >> temp/thirdtemp.csv 
-
-            # Récupérer les 10 premiers conducteurs au choix fichier finaltemp.csv ou dansla variable
-            # longest_10_drivers=$(head -n 10 temp/thirdtemp.csv)
             head -n 10 temp/thirdtemp.csv >> temp/finaltemp.csv
 
             echo "Les 10 conducteurs avec le plus de trajets sont : "
@@ -188,11 +160,7 @@ do
             ;;
         -l)
             echo "Traitement L..."
-            # récupérer les distances totales pour chaque trajet (meme route ID)
-            #cat "$input_file" >> temp/temp.csv
-            #awk -F ';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
             LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
-
 
             # trier les plus longs trajets
             sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv  
@@ -228,33 +196,33 @@ do
             #awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" (city in departure_city ? departure_city[city] : 0) }' "$input_file" >> temp/firsttemp.csv
 
             awk -F';' 'BEGIN { OFS=";"; }
-{
-    route_id = $1;
-    townA = $3;
-    townB = $4;
+            { 
+                route_id = $1;
+                townA = $3;
+                townB = $4;
 
-    if (!(route_id SUBSEP townA in visited_cities)) {
-        visited_cities[route_id SUBSEP townA] = 1;
-        count[townA] += 1;
-    }
+                # Vérifier si townA ou townB ne sont pas dans route_id SUBSEP town dans visited_cities
+                if (!(route_id SUBSEP townA in visited_cities) || !(route_id SUBSEP townB in visited_cities)) {
+                    if (!(route_id SUBSEP townA in visited_cities)) {
+                        visited_cities[route_id SUBSEP townA] = 1;
+                        count[townA] += 1;
+                    }
+                    if (!(route_id SUBSEP townB in visited_cities)) {
+                        visited_cities[route_id SUBSEP townB] = 1;
+                        count[townB] += 1;
+                    }
+                }
 
-    if (!(route_id SUBSEP townB in visited_cities)) {
-        visited_cities[route_id SUBSEP townB] = 1;
-        count[townB] += 1;
-    }
+                if ($2 == 1) { 
+                    departure_city[$3] += 1;
+                }
+            }
+            END { 
+                for (city in count) {
+                    print city, count[city] ";" (city in departure_city ? departure_city[city] : 0);
+                }
+            }' "$input_file" >> temp/firsttemp.csv
 
-    if ($2 == 1) {
-        departure_city[townA] += 1;
-    }
-}
-END {
-    for (city in count) {
-        print city, count[city] ";" (city in departure_city ? departure_city[city] : 0);
-    }
-}' "$input_file" >> temp/firsttemp.csv
-
-
-            gcc -o progc/progt progc/programme_t.c
             ./progc/progt temp/firsttemp.csv
              #sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
 
@@ -262,7 +230,6 @@ END {
              head -n 11 temp/secondtemp.csv >> temp/thirdtemp.csv
              #awk 'NF{printf "%s", $0; getline; print}' temp/thirdtemp.csv > temp/ok.csv
 
-             gcc -o progc/progt2 progc/programme_t2.c
              ./progc/progt2 temp/thirdtemp.csv
              #sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
 
@@ -271,18 +238,20 @@ END {
            ;;
         -s)
            echo "Traitement S..."
-            # Vérification de l'executable c
+            # verification of the c executable
             executable_verification "$option"
+
+            # Extract Route_id, Step_id and Distance from the data file
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
-            tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
+            tail -n +2 temp/firsttemp.csv >> temp/secondtemp.csv
+
+            # Start processing via the c program
             echo "Les statistiques sur les étapes sont : "
-            gcc -o progc/progs progc/programme_s.c
             ./progc/progs temp/secondtemp.csv
 
-            # Récupérer les 50 premiers 
+            # Recover the first 50 
             head -n 50 temp/output.csv >> temp/finaltemp.csv
             echo "Les 50 premiers sont : "
-            # route_id, min, max, moy, diff
             cat temp/finaltemp.csv
             
             rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
