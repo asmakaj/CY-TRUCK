@@ -111,7 +111,7 @@ pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
 pTree readCSV(const char* data, pTree abr) {
     FILE* file = fopen(data, "r");
     if (file == NULL) {
-        perror("Error opening the file");
+        perror("Error opening the file...\n");
         exit(EXIT_FAILURE);
     }
 
@@ -375,7 +375,7 @@ void freeAVL(spTree avl){
 int main(int argc, char *argv[]){
     // Check if the number of arguments is correct
     if (argc != 2) {
-        printf("Il y a plus d'un argument pour le programme.c");
+        printf("There is more than one argument for the program. c\n");
         exit (9);
     }
 
@@ -391,7 +391,7 @@ int main(int argc, char *argv[]){
     // Write the information contained in the avl in an output csv file
     FILE *file = fopen("temp/output.csv", "w");
     if (file == NULL) {
-        perror("Erreur lors de l'ouverture du fichier");
+        perror("Error when opening the file...\n");
         exit(EXIT_FAILURE);
     }
     infixreverse(avl, file);
