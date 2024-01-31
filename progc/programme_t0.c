@@ -67,6 +67,7 @@ void prefixe(File* result, FILE* file) {
     }
 }
 
+
 void afficheListe(Chainon* pliste){
     if(pliste == NULL){
         exit(2);
@@ -77,10 +78,9 @@ void afficheListe(Chainon* pliste){
         printf("%s;%d",p->city, p->count);
         p = p->suivant;
         if(p->suivant != NULL){
-            printf("->");
+            printf("\n");
         }
     } 
-    printf("\n");
 }
 
 void infixtestAVL(spTree p){
@@ -207,7 +207,7 @@ int fileVerification(File* f){
         p->suivant = new;
         avl->crossed->queue = new;
     }
-        printf("crossedcity 1 ok \n");
+      //  printf("crossedcity 1 ok \n");
     return avl->crossed;
 }
 
@@ -369,8 +369,8 @@ printf("insertAVL 3 ok \n");
     return avl;
 }
 */
-spTree insertAVL(spTree avl, int* h, int route_ID, int step, const char* cityA, char* cityB) {
-    printf("insertAVL 1 ok \n");
+spTree insertAVL(spTree avl, int* h, int route_ID, int step, const char* cityA, const char* cityB) {
+    //printf("insertAVL 1 ok \n");
 
     spTree new = createNodeAVL(route_ID, step, cityA, cityB);
 
@@ -385,7 +385,7 @@ spTree insertAVL(spTree avl, int* h, int route_ID, int step, const char* cityA, 
         avl->crossed = creationFile();
         avl->crossed = crossedcity(avl, cityA);
         avl->crossed = crossedcity(avl, cityB);
-        printf("insertAVL 2 ok \n");
+        //printf("insertAVL 2 ok \n");
         return avl;
     } else if (new->route_ID < avl->route_ID) {
         avl->pLeft = insertAVL(avl->pLeft, h, route_ID, step, cityA, cityB);
@@ -400,7 +400,7 @@ spTree insertAVL(spTree avl, int* h, int route_ID, int step, const char* cityA, 
         return avl;
     }
 
-    printf("insertAVL 3 ok \n");
+    //printf("insertAVL 3 ok \n");
     if (*h != 0) {
         avl->eq = avl->eq + *h;
         avl = equilibrageAVL(avl);
@@ -464,14 +464,14 @@ File* insertResult(File* result, spTree avl) {
     if (avl == NULL || result == NULL) {
         exit(42);
     }
-    printf("insert result debut ok \n");
+    //printf("insert result debut ok \n");
 
     if (avl->crossed == NULL) {
         printf("L'avl pour remplir les resultats est nulle\n");
         exit(54);
     }
 
-    printf("insert result 2 ok \n");
+    //printf("insert result 2 ok \n");
 
     Chainon* p = avl->crossed->tete;
 
@@ -506,7 +506,7 @@ File* insertResult(File* result, spTree avl) {
         p = p->suivant;
     }
 
-    printf("inssertResult 1 ok \n");
+   // printf("inssertResult 1 ok \n");
     return result;
 }
 
@@ -532,15 +532,16 @@ spTree fillAVL(const char* data, spTree avl) {
         exit(EXIT_FAILURE);
     }
 
+    int h = 0;
     char cityA[50];
     char cityB[50];
-    int h = 0;
-    int step = 0, route_ID = 0;
+    int step, route_ID;
 
-    while (fscanf(file1, "%d;%d;%49[^;];%49[^;]", &route_ID, &step, cityA, cityB) == 4) {
-        avl = insertAVL(avl, &h, route_ID, step, strdup(cityA), strdup(cityB)); 
+    while (fscanf(file1, "%49[^;];%49[^;];%d;%d;", cityA, cityB, &route_ID, &step) == 4) {
+       // printf("Route_ID: %d, Step: %d, CityA: %s, CityB: %s\n", route_ID, step, cityA, cityB);
+       // printf("test dans while\n");
+        avl = insertAVL(avl, &h, route_ID, step, strdup(cityA), strdup(cityB));
     }
-
     fclose(file1);
     printf("fill avl fin ok\n");
     return avl;
@@ -598,7 +599,7 @@ int main(int argc, char *argv[]){
     spTree avl = NULL;
     avl = fillAVL(argv[1], avl);
 
-    infixtestAVL(avl);
+    //infixtestAVL(avl);
     printf("main 2 ok\n");
 
     int h= 0;
@@ -621,7 +622,7 @@ int main(int argc, char *argv[]){
 
     printf("main 4 ok\n");
 
-    afficheListe(result->tete);
+    //afficheListe(result->tete);
     fclose(file);
 
     freeFile(result);

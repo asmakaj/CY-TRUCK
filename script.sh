@@ -216,28 +216,58 @@ do
             echo "Traitement T..."
             # Vérification de l'executable c
             executable_verification "$option"
-            tail -n +2 "$input_file" > temp/firsttemp.csv
-            cut -d';' -f1,2,3,4 temp/firsttemp.csv >> temp/temp.csv
-            head -n 200 temp/temp.csv > temp/secondtemp.csv
+            #tail -n +2 "$input_file" > temp/firsttemp.csv
+            #awk -F';' '{print $3";"$4";"$1";"$2}' temp/firsttemp.csv >> temp/secondtemp.csv
 
+            # head -n 2000000 temp/temp.csv > temp/secondtemp.csv
 
-            gcc -o progc/progt0 progc/programme_t0.c
-            ./progc/progt0 temp/secondtemp.csv
-            
-            #awk avec ville de depart
+  #awk avec ville de depart
             #awk -F';' '$2 == 1 {departure_city[$3]+=1 et count[$3]++ } END {for (city in departure_city) print city ";" departure_city[city]}' "$input_file" >> temp/firsttemp.csv
 
+             # Recupère le nombre de trajets qui parcourent chaque ville, ainsi que le nombre de fois où ces villes ont été des villes de départ de trajets.
+            #awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" (city in departure_city ? departure_city[city] : 0) }' "$input_file" >> temp/firsttemp.csv
 
-            #programme_t.csv A AJOUTER
+            awk -F';' 'BEGIN { OFS=";"; }
+{
+    route_id = $1;
+    townA = $3;
+    townB = $4;
 
-            head -n 10 temp/thirdtemp.csv > temp/fourthtemp.csv
+    if (!(route_id SUBSEP townA in visited_cities)) {
+        visited_cities[route_id SUBSEP townA] = 1;
+        count[townA] += 1;
+    }
 
-            gcc -o progc/progt2 progc/programme_t2.c
-            ./progc/progt2 temp/fourthtemp.csv
+    if (!(route_id SUBSEP townB in visited_cities)) {
+        visited_cities[route_id SUBSEP townB] = 1;
+        count[townB] += 1;
+    }
 
-            cat temp/finaltemp.csv
-            rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv temp/temp.csv
+    if ($2 == 1) {
+        departure_city[townA] += 1;
+    }
+}
+END {
+    for (city in count) {
+        print city, count[city] ";" (city in departure_city ? departure_city[city] : 0);
+    }
+}' "$input_file" >> temp/firsttemp.csv
 
+
+            gcc -o progc/progt progc/programme_t.c
+            ./progc/progt temp/firsttemp.csv
+             #sort -t ';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
+
+
+             head -n 11 temp/secondtemp.csv >> temp/thirdtemp.csv
+             #awk 'NF{printf "%s", $0; getline; print}' temp/thirdtemp.csv > temp/ok.csv
+
+             gcc -o progc/progt2 progc/programme_t2.c
+             ./progc/progt2 temp/thirdtemp.csv
+             #sort -t ';' -k2,1 -n temp/thirdtemp.csv >> temp/finaltemp.csv
+
+             cat temp/finaltemp.csv
+             rm temp/firsttemp.csv temp/thirdtemp.csv temp/secondtemp.csv temp/finaltemp.csv
            ;;
         -s)
            echo "Traitement S..."

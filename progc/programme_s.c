@@ -267,6 +267,11 @@ spTree equilibrageAVL(spTree avl){
 spTree insertAVL(spTree avl, int* h, pTree abr){
     spTree new = createNodeAVL(abr);
 
+    if(new == NULL){
+        printf("erreu du malloc");
+        exit(54);
+    }
+
     if(avl ==  NULL){
         *h = 1;
         return new;
