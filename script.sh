@@ -1,18 +1,20 @@
 #!/bin/bash
 
 # FONCTIONS
+
 # Creation des dossiers temp et images
 create_directories() {
-# Nom du dossier a verifier
-file="temp"
-# Verifier si le dossier existe
-if [ -d "$file" ]
-then
-    # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
-    find temp -mindepth 1 -delete 
-fi
-# Creer les dossiers
-mkdir -p temp images
+    # Nom du dossier a verifier
+    file="temp"
+    
+    # Verifier si le dossier existe
+    if [ -d "$file" ]
+    then
+        # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
+        find temp -mindepth 1 -delete 
+    fi
+    # Creer les dossiers
+    mkdir -p temp images
 }
 
 # Verification de la presence de l'executable C
@@ -354,19 +356,21 @@ EOF
 
             ;;
         -s)
-            echo "Traitement S..."
-            # Vérification de l'executable c
+            echo "S treatment..."
+            # verification of the c executable
             executable_verification "$option"
+
+            # Extract Route_id, Step_id and Distance from the data file
             cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
-            tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
+            tail -n +2 temp/firsttemp.csv >> temp/secondtemp.csv
+
+            # Start processing via the c program
             echo "Les statistiques sur les étapes sont : "
-            gcc -o progc/progs progc/programme_s.c
             ./progc/progs temp/secondtemp.csv
 
-            # Récupérer les 50 premiers 
+            # Recover the first 50 
             head -n 50 temp/output.csv >> temp/finaltemp.csv
             echo "Les 50 premiers sont : "
-            # route_id, min, max, moy, diff
             cat temp/finaltemp.csv
             
             rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
