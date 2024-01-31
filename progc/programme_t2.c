@@ -1,7 +1,23 @@
+/*
+ * File Name: programme_t2.c
+ * Author: 
+ * Created on: January 8, 2024
+ * Description: 
+    This program collects the different cities, the number of times they were crossed,
+    and the number of times they are cities of departure of each trip.
+    These data will be sort by these cities will be sorted alphabetically,
+    and then written to a csv output file as: 
+    City;crossed;departure_city
+*/
+
 #include<stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ _____Structure AVL_____
+ Description : stores the name of the city, the number of times the city was crossed, the number of times the city is a departure city
+ */
 typedef struct AVL{
     char* city;
     int crossed;
@@ -14,35 +30,19 @@ typedef struct AVL{
 typedef AVL_Tree* spTree;
 
 /*
-void infixtestAVL(spTree p){
-    if(p != NULL){
-        infixtestAVL(p->pRight);
-        printf("[%02d]", p->crossed);
-        //fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f;%d\n", p->route_ID, p->min, p->max, p->moy, p->diff, p->eq);
-        //insertAVL1(avl, 0, p);
-    infixtestAVL(p->pLeft);
-    }
-}
-*/
-
-void infixreverse(spTree avl, FILE* file) {
-    if (avl != NULL) {
-        infixreverse(avl->pRight, file);
-        fprintf(file, "%s;%d;%d", avl->city, avl->crossed, avl->departure_city);
-        infixreverse(avl->pLeft, file);
-    }
-}
-
-
-//ok
+    Function : createNodeAVL
+    Description : Creates a new AVL node
+    Parameters : necessary information to initialize the new node
+    Returns : the new node 
+ */
 spTree createNodeAVL(const char* city, int crossed, int departure_city){
     spTree new = malloc(sizeof(AVL_Tree));
     if (new == NULL) {
-        printf("Erreur au niveau du malloc");
-        exit(3);
+        printf("The malloc of the new AVL node failed... Please try again\n");
+        exit(1);
     }
 
-    new->city = strdup(city); // Alloue de la mémoire et copie la ville
+    new->city = strdup(city); // Allocates memory and copies the city
     new->crossed = crossed;
     new->departure_city = departure_city;
     new->eq = 0;
@@ -52,21 +52,48 @@ spTree createNodeAVL(const char* city, int crossed, int departure_city){
     return new;
 }
 
-// Fonction pour trouver le minimum entre trois entiers
+
+/*
+    Function : min3
+    Description : Find the minimum between 3 values
+    Returns : the minimum value
+ */
 int min3(int a, int b, int c){
 return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c);
 }
 
-// Fonction pour trouver le max entre deux entiers
+/*
+    Function : max2
+    Description : Find the maximum between 2 values
+    Returns : the maximum value
+ */
 int max2(int a, int b){
     return (a > b) ? a : b;
 }
 
-// issu du cours
+/*
+    Function : min2
+    Description : Find the minimum between 2 values
+    Returns : the minimum value
+ */
+int min2(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+/*
+    Function : max3
+    Description : Find the maximum between 3 values
+    Returns : the maximum value
+ */
+int max3(int a, int b, int c) {
+    return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
+}
+
+// from the lecture course
 spTree leftRotation(spTree avl){
     if(avl == NULL){
-        printf("L'arbre est null\n");
-        exit(4);
+        printf("The AVL is NULL... Please try again\n");
+        exit(2);
     }
     spTree pivot;
     int eq_a, eq_p;
@@ -81,25 +108,14 @@ spTree leftRotation(spTree avl){
     pivot->eq = min3(eq_a - 2, eq_a + eq_p - 2, eq_p-1);
 
     avl = pivot;
-
     return avl;
 }
 
-// Fonction pour trouver le minimum entre deux entiers
-int min2(int a, int b) {
-    return (a < b) ? a : b;
-}
-
-// Fonction pour trouver le maximum entre trois entiers
-int max3(int a, int b, int c) {
-    return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
-}
-
-// issu du cours
+// from the lecture course
 spTree rightRotation(spTree avl){
     if(avl == NULL){
-        printf("L'arbre est null\n");
-        exit(5);
+        printf("The AVL is NULL... Please try again\n");
+        exit(3);
     }
     spTree pivot;
     int eq_a, eq_p;
@@ -114,33 +130,34 @@ spTree rightRotation(spTree avl){
     pivot->eq = max3(eq_a + 2, eq_a + eq_p + 2, eq_p + 1);
 
     avl = pivot;
-
     return avl;
 }
 
-// issu du cours
+// from the lecture course
 spTree doubleLeftRotation(spTree avl){
     if(avl == NULL){
-        printf("L'arbre est null\n");
-        exit(6);
+        printf("The AVL is NULL... Please try again\n");
+        exit(4);
     }
     avl->pRight = rightRotation(avl->pRight);
     return leftRotation(avl);
 }
-// issu du cours
+
+// from the lecture course
 spTree doubleRightRotation(spTree avl){
         if(avl == NULL){
-        printf("L'arbre est null\n");
-        exit(7);
+        printf("The AVL is NULL... Please try again\n");
+        exit(5);
     }
     avl->pLeft = leftRotation(avl->pLeft);
     return rightRotation(avl);
 }
-// issu du cours
+
+// from the lecture course
 spTree equilibrageAVL(spTree avl){
         if(avl == NULL){
-        printf("L'arbre est null\n");
-        exit(8);
+        printf("The AVL is NULL... Please try again\n");
+        exit(6);
     }
     if(avl->eq > 1){
         if(avl->pRight->eq >= 0){
@@ -160,13 +177,18 @@ spTree equilibrageAVL(spTree avl){
     }
     return avl;
 }
-// issu du cours
-spTree insertAVL1(spTree avl, int* h, const char* city, int crossed, int departure_city){
+
+/*
+    Function : insertAVL
+    Description : Insert the new nodes in the AVL
+    Returns : the updated AVL
+ */
+spTree insertAVL(spTree avl, int* h, const char* city, int crossed, int departure_city){
     spTree new = createNodeAVL(city, crossed, departure_city);
 
     if(new == NULL){
-        printf("Erreur, le nouveau est NULL");
-        exit(10);
+        printf("The malloc of the new AVL node failed... Please try again\n");
+        exit(7);
     }
 
     if(avl ==  NULL){
@@ -176,11 +198,11 @@ spTree insertAVL1(spTree avl, int* h, const char* city, int crossed, int departu
     int result = strcmp(new->city, avl->city);
 
     if(result > 0){
-        avl->pLeft = insertAVL1(avl->pLeft, h,city, crossed, departure_city);
+        avl->pLeft = insertAVL(avl->pLeft, h,city, crossed, departure_city);
         *h = -(*h);
     }
     else if(result < 0){
-        avl->pRight = insertAVL1(avl->pRight, h, city, crossed, departure_city);
+        avl->pRight = insertAVL(avl->pRight, h, city, crossed, departure_city);
     }
     else{
         h = 0;
@@ -202,12 +224,15 @@ spTree insertAVL1(spTree avl, int* h, const char* city, int crossed, int departu
     return avl;
 }
 
-// Function to read data from CSV
-// nom de la ville;crossed;departure_city
+/*
+    Function : fillAVL
+    Description : Read data from CSV and add these data to the AVL
+    Returns : the updated AVL
+ */
 spTree fillAVL(const char* data, spTree avl) {
     FILE* file1 = fopen(data, "r");
     if (file1 == NULL) {
-        perror("Error opening the file");
+        perror("Error opening the file...\n");
         exit(EXIT_FAILURE);
     }
 
@@ -215,50 +240,62 @@ spTree fillAVL(const char* data, spTree avl) {
     int h = 0;
     int crossed = 0, departure_city = 0;
 
+    // The loop retrieves the csv data line by line, then adds them to the tree 
     while (fscanf(file1, "%[^;];%d;%d", city, &crossed, &departure_city) == 3) {
-        avl = insertAVL1(avl, &h, city, crossed, departure_city);
+        avl = insertAVL(avl, &h, city, crossed, departure_city);
     }
     fclose(file1);
     free(city);
     return avl;
 }
 
+/*
+    Function : infixreverse
+    Description : print in the output file the cities in alphabetical order 
+*/
+void infixreverse(spTree avl, FILE* file) {
+    if (avl != NULL) {
+        infixreverse(avl->pRight, file);
+        fprintf(file, "%s;%d;%d", avl->city, avl->crossed, avl->departure_city);
+        infixreverse(avl->pLeft, file);
+    }
+}
+
+/*
+    Function : freeAVL
+    Description : Releases the memory allocated for the AVL
+ */
 void freeAVL(spTree avl){
-    // Si le nœud est NULL, il n'y a rien à libérer, donc return
     if (avl == NULL) {
         return;
     }
-
-    // Récursivement libérer le sous-arbre gauche et le sous-arbre droit
     freeAVL(avl->pLeft);
     freeAVL(avl->pRight);
-
-    // Libérer le nœud actuel
     free(avl);
 }
 
-
 int main(int argc, char *argv[]){
-    
-    // Vérifier si le nombre d'arguments est correct
+   
+    // Check if the number of arguments is correct
     if (argc != 2) {
-        printf("Il y a plus d'un argument pour le programme.c");
-        exit (1);
+        printf("There is more than one argument for the program. c\n");
+        exit (8);
     }
 
+    // Sort cities by alphabetical order 
     spTree avl = NULL;
     avl = fillAVL(argv[1], avl);
 
-    // Ouvrir un fichier en écriture
+    // Write the information contained in the avl in an output csv file
     FILE *file = fopen("temp/finaltemp.csv", "w");
-    if (file == NULL) {
-        perror("Erreur lors de l'ouverture du fichier");
+    if (file == NULL){
+        perror("Error when opening the file...\n");
         exit(EXIT_FAILURE);
     }
-
     infixreverse(avl, file);
-
     fclose(file);
+    
+    // Memory release
     freeAVL(avl);
 
 
