@@ -149,7 +149,7 @@ do
         -d1)
 
            # Enregistrez le temps de début
-            start_time=$(date +%s.%N)
+            start_time=$(date +%s)
 
             echo "Traitement D1..."
             #cat "$input_file" >> temp/temp.csv
