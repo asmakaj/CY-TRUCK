@@ -141,9 +141,9 @@ do
             # Saves the start time
             start_time=$(date +%s)
 
-            echo "Traitement D1..."
+            echo "Traitement D1 in progress"
 
-            # Collects the first stages of each journey and count the number of tajets per driver
+            # Collects the first stages of each journey and count the number of tajects per driver
             grep ";1;" "$input_file" > temp/firsttemp.csv
             awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/firsttemp.csv > temp/secondtemp.csv
 
@@ -151,59 +151,54 @@ do
             sort -t';' -k2,2 -n -r temp/secondtemp.csv > temp/thirdtemp.csv 
             head -n 10 temp/thirdtemp.csv > temp/finaltemp.csv
 
-            echo "Les 10 conducteurs avec le plus de trajets sont : "
-            cat temp/finaltemp.csv
 
 ################################## START OF THE GNUPLOT ##################################
 
-            # Commande Gnuplot
+            # Gnuplot starting command 
             gnuplot << EOF
-            #Définition du style de sortie avec rotation
+
+            # define the output style and the title
             set terminal pngcairo enhanced font 'arial,15' size 1100,1000
-            set output 'images/Traitement1.png'
-            
-            #Séparateur pour le using
+            set output 'images/Treatment1.png'
             set datafile separator ";"
-            
-            #Titre du graphique
             set ylabel 'Option -d1 : Nb routes = f(Driver)'
-            
-            #Style de la barre
+
+            #set the bar graph style 
             set style data histogram
             set style fill solid border -1
-            
-            #Enlever la légende
+
+            #remove the legend
             unset key
-            
-            #Ajustement de la largeur des colonnes et positionnement à gauche
+
+            #adjust the width of the bars
             set style histogram cluster gap 1
             set boxwidth 1.6
-            
-            #Axe X
+      
+            #set the axis names
             set xlabel 'DRIVER NAMES' rotate by 180
             set y2label 'NB ROUTES'
-            
-            #Ajustement des xtics
+       
+            #ajust the presentation of data on the two axis
             set xtics rotate
             set y2range [0:250]
-            
-            #Ajustement des y2tics
             set y2tics rotate
             unset ytics;set y2tics mirror
             
-            #Charger les données depuis le fichier temporaire
-            plot 'temp/finaltemp.csv' using 2:xticlabels(1) axes x1y2 notitle linecolor 2 lt 1
+            #enters the data from the end-of-processing file to draw the histogram
+            plot 'temp/finaltemp.csv' using 2:xticlabels(1) axes x1y2 notitle linecolor rgb 'purple' lt 1
 EOF
-            convert -rotate 90 images/Traitement1.png images/Traitement1.png
-            
-            
-            # Placer l'image dans le dossier images
-            mv "$output_file" images/
-            # Ouvrir l'image
-            xdg-open "images/Traitement1.png"
 ####################################### END OF GNUPLOT ####################################
+           
+            #This puts the graph bars horizontally and parallel to the x-axis
+            convert -rotate 90 images/Treatment1.png images/Treatment1.png
             
-            # Clears temporary files
+            # put the histogramm into the correct file
+            mv "$output_file" images/
+            
+            # Open the visualizer of graphics
+            xdg-open "images/Treatment1.png"
+
+            # Clears temporary files needed for this treatment
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
 
             # Records the end time
