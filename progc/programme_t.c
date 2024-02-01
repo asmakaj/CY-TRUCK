@@ -1,6 +1,6 @@
 /*
  * File Name: programme_t.c
- * Author: 
+ * Author: Deulyne DESTIN
  * Created on: January 6, 2024
  * Description: 
     This program collects the different cities, the number of times they were crossed,
@@ -230,12 +230,12 @@ spTree fillAVL(const char* data, spTree avl) {
         exit(EXIT_FAILURE);
     }
 
-    char city[50];
+    char city[55];
     int h = 0;
     int crossed = 0, departure_city = 0;
 
     // The loop retrieves the csv data line by line, then adds them to the tree 
-    while (fscanf(file, "%49[^;];%d;%d", city, &crossed, &departure_city) == 3) {
+    while (fscanf(file, "%54[^;];%d;%d", city, &crossed, &departure_city) == 3) {
         avl = insertAVL(avl, &h, city, crossed, departure_city);
     }
 
