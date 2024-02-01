@@ -236,12 +236,12 @@ spTree fillAVL(const char* data, spTree avl) {
         exit(EXIT_FAILURE);
     }
 
-    char* city = malloc(30);
+    char* city = malloc(55);
     int h = 0;
     int crossed = 0, departure_city = 0;
 
     // The loop retrieves the csv data line by line, then adds them to the tree 
-    while (fscanf(file1, "%[^;];%d;%d", city, &crossed, &departure_city) == 3) {
+    while (fscanf(file1, "%54[^;];%d;%d", city, &crossed, &departure_city) == 3) {
         avl = insertAVL(avl, &h, city, crossed, departure_city);
     }
     fclose(file1);
