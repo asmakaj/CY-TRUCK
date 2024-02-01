@@ -154,7 +154,7 @@ do
 	output_file="images/Treatment1.png"
 
 
-################################## START OF THE GNUPLOT ##################################
+################################## START OF GNUPLOT ##################################
 
             # Gnuplot starting command 
             gnuplot << EOF
@@ -189,7 +189,6 @@ do
             #enters the data from the end-of-processing file to draw the histogram
             plot 'temp/finaltemp.csv' using 2:xticlabels(1) axes x1y2 notitle linecolor rgb 'purple' lt 1
 EOF
-####################################### END OF GNUPLOT ####################################
 
             #This puts the graph bars horizontally and parallel to the x-axis
             convert -rotate 90 "$output_file" "temp_rotated.png"
@@ -199,6 +198,8 @@ EOF
             
             # Open the visualizer of graphics for the right .png
             xdg-open "images/Treatment_1.png"
+
+####################################### END OF GNUPLOT ####################################
 
             # Clears temporary files needed for this treatment
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv 
@@ -226,11 +227,9 @@ EOF
 
             # Sorts the list in descending order according to total distances and gets the first 10
             sort -t';' -k2,2 -n -r temp/firsttemp.csv > temp/secondtemp.csv 
-            head -n 10 temp/secondtemp.csv >> temp/finaltemp.csv
-            echo "Les 10 conducteurs avec les plus grandes distances sont : "
-            cat temp/finaltemp.csv
+            head -n 10 temp/secondtemp.csv > temp/finaltemp.csv
 
-################################## START OF THE GNUPLOT ##################################
+################################## START OF GNUPLOT ##################################
             # Commande Gnuplot
             gnuplot << EOF
             #Définition du style de sortie avec rotation
@@ -278,6 +277,7 @@ EOF
             xdg-open "images/Traitement2.png"
 
 ####################################### END OF GNUPLOT ####################################
+
             # Clears temporary files
             rm temp/firsttemp.csv temp/finaltemp.csv temp/secondtemp.csv
             
@@ -309,12 +309,7 @@ EOF
             # Sorts trips by increasing identification number
             sort -t ';' -k1,1 -n -r temp/thirdtemp.csv  > temp/finaltemp.csv
 
-            longest_10_trajects=$(head -n 10 temp/finaltemp.csv)
-            echo "Les 10 trajets les plus longs sont : "
-            echo "$longest_10_trajects"
-
-
-################################## START OF THE GNUPLOT ##################################
+################################## START OF GNUPLOT ##################################
             # Commande Gnuplot
             gnuplot <<EOF
             # Police du graphique
@@ -353,7 +348,6 @@ EOF
 
             # Clears temporary files
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
-
 
             # Records the end time
             end_time=$(date +%s)
@@ -417,9 +411,8 @@ EOF
 
             # Alphabetize the top 10 cities 
             ./progc/progt2 temp/thirdtemp.csv
-            cat temp/finaltemp.csv
 
-################################## START OF THE GNUPLOT ##################################
+################################## START OF GNUPLOT ##################################
 ###################################### END OF GNUPLOT ####################################
 
             # Clears temporary files
@@ -447,20 +440,18 @@ EOF
             executable_verification "$option"
 
             # Extract Route_id, Step_id and Distance from the data file
-            cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
-            tail -n +2 temp/firsttemp.csv >> temp/secondtemp.csv
+            cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
+            tail -n +2 temp/firsttemp.csv > temp/secondtemp.csv
 
             # Start processing via the c program
             echo "Les statistiques sur les étapes sont : "
             ./progc/progs temp/secondtemp.csv
 
             # Recover the first 50 
-            head -n 50 temp/output.csv >> temp/finaltemp.csv
-            echo "Les 50 premiers sont : "
-            cat temp/finaltemp.csv
+            head -n 50 temp/output.csv > temp/finaltemp.csv
 
 
-################################## START OF THE GNUPLOT ##################################
+################################## START OF GNUPLOT ##################################
 ###################################### END OF GNUPLOT ####################################
 
             # Clears temporary files
