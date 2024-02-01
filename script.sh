@@ -1,30 +1,44 @@
 #!/bin/bash
 
-# FONCTIONS
+###################################################################################################################################
 
-# Creation des dossiers temp et images
-create_directories() {
-    # Nom du dossier a verifier
+# File Name: script.sh
+# Author: Deulyne DESTIN, Asma KAJEIOU, Emma DOS SANTOS
+# Created on: December ..., 2023
+# Description: (à mettre à jour)
+#   This program collects all the stages of the journeys made by different drivers.
+#   It will then sum the distances of the different steps while storing the min and max distances of the trips.
+#   These data will be sorted in descending order of "max distance - min distance",
+#   and then written to a csv output file as: 
+#   Route_ID;min_distance;max_distance;average_distance;(max_distance-min_distance)
+
+###################################################################################################################################
+
+
+###### FUNCTIONS #######
+
+
+# Creation of temp and image folders
+create_directories(){
     file="temp"
-    
-    # Verifier si le dossier existe
+    # Check if the folder exists
     if [ -d "$file" ]
     then
-        # find : Cela garantit que tous les fichiers et sous-répertoires dans temp sont supprimés, même si le répertoire est déjà vide
+        # Ensures that all files and subdirectories in temp are deleted, even if the directory is already empty
         find temp -mindepth 1 -delete 
     fi
-    # Creer les dossiers
+
     mkdir -p temp images
 }
 
-# Verification de la presence de l'executable C
+# Verification of the presence of the C executable according to the treatments
 executable_verification(){
     case $1 in
         -t)
         if [ ! -f progc/progt ]
         then
             gcc -o progc/progt progc/programme_t.c
-            # Verifier si la compilation s'est bien deroulee
+            # Check if the compilation went well
             if [ $? -ne 0 ]
             then
                 echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
@@ -34,7 +48,7 @@ executable_verification(){
         if [ ! -f progc/progt2 ]
         then
             gcc -o progc/progt2 progc/programme_t2.c
-            # Verifier si la compilation s'est bien deroulee
+            # Check if the compilation went well
             if [ $? -ne 0 ]
             then
                 echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
@@ -46,7 +60,7 @@ executable_verification(){
         if [ ! -f progc/progs ]
         then
             gcc -o progc/progs progc/programme_s.c
-            # Verifier si la compilation s'est bien deroulee
+            # Check if the compilation went well
             if [ $? -ne 0 ]
             then
                 echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
@@ -58,63 +72,41 @@ executable_verification(){
             echo "L'option $option n'est pas reconnue. Veuillez réessayer."
             exit 1 ;;
     esac
-# echo "L'executable C est present."
 }
 
-# À SUPPRIMER QUAND ON AURA FINI DE TOUT CODER
-#compilation() {
- #   gcc -o progc/prog progc/programme.c
-#    if [ $? -ne 0 ]
-#    then
-#       echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-#        exit 1
-#    fi
-#}
 
-# Creation du graphique avec gnuplot
-#generate_graph() {
-    # À FAIRE
-#}
-# Appel de la fonction : generate_graph "temp/result_$1" "images/graph_$1.png"
+###### MAIN #######
 
-# Affichage du temps d'execution
-#execution_time() {
-    # À FAIRE
-#}
 
-#--------------------------------------------------------------------------------------------------------------------------------------------------
-
-# MAIN
-
-# Est ce qu'il y aura obligatoirement 1 argument ???? Sinon verifier qu'il y a au moins 1 argument
-
-# Récupération du fichier CSV passé en argument
+# Recovery of the CSV file passed as argument
 input_file=$1
 
-# Vérification de l'existence du fichier
+
+# Checking the existence of the file
 if [ ! -f "$input_file" ]
 then
     echo "Le fichier $input_file n'existe pas."
     exit 1
 fi
-# Vérification de l'extension du fichier
+# Checking the file extension
 if [[ ! "$input_file" =~ \.csv$ ]]
 then
     echo "Le fichier $input_file n'est pas un fichier .csv. Veuillez réessayer svp..."
     exit 1
 fi
 
-# Création du dossier "data" s'il n'existe pas
-mkdir -p data
-# Copie du fichier CSV dans le dossier data
-cp "$input_file" data/ # L'ECRASEMENT POSE PROBLEME ?
-# echo "Le fichier $input_file a été copié dans le dossier data avec succès."
 
-# Cas du -h
-# Boucle pour parcourir les arguments
+# Creation of the "data" folder if it does not exist
+mkdir -p data
+# Copy the CSV file to the data folder
+cp "$input_file" data/ 
+
+
+# Treatment h
+# Loop that scans all arguments by checking the presence of the -t
 for arg in "$@"
 do
-    # Si l'argument est égal à "-h", alors on affiche l'aide
+    # If an argument is equal to "-h", then the help is displayed
     if [ "$arg" == "-h" ]
     then
     echo "---------------------------------------------------"
@@ -128,40 +120,41 @@ do
 
     exit 0
     fi
-
 done
 
-# Vérification des dossiers temp et images
+
+# Check temp and image directories
 create_directories
 
-# EXECUTION DES DIFFÉRENTS TRAITEMENTS
+# PROCESSING EXECUTION
 
-# Le premier argument est le fichier CSV
+# The first argument is the CSV file
 input_file=$1
+# The first argument is now the first argument given when running the script
 shift
-# On a décalé les arguments vers la gauche pour exclure le fichier CSV, le premier argument est maintenant le premier traintement
-# Pour avoir accès a data.csv, il faut faire appel à la varible $input_file
 
-# Boucle pour traiter chaque argument 
+# Loop to process each argument
 for option in "$@"
 do
    case $option in
         -d1)
-
-           # Enregistrez le temps de début
+            # Saves the start time
             start_time=$(date +%s)
 
             echo "Traitement D1..."
-            #cat "$input_file" >> temp/temp.csv
+
+            # Collects the first stages of each journey and count the number of tajets per driver
             grep ";1;" "$input_file" > temp/firsttemp.csv
-            awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/firsttemp.csv >> temp/secondtemp.csv
+            awk -F';' '{count[$6]+= 1} END {for (driver in count) print driver ";" count[driver]}' temp/firsttemp.csv > temp/secondtemp.csv
 
-            # Trier la liste par ordre décroissant de nombre de trajets
-            sort -t';' -k2,2 -n -r temp/secondtemp.csv >> temp/thirdtemp.csv 
+            # Sorts the list in descending order of number of trips and get the first 10
+            sort -t';' -k2,2 -n -r temp/secondtemp.csv > temp/thirdtemp.csv 
+            head -n 10 temp/thirdtemp.csv > temp/finaltemp.csv
 
-            # Récupérer les 10 premiers conducteurs au choix fichier finaltemp.csv ou dansla variable
-            # longest_10_drivers=$(head -n 10 temp/thirdtemp.csv)
-            head -n 10 temp/thirdtemp.csv >> temp/finaltemp.csv
+            echo "Les 10 conducteurs avec le plus de trajets sont : "
+            cat temp/finaltemp.csv
+
+################################## START OF THE GNUPLOT ##################################
 
             # Commande Gnuplot
             gnuplot << EOF
@@ -208,38 +201,39 @@ EOF
             mv "$output_file" images/
             # Ouvrir l'image
             xdg-open "images/Traitement1.png"
+####################################### END OF GNUPLOT ####################################
             
-            # Nettoyer les fichiers temporaires
+            # Clears temporary files
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
 
-            ./votre_programme.sh
-
-            # Enregistrez le temps de fin
+            # Records the end time
             end_time=$(date +%s)
 
-            # Calculez la différence
+            # Computes the difference
             execution_time=$((end_time - start_time))
 
-            # Affichez le temps d'exécution
-            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+            # Displays the execution time
+            echo "The program took ${execution_time} seconds to run."
 
             ;;
             
-            -d2)
-            # Enregistrez le temps de début
-             start_time=$(date +%s)
-
+        -d2)
+            
+            # Saves the start time
+            start_time=$(date +%s)
+            
             echo "Traitement D2..."
-            #Recupérer
-            #awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" >> temp/firsttemp.csv
-            LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" >> temp/firsttemp.csv
 
-            # Trier la liste par ordre décroissant des distances totales
-            sort -t';' -k2,2 -n -r temp/firsttemp.csv >> temp/secondtemp.csv
-            
-            #longest_10_distances=$(head -n 10 temp/finaltemp.csv)
+            # Gets the total distance travelled by each driver
+            LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" > temp/firsttemp.csv
+
+            # Sorts the list in descending order according to total distances and gets the first 10
+            sort -t';' -k2,2 -n -r temp/firsttemp.csv > temp/secondtemp.csv 
             head -n 10 temp/secondtemp.csv >> temp/finaltemp.csv
-            
+            echo "Les 10 conducteurs avec les plus grandes distances sont : "
+            cat temp/finaltemp.csv
+
+################################## START OF THE GNUPLOT ##################################
             # Commande Gnuplot
             gnuplot << EOF
             #Définition du style de sortie avec rotation
@@ -285,43 +279,45 @@ EOF
             mv "$output_file" images/
             # Ouvrir l'image
             xdg-open "images/Traitement2.png"
-            
-            # Nettoyer les fichiers temporaires
-            rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
-            
-             ./votre_programme.sh
 
-            # Enregistrez le temps de fin
+####################################### END OF GNUPLOT ####################################
+            # Clears temporary files
+            rm temp/firsttemp.csv temp/finaltemp.csv temp/secondtemp.csv
+            
+            # Records the end time
             end_time=$(date +%s)
 
-            # Calculez la différence
+            # Computes the difference
             execution_time=$((end_time - start_time))
 
-            # Affichez le temps d'exécution
-            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+            # Displays the execution time
+            echo "The program took ${execution_time} seconds to run."
 
             
         ;;
 
-       -l)
-            # Enregistrez le temps de début
+           -l)
+            # Saves the start time
             start_time=$(date +%s)
 
             echo "Traitement L..."
-            # récupérer les distances totales pour chaque trajet (meme route ID)
-            LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
-            
-            # trier les plus longs trajets
-            sort -t ';' -k2,2 -n -r temp/templ.csv >> temp/tempcorrected.csv
-            # Récupérer les 10 premiers trajets
-            head -n 10 temp/tempcorrected.csv >> temp/tempfinal.csv
-            #trier les 10 trajets par numéro d'identification croissant
-            sort -t ';' -k1,1 -n -r temp/tempfinal.csv >> temp/tempdone.csv
-            longest_10_trajects=$(head -n 10 temp/tempdone.csv)
-            
-            # Nom du fichier de sortie du graphique
-            output_file="TraitemenentL.png"
-            
+
+            # Recovers the total distance of each journey
+            LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" > temp/firsttemp.csv
+
+            # Sorts the list in descending order according to total distances and get the first 10
+            sort -t ';' -k2,2 -n -r temp/firsttemp.csv > temp/secondtemp.csv
+            head -n 10 temp/secondtemp.csv > temp/thirdtemp.csv 
+           
+            # Sorts trips by increasing identification number
+            sort -t ';' -k1,1 -n -r temp/thirdtemp.csv  > temp/finaltemp.csv
+
+            longest_10_trajects=$(head -n 10 temp/finaltemp.csv)
+            echo "Les 10 trajets les plus longs sont : "
+            echo "$longest_10_trajects"
+
+
+################################## START OF THE GNUPLOT ##################################
             # Commande Gnuplot
             gnuplot <<EOF
             # Police du graphique
@@ -355,60 +351,98 @@ EOF
             mv "$output_file" images/
             # Ouvrir l'image
             xdg-open "images/$output_file"
-            
-            # Nettoyer les fichiers temporaires
-            rm temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
 
-             ./votre_programme.sh
+####################################### END OF GNUPLOT ####################################
 
-            # Enregistrez le temps de fin
+            # Clears temporary files
+            rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+
+
+            # Records the end time
             end_time=$(date +%s)
 
-            # Calculez la différence
+            # Computes the difference
             execution_time=$((end_time - start_time))
 
-            # Affichez le temps d'exécution
-            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+            # Displays the execution time
+            echo "The program took ${execution_time} seconds to run."
 
             ;;
-        -t)
-             # Enregistrez le temps de début
-            start_time=$(date +%s)
-
-            echo "Traitement T..."
-            # Vérification de l'executable c
-            executable_verification "$option"
-
-            # Recupère le nombre de trajets qui parcourent chaque ville, ainsi que le nombre de fois où ces villes ont été des villes de départ de trajets.
-            awk -F';' 'BEGIN { OFS=";"; } { count[$4] += 1; if ($2 == 1) { departure_city[$3] += 1; count[$3] += 1; } } END { for (city in count) print city, count[city] ";" departure_city[city] }' "$input_file" >> temp/firsttemp.csv
-
-
-            gcc -o progc/progt progc/programme_t.c
-            ./progc/progt temp/firsttemp.csv
             
-            head -n 10 temp/secondtemp.csv >> temp/thirdtemp.csv
+            -t)
+                    
+            # Saves the start time
+            start_time=$(date +%s)
+            
+             echo "Traitement T..."
 
-            gcc -o progc/progt2 progc/programme_t2.c
+            # Check the executable c
+            executable_verification "$option"
+            
+            # Will count the number of times each city is crossed and the number of times they are departure city 
+            awk -F';' 'BEGIN { OFS=";"; }
+            { 
+                route_id = $1;
+                townA = $3;
+                townB = $4;
+
+                # Check if Route_ID/townA or Route_ID/townB are not already present in the visited_cities table, 
+                # otherwise a new box of the table with these values is created and initialized to 1
+
+                if (!(route_id SUBSEP townA in visited_cities) || !(route_id SUBSEP townB in visited_cities)) {
+                    if (!(route_id SUBSEP townA in visited_cities)) {
+                        visited_cities[route_id SUBSEP townA] = 1;
+                        count[townA] += 1;
+                    }
+                    if (!(route_id SUBSEP townB in visited_cities)) {
+                        visited_cities[route_id SUBSEP townB] = 1;
+                        count[townB] += 1;
+                    }
+                }
+
+                # If the journey step is 1, then the value assigned to townA is incremented in the departure_city table
+
+                if ($2 == 1) { 
+                    departure_city[$3] += 1;
+                }
+            }
+            
+            # Displays the results in a temporary file
+            END { 
+                for (city in count) {
+                    print city, count[city] ";" (city in departure_city ? departure_city[city] : 0);
+                }
+            }' "$input_file" > temp/firsttemp.csv
+
+            # Sort by descending order the cities according to the number of times they are crossed and get the first 10
+            ./progc/progt temp/firsttemp.csv
+            head -n 11 temp/secondtemp.csv > temp/thirdtemp.csv
+
+            # Alphabetize the top 10 cities 
             ./progc/progt2 temp/thirdtemp.csv
-
             cat temp/finaltemp.csv
+
+################################## START OF THE GNUPLOT ##################################
+###################################### END OF GNUPLOT ####################################
+
+            # Clears temporary files
             rm temp/firsttemp.csv temp/thirdtemp.csv temp/secondtemp.csv temp/finaltemp.csv
 
-             ./votre_programme.sh
-
-            # Enregistrez le temps de fin
+             # Records the end time
             end_time=$(date +%s)
 
-            # Calculez la différence
+            # Computes the difference
             execution_time=$((end_time - start_time))
 
-            # Affichez le temps d'exécution
-            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+            # Displays the execution time
+            echo "The program took ${execution_time} seconds to run."
 
-
-            ;;
-        -s)
-         # Enregistrez le temps de début
+           
+           ;;
+           
+       -s)
+        
+            # Saves the start time
             start_time=$(date +%s)
 
             echo "S treatment..."
@@ -427,24 +461,27 @@ EOF
             head -n 50 temp/output.csv >> temp/finaltemp.csv
             echo "Les 50 premiers sont : "
             cat temp/finaltemp.csv
-            
+
+
+################################## START OF THE GNUPLOT ##################################
+###################################### END OF GNUPLOT ####################################
+
+            # Clears temporary files
             rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
 
-             ./votre_programme.sh
-
-            # Enregistrez le temps de fin
+            # Records the end time
             end_time=$(date +%s)
 
-            # Calculez la différence
+            # Computes the difference
             execution_time=$((end_time - start_time))
 
-            # Affichez le temps d'exécution
-            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+            # Displays the execution time
+            echo "The program took ${execution_time} seconds to run."
 
             ;;
 
         *)
-            echo "L'option $option n'est pas reconnue. Veuillez réessayer."
+            echo "The option $option is not recognized... Please try again.\n"
             exit 1 ;;
     esac
 done
