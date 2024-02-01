@@ -230,7 +230,7 @@ spTree fillAVL(const char* data, spTree avl) {
         exit(EXIT_FAILURE);
     }
 
-    char city[55];
+    char city = mallloc(55);
     int h = 0;
     int crossed = 0, departure_city = 0;
 
@@ -238,7 +238,7 @@ spTree fillAVL(const char* data, spTree avl) {
     while (fscanf(file, "%54[^;];%d;%d", city, &crossed, &departure_city) == 3) {
         avl = insertAVL(avl, &h, city, crossed, departure_city);
     }
-
+    free(city);
     fclose(file);
     return avl;
 }
