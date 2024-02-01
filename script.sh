@@ -212,13 +212,23 @@ EOF
             # Nettoyer les fichiers temporaires
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
 
-             # Calculez la durée totale d'exécution
-            execution_time=$(echo "$end_time - $start_time" | bc)
+            ./votre_programme.sh
 
-            echo "Le temps d'exécution est de $execution_time secondes."
+            # Enregistrez le temps de fin
+            end_time=$(date +%s)
+
+            # Calculez la différence
+            execution_time=$((end_time - start_time))
+
+            # Affichez le temps d'exécution
+            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+
             ;;
             
             -d2)
+            # Enregistrez le temps de début
+             start_time=$(date +%s)
+
             echo "Traitement D2..."
             #Recupérer
             #awk -F';' '{count[$6]+=$5} END {for (driver in count) print driver ";" count[driver]}' "$input_file" >> temp/firsttemp.csv
@@ -279,9 +289,24 @@ EOF
             # Nettoyer les fichiers temporaires
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
             
+             ./votre_programme.sh
+
+            # Enregistrez le temps de fin
+            end_time=$(date +%s)
+
+            # Calculez la différence
+            execution_time=$((end_time - start_time))
+
+            # Affichez le temps d'exécution
+            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+
+            
         ;;
 
        -l)
+            # Enregistrez le temps de début
+            start_time=$(date +%s)
+
             echo "Traitement L..."
             # récupérer les distances totales pour chaque trajet (meme route ID)
             LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" >> temp/templ.csv
@@ -333,8 +358,23 @@ EOF
             
             # Nettoyer les fichiers temporaires
             rm temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
+
+             ./votre_programme.sh
+
+            # Enregistrez le temps de fin
+            end_time=$(date +%s)
+
+            # Calculez la différence
+            execution_time=$((end_time - start_time))
+
+            # Affichez le temps d'exécution
+            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+
             ;;
         -t)
+             # Enregistrez le temps de début
+            start_time=$(date +%s)
+
             echo "Traitement T..."
             # Vérification de l'executable c
             executable_verification "$option"
@@ -354,8 +394,23 @@ EOF
             cat temp/finaltemp.csv
             rm temp/firsttemp.csv temp/thirdtemp.csv temp/secondtemp.csv temp/finaltemp.csv
 
+             ./votre_programme.sh
+
+            # Enregistrez le temps de fin
+            end_time=$(date +%s)
+
+            # Calculez la différence
+            execution_time=$((end_time - start_time))
+
+            # Affichez le temps d'exécution
+            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+
+
             ;;
         -s)
+         # Enregistrez le temps de début
+            start_time=$(date +%s)
+
             echo "S treatment..."
             # verification of the c executable
             executable_verification "$option"
@@ -374,6 +429,18 @@ EOF
             cat temp/finaltemp.csv
             
             rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
+
+             ./votre_programme.sh
+
+            # Enregistrez le temps de fin
+            end_time=$(date +%s)
+
+            # Calculez la différence
+            execution_time=$((end_time - start_time))
+
+            # Affichez le temps d'exécution
+            echo "Le programme a mis ${execution_time} secondes pour s'exécuter."
+
             ;;
 
         *)
