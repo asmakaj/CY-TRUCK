@@ -141,7 +141,7 @@ do
             # Saves the start time
             start_time=$(date +%s)
 
-            echo "Traitement D1 in progress"
+            echo -e "Treatment -d1 in progress...\n"
 
             # Collects the first stages of each journey and count the number of tajects per driver
             grep ";1;" "$input_file" > temp/firsttemp.csv
@@ -150,6 +150,8 @@ do
             # Sorts the list in descending order of number of trips and get the first 10
             sort -t';' -k2,2 -n -r temp/secondtemp.csv > temp/thirdtemp.csv 
             head -n 10 temp/thirdtemp.csv > temp/finaltemp.csv
+
+	output_file="images/Treatment1.png"
 
 
 ################################## START OF THE GNUPLOT ##################################
@@ -188,18 +190,18 @@ do
             plot 'temp/finaltemp.csv' using 2:xticlabels(1) axes x1y2 notitle linecolor rgb 'purple' lt 1
 EOF
 ####################################### END OF GNUPLOT ####################################
-           
+
             #This puts the graph bars horizontally and parallel to the x-axis
-            convert -rotate 90 images/Treatment1.png images/Treatment1.png
+            convert -rotate 90 "$output_file" "temp_rotated.png"
             
             # put the histogramm into the correct file
-            mv "$output_file" images/
+            mv "temp_rotated.png" "images/Treatment_1.png"
             
-            # Open the visualizer of graphics
-            xdg-open "images/Treatment1.png"
+            # Open the visualizer of graphics for the right .png
+            xdg-open "images/Treatment_1.png"
 
             # Clears temporary files needed for this treatment
-            rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+            rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv 
 
             # Records the end time
             end_time=$(date +%s)
@@ -208,7 +210,7 @@ EOF
             execution_time=$((end_time - start_time))
 
             # Displays the execution time
-            echo "The program took ${execution_time} seconds to run."
+            echo -e "-----------------TIMER-----------------\nThe Treatment -D1 took ${execution_time} seconds to run.\n"
 
             ;;
             
