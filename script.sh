@@ -133,6 +133,9 @@ do
             echo "Les 10 conducteurs avec le plus de trajets sont : "
             cat temp/finaltemp.csv
 
+            # Calculez la durée totale d'exécution
+            execution_time=$(echo "$end_time - $start_time" | bc)
+
             # Nettoyer les fichiers temporaires
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
 
@@ -155,6 +158,8 @@ do
             
             echo "Les 10 conducteurs avec les plus grandes distances sont : "
             cat temp/finaltemp.csv
+            # Calculez la durée totale d'exécution
+            execution_time=$(echo "$end_time - $start_time" | bc)
             
             rm temp/firsttemp.csv temp/finaltemp.csv temp/secondtemp.csv
             ;;
@@ -175,6 +180,8 @@ do
             # Créer le graphique de type histogramme
             echo "Les 10 trajets les plus longs sont : "
             echo "$longest_10_trajects"
+            # Calculez la durée totale d'exécution
+            execution_time=$(echo "$end_time - $start_time" | bc)
 
             # Nettoyer les fichiers temporaires
             rm temp/temp.csv temp/templ.csv temp/tempcorrected.csv temp/tempfinal.csv temp/tempdone.csv
