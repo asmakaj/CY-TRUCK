@@ -41,7 +41,7 @@ executable_verification(){
             # Check if the compilation went well
             if [ $? -ne 0 ]
             then
-                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
+                echo "Error while compiling... Please correct the errors before proceeding."
                 exit 1
             fi
         fi
@@ -51,8 +51,8 @@ executable_verification(){
             # Check if the compilation went well
             if [ $? -ne 0 ]
             then
-                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-                exit 1
+                echo "Error while compiling... Please correct the errors before proceeding."
+                exit 2
             fi
         fi
         ;;
@@ -63,14 +63,14 @@ executable_verification(){
             # Check if the compilation went well
             if [ $? -ne 0 ]
             then
-                echo "Erreur lors de la compilation. Veuillez corriger les erreurs avant de continuer."
-                exit 1
+                echo "Error while compiling... Please correct the errors before proceeding."
+                exit 3
             fi
         fi
         ;;
          *)
-            echo "L'option $option n'est pas reconnue. Veuillez réessayer."
-            exit 1 ;;
+            echo "The option $option is not recognized... Please try again."
+            exit 4 ;;
     esac
 }
 
@@ -86,13 +86,13 @@ input_file=$1
 if [ ! -f "$input_file" ]
 then
     echo "Le fichier $input_file n'existe pas."
-    exit 1
+    exit 5
 fi
 # Checking the file extension
 if [[ ! "$input_file" =~ \.csv$ ]]
 then
-    echo "Le fichier $input_file n'est pas un fichier .csv. Veuillez réessayer svp..."
-    exit 1
+    echo "The file $input_file is not a CSV. Please try again..."
+    exit 6
 fi
 
 
@@ -118,7 +118,7 @@ do
     echo "-s : Statistiques sur les etapes"
     echo "---------------------------------------------------"
 
-    exit 0
+    exit 7
     fi
 done
 
@@ -470,7 +470,7 @@ EOF
 
         *)
             echo "The option $option is not recognized... Please try again.\n"
-            exit 1 ;;
+            exit 8 ;;
     esac
 done
 
