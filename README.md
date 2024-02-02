@@ -13,7 +13,7 @@ Ce projet a pour but de gérer un fichier `.csv` et de le modifier selon différ
 
 ## Informations générales
 
-Une fois le programme lancé, l'utilisateur a le choix entre plusieurs traitements prédéfinis.
+Une fois le programme lancé, l'utilisateur a le choix entre plusieurs traitements prédéfinis pour traiter le fichier `.csv`de son choix.
 
 L'utilisateur peut ensuite choisir un ou plusieurs traitement par compilation parmi la liste suivante :
  
@@ -38,24 +38,27 @@ Le projet se compose de cinq dossiers :
 | temp | stocke les fichiers intermédiaires utiles au bon fonctionnement du traitement |
 
 NB : - le dossier `progc` supporte un sous dossier nécessaire au `makefile` qui est `files.o`
-     - les dossiers `temp`et `images` n'existent pas lors du téléchargement puisque les traitements n'ont pas été encore effectués, mais dès la compilation ils se créeront.
+     - les dossiers `temp`, `data`et `images` n'existent pas lors du téléchargement mais seront crées avant la réalisation des traitement car les dossiers sont crées      
+     lorsqu'on vérifie les arguments de la compilation.
 
 ## Guides des commandes
 
 A partir du terminal:
 
 * Pour compiler :
-     1) Se placer dans le dossier CY-TRUCK grâce à la commande `cd CY-TRUCK`après avoir téléchargé le projet.
-     2) Compiler pour la première fois le projet grâce à `./script.sh FICHIER.CSV -h` ->  Cela vous permet de passer en revue tout les traitements possibles du projet.
-        (NB : lorsque l'argument vaut `-h` les autres arguments sont automatiquement ignorés) 
-     3) Une fois avoir choisi un ou plusieurs traitements veuillez réecrire la ligne précédente : `./script.sh FICHIER.CSV -TRAITEMENTS_CHOISIS`.
+     1) Se placer dans le dossier CY-TRUCK grâce à la commande `cd CY-TRUCK`après avoir téléchargé l'ensemble du composant du projet.
+     2) Compiler *pour la première fois* le projet grâce à `./script.sh FICHIER.CSV -h` ->  Cela vous permet de passer en revue tout les traitements possibles du projet et à         noter que le FICHIER.CSV est aux choix de l'utilisateur.
+        (NB : lorsque l'argument vaut `-h` les autres arguments sont automatiquement ignorés ainsi compiler des traitements en plus du -h n'est pas pertinent) 
+     3) Une fois avoir choisi un ou plusieurs traitements veuillez réecrire la ligne précédente avec le traitement de votre choix (-d1, -d2, -l, -s et -t) : `./script.sh     
+        FICHIER.CSV -TRAITEMENTS_CHOISIS`.
 
  * Pour l'utilisation :
-    1) Après avoir compilé et essayer au moins un traitement toujours en tapant dans le terminal `./script.sh FICHIER.CSV -TRAITEMENTS_CHOISIS`, tous les dossiers   
+    1) Après avoir compilé et essayé au moins un traitement toujours en tapant dans le terminal `./script.sh FICHIER.CSV -TRAITEMENTS_CHOISIS`, tous les dossiers   
        nécessaires au bon fonctionnement du projet seront crées.
-    2) Vous pouvez dès lors appliquer le ou les traitements de votre choix sur le fichier. A noter que les fichiers intermédiaires seront placés dans le dossier temp prévu à        cet effet mais seront supprimés à la fin du traitement.
-    3) A la fin de chacun des traitements (hormis le -h et -i) une fenêtre avec les résultats de traitement présentés sous forme de graphique sera automatiquement ouverte.
-    4) A chaque nouveau traitement, tous les fichiers relevant du traitement précédent seront supprimés à l'exception des graphiques.
+    2) Vous pouvez dès lors appliquer le ou les traitements de votre choix sur le fichier. A noter que les fichiers intermédiaires seront placés dans le dossier `temp` prévu        à cet effet mais seront supprimés à la fin du traitement.
+    3) A la fin de chacun des traitements (hormis le -h et -i) une fenêtre avec les résultats de traitement présenté sous forme de graphique sera automatiquement ouverte.
+    4) A chaque nouveau traitement, tous les fichiers relevant du traitement précédent seront supprimés à l'exception des graphiques qui sont stockés dans le dossier     
+       `images`.
     5)  Le dossier `demo` présente quant à lui les résultats de traitement qui seront utilisés pour les graphique.
        
 
