@@ -686,7 +686,10 @@ EOF
 done
 
 # Moves all charts to the demo folder and keeps the last two executions in hystory
-mv images/*.png demo/
+mv images/*.png demo/ 2>/dev/null 
 cd demo
-ls -t *.png | tail -n +6 | xargs rm --
+
+if [ -n "$(ls -A *.csv 2>/dev/null)" ]; then
+    ls -t *.csv | tail -n +6 | xargs -I {} find . -name {} -type f -delete
+fi
 cd ..
