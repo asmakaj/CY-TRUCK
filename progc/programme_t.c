@@ -1,40 +1,24 @@
+
 /*
  * File Name: programme_t.c
- * Author: Deulyne DESTIN
+ * Author:
  * Created on: January 6, 2024
- * Description: 
+ * Description:
     This program collects the different cities, the number of times they were crossed,
     and the number of times they are cities of departure of each trip.
     These data will be sort by descending order these cities according to the number of times they were crossed,
-    and then written to a csv output file as: 
+    and then written to a csv output file as:
     City;crossed;departure_city
 
  */
 
-#include<stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-/*
- _____Structure AVL_____
- Description : stores the name of the city, the number of times the city was crossed, the number of times the city is a departure city
- */
-typedef struct AVL{
-    char* city;
-    int crossed;
-    int departure_city;
-    int eq;
-    struct AVL* pLeft;
-    struct AVL* pRight;
-}AVL_Tree;
-
-typedef AVL_Tree* spTree;
+#include "programme_t.h"
 
 /*
     Function : createNodeAVL
     Description : Creates a new AVL node
     Parameters : necessary information to initialize the new node
-    Returns : the new node 
+    Returns : the new node
  */
 spTree createNodeAVL(const char* city, int crossed, int departure_city){
     spTree new = malloc(sizeof(AVL_Tree));
@@ -101,7 +85,7 @@ spTree leftRotation(spTree avl){
     pivot = avl->pRight;
     avl->pRight = pivot->pLeft;
     pivot->pLeft = avl;
-    
+   
     eq_a = avl->eq;
     eq_p = pivot->eq;
     avl->eq = eq_a - max2(eq_p, 0) - 1;
@@ -123,7 +107,7 @@ spTree rightRotation(spTree avl){
     pivot = avl->pLeft;
     avl->pLeft = pivot->pRight;
     pivot->pRight = avl;
-    
+   
     eq_a = avl->eq;
     eq_p = pivot->eq;
     avl->eq = eq_a - min2(eq_p, 0) + 1;
@@ -230,22 +214,22 @@ spTree fillAVL(const char* data, spTree avl) {
         exit(EXIT_FAILURE);
     }
 
-    char city = mallloc(55);
+    char city[50];
     int h = 0;
     int crossed = 0, departure_city = 0;
 
-    // The loop retrieves the csv data line by line, then adds them to the tree 
-    while (fscanf(file, "%54[^;];%d;%d", city, &crossed, &departure_city) == 3) {
+    // The loop retrieves the csv data line by line, then adds them to the tree
+    while (fscanf(file, "%49[^;];%d;%d", city, &crossed, &departure_city) == 3) {
         avl = insertAVL(avl, &h, city, crossed, departure_city);
     }
-    free(city);
+
     fclose(file);
     return avl;
 }
 
 /*
     Function : infixreverse
-    Description : print in the output file the cities in descending order of the number of times they have been crossed 
+    Description : print in the output file the cities in descending order of the number of times they have been crossed
  */
 void infixreverse(spTree avl, FILE* file) {
     if (avl != NULL) {
@@ -269,19 +253,19 @@ void freeAVL(spTree avl){
 }
 
 int main(int argc, char *argv[]){
-    
+   
     // Check if the number of arguments is correct
     if (argc != 2) {
-        printf("There is more than one argument for the program. c\n");
+        printf("There is more than two argument for the program. c\n");
         exit (8);
     }
 
-    // Sort in decreasing order the cities by the number of times they have been crossed 
+    // Sort in decreasing order the cities by the number of times they have been crossed
     spTree avl = NULL;
     avl = fillAVL(argv[1], avl);
 
     // Write the information contained in the avl in an output csv file
-    FILE *file = fopen("temp/secondtemp.csv", "w");
+    FILE *file = fopen("temp/firsttemp.csv", "w");
     if (file == NULL) {
         perror("Error when opening the file...\n");
         exit(EXIT_FAILURE);
@@ -293,3 +277,7 @@ int main(int argc, char *argv[]){
     freeAVL(avl);
     return 0 ;
 }
+
+
+
+

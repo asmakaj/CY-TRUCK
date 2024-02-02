@@ -1,59 +1,25 @@
+
 /*
  * File Name: programme_s.c
- * Author: Deulyne DESTIN
+ * Author:
  * Created on: December 25, 2023
- * Description: 
+ * Description:
     This program collects all the stages of the journeys made by different drivers.
     It will then sum the distances of the different steps while storing the min and max distances of the trips.
     These data will be sorted in descending order of "max distance - min distance",
-    and then written to a csv output file as: 
+    and then written to a csv output file as:
     Route_ID;min_distance;max_distance;average_distance;(max_distance-min_distance)
  */
 
 
-#include<stdio.h>
-#include <stdlib.h>
-
-/*
- _____Structure ABR (binary search tree)_____
- Description : stores the Route id, the number of steps, the total distance travelled per journey, the min distance and the max distance
- */
-typedef struct ABR{
-  int route_ID;
-  int step_ID;
-  float total_distance;
-  float min_distance;
-  float max_distance;
-  int count;
-  struct ABR* pLeft;
-  struct ABR* pRight;
-}ABR_Tree;
-
-typedef ABR_Tree* pTree;
-
-/*
- _____Structure AVL_____
- Description : stores the Route id, the min distance, the max distance, the average distance and the difference between the max and the min
- */
-typedef struct AVL{
-    int route_ID;
-    float min_distance;
-    float max_distance;
-    float moy;
-    float diff;
-    int eq;
-    struct AVL* pLeft;
-    struct AVL* pRight;
-}AVL_Tree;
-
-typedef AVL_Tree* spTree;
+#include "programme_s.h"
 
 
 /*
     Function : createNodeABR
     Description : Creates a new tree node
     Parameters : necessary information to initialize the new node
-    Returns : the new node 
+    Returns : the new node
  */
 pTree createNodeABR(int route_ID, int step_ID, float distance, float min_distance, float max_distance){
     pTree pNew = malloc(sizeof(ABR_Tree));
@@ -85,7 +51,7 @@ pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
     }
     else if(route_ID < abr->route_ID){
         abr->pLeft = insertABR(abr->pLeft, route_ID, step_ID, distance);
-    } 
+    }
     else if(route_ID > abr->route_ID){
         abr->pRight = insertABR(abr->pRight, route_ID, step_ID, distance);
     } //when the route_id are equal, count is increased by 1, the new distance is added to the total distances of the route, and the min and max values are updated
@@ -111,14 +77,14 @@ pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
 pTree readCSV(const char* data, pTree abr) {
     FILE* file = fopen(data, "r");
     if (file == NULL) {
-        perror("Error opening the file...\n");
+        perror("Error opening the file");
         exit(EXIT_FAILURE);
     }
 
     int route_ID, step_ID;
     float distance;
-    
-    // The loop retrieves the csv data line by line, then adds them to the tree 
+   
+    // The loop retrieves the csv data line by line, then adds them to the tree
     while(fscanf(file, "%d;%d;%f", &route_ID, &step_ID, &distance) == 3) {
         abr = insertABR(abr, route_ID, step_ID, distance);
     }
@@ -174,7 +140,7 @@ spTree leftRotation(spTree avl){
     pivot = avl->pRight;
     avl->pRight = pivot->pLeft;
     pivot->pLeft = avl;
-    
+   
     eq_a = avl->eq;
     eq_p = pivot->eq;
     avl->eq = eq_a - max2(eq_p, 0) - 1;
@@ -196,7 +162,7 @@ spTree rightRotation(spTree avl){
     pivot = avl->pLeft;
     avl->pLeft = pivot->pRight;
     pivot->pRight = avl;
-    
+   
     eq_a = avl->eq;
     eq_p = pivot->eq;
     avl->eq = eq_a - min2(eq_p, 0) + 1;
@@ -255,7 +221,7 @@ spTree equilibrageAVL(spTree avl){
     Function : createNodeAVL
     Description : Creates a new AVL node
     Parameters : necessary information to initialize the new node
-    Returns : the new node 
+    Returns : the new node
  */
 spTree createNodeAVL(pTree abr){
     spTree new = malloc(sizeof(AVL_Tree));
@@ -329,7 +295,7 @@ spTree fillAVL(pTree abr, spTree avl, int h){
         avl = insertAVL(avl, &h, abr);
         avl = fillAVL(abr->pLeft, avl, h);
         avl = fillAVL(abr->pRight, avl, h);
-    } 
+    }
     return avl;
 }
 
@@ -337,11 +303,12 @@ spTree fillAVL(pTree abr, spTree avl, int h){
     Function : infixreverse
     Description : Infix path of the AVL and print its values in the output_file
  */
-void infixreverse(spTree avl, FILE* file) {
+void infixreverse(spTree avl, FILE* file, int* i) {
     if (avl != NULL) {
-        infixreverse(avl->pRight, file);
-        fprintf(file, "%d;%.3f;%.3f;%.3f;%.3f\n", avl->route_ID, avl->min_distance, avl->max_distance, avl->moy, avl->diff);
-        infixreverse(avl->pLeft, file);
+        infixreverse(avl->pRight, file, i);
+        (*i)++;
+        fprintf(file, "%d;%d;%.3f;%.3f;%.3f;%.3f\n", *i,  avl->route_ID, avl->min_distance, avl->moy, avl->max_distance, avl->diff);
+        infixreverse(avl->pLeft, file, i);
     }
 }
 
@@ -375,7 +342,7 @@ void freeAVL(spTree avl){
 int main(int argc, char *argv[]){
     // Check if the number of arguments is correct
     if (argc != 2) {
-        printf("There is more than one argument for the program. c\n");
+        printf("There is more than two argument for the program. c\n");
         exit (9);
     }
 
@@ -389,12 +356,14 @@ int main(int argc, char *argv[]){
     avl = fillAVL(abr, avl, h);
 
     // Write the information contained in the avl in an output csv file
-    FILE *file = fopen("temp/output.csv", "w");
+    FILE *file = fopen("temp/secondtemp.csv", "w");
     if (file == NULL) {
         perror("Error when opening the file...\n");
         exit(EXIT_FAILURE);
     }
-    infixreverse(avl, file);
+    // initializing the count
+    int i=0;
+    infixreverse(avl, file, &i);
     fclose(file);
 
     //Memory release
@@ -403,3 +372,7 @@ int main(int argc, char *argv[]){
 
     return 0 ;
 }
+
+
+
+
