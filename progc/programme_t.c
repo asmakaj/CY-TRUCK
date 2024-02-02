@@ -59,7 +59,7 @@ int max2(int a, int b){
     Description : Find the minimum between 2 values
     Returns : the minimum value
  */
-int min2(int a, int b) {
+int min2(int a, int b){
     return (a < b) ? a : b;
 }
 
@@ -68,7 +68,7 @@ int min2(int a, int b) {
     Description : Find the maximum between 3 values
     Returns : the maximum value
  */
-int max3(int a, int b, int c) {
+int max3(int a, int b, int c){
     return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
 }
 
@@ -206,7 +206,7 @@ spTree insertAVL(spTree avl, int* h, const char* city, int crossed, int departur
     Description : Read data from CSV and add these data to the AVL
     Returns : the updated AVL
  */
-spTree fillAVL(const char* data, spTree avl) {
+spTree fillAVL(const char* data, spTree avl){
     FILE* file = fopen(data, "r");
     if (file == NULL) {
         perror("Error opening the file... \n");
@@ -230,7 +230,7 @@ spTree fillAVL(const char* data, spTree avl) {
     Function : infixreverse
     Description : print in the output file the cities in descending order of the number of times they have been crossed
  */
-void infixreverse(spTree avl, FILE* file) {
+void infixreverse(spTree avl, FILE* file){
     if (avl != NULL) {
         infixreverse(avl->pRight, file);
         fprintf(file, "%s;%d;%d", avl->city, avl->crossed, avl->departure_city);
