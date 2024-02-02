@@ -37,7 +37,7 @@ Le projet se compose de cinq dossiers :
 | progc | stocke tous les fichiers relatifs au makefile donc les fichiers de type `.c` `.h` `.o` ainsi que les éxecutables  | 
 | temp | stocke les fichiers intermédiaires utiles au bon fonctionnement du traitement |
 
-NB : - le dossier `progc` supporte un sous dossier nécessaire au `makefile` qui est `files.o`
+NB : - le dossier `progc` supporte un sous dossier nécessaire au `makefile` qui est `files.o` qui possède un `essai.txt`
      - les dossiers `temp`, `data`et `images` n'existent pas lors du téléchargement mais seront crées avant la réalisation des traitement car les dossiers sont crées      
      lorsqu'on vérifie les arguments de la compilation.
 
