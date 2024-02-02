@@ -61,6 +61,7 @@ A partir du terminal:
        `images`.
     5)  Le dossier `demo` présente quant à lui les résultats d'executions pécédentes (`finaltemp.csv`) qui seront utilisés pour les graphiques.
     6)  Pour supprimer les fichiers générés lors de la compilation du Makefile notament pourles traitement -s et -t, il faut se placer dans le dossier `progc` et utiliser la commande `make clean`.
+    7)  L'option -i bonus ne s'utilise qu'après avoir réalisé aux moins 2 commandes dans le terminal.
        
 
 ## Technologies
