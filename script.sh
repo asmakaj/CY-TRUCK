@@ -20,17 +20,18 @@
 
 
 # Creation of temp and image folders
-create_directories(){
+create_directories() {
     file="temp"
+    
     # Check if the folder exists
-    if [ -d "$file" ]
-    then
-        # Ensures that all files and subdirectories in temp are deleted, even if the directory is already empty
-        find temp -mindepth 1 -delete 
+    if [ -d "$file" ]; then
+        # Use rm to delete all files and subdirectories in temp
+        rm -rf $file/*
     fi
-
+    
     mkdir -p temp images
 }
+
 
 # Verification of the presence of the C executable according to the treatments
 executable_verification(){
@@ -86,6 +87,98 @@ files_o_verification(){
             exit 5
         fi
     fi
+}
+
+make_clean() {
+    case $1 in
+        -t)
+            if [ ! -f progc/progt ]; then
+                # Check if File Exists
+                if [ -e "progc/Project_T1" ]; then
+                    rm -f progc/Project_T1
+                    # Handle errors if the removal command fails
+                    if [ $? -ne 0 ]; then
+                        echo "An error has occurred in the rm : exiting the program"
+                        exit 9
+                    fi
+                fi
+
+                # Compilation
+                make -C progc Project_T1
+                # Handle errors if the compilation command fails
+                if [ $? -ne 0 ]; then
+                    echo "An error has occurred in the compilation : exiting the program"
+                    # Displays the execution time
+                    echo "==========================TIMER=========================="
+                    echo "          The Option -t took ${execution_time} seconds to run."
+                    echo "========================================================="
+                    exit 10
+                fi
+                echo # Line break
+
+                # Check if File Exists
+                if [ -e "progc/Project_T2" ]; then
+                    rm -f progc/Project_T2
+                    # Handle errors if the removal command fails
+                    if [ $? -ne 0 ]; then
+                        echo "An error has occurred in the rm : exiting the program"
+                        exit 11
+                    fi
+                fi
+
+                # Compilation
+                make -C progc Project_T2
+                # Handle errors if the compilation command fails
+                if [ $? -ne 0 ]; then
+                    echo "An error has occurred in the compilation : exiting the program"
+                    # Displays the execution time
+                    echo "==========================TIMER=========================="
+                    echo "          The Option -t took ${execution_time} seconds to run."
+                    echo "========================================================="
+                    exit 12
+                fi
+                echo # Line break
+
+                # Will count the number of times each city is crossed and the number of times they are departure city
+                make -C progc Project_T1
+                make -C progc Project_T2
+
+				fi
+            ;;
+        
+        -s)
+            if [ ! -f progc/progs ]; then
+                # Check if File Exists
+                if [ -e "progc/Project_S" ]; then
+                    rm -f progc/Project_S    
+                    # Handle errors if the removal command fails
+                    if [ $? -ne 0 ]; then
+                        echo "An error has occurred in the rm : exiting the program"
+                        exit 13
+                    fi
+                fi
+            fi
+            # Compilation
+            make -C progc Project_S
+            # Handle errors if the compilation command fails
+            if [ $? -ne 0 ]; then
+                echo "An error has occurred in the compilation : exiting the program"
+                # Displays the execution time
+                echo "==========================TIMER=========================="
+                echo "          The Option -s took ${execution_time} seconds to run."
+                echo "========================================================="
+                exit 14
+            fi
+            echo # Line break
+            
+            make -C progc Project_S
+        ;;
+        
+        *)
+            echo "The option $1 is not recognized... Please try again."
+            exit 4 
+        ;;
+    esac
 }
 
 
@@ -406,56 +499,8 @@ EOF
 		# Check the executable c
 		executable_verification "$option"
         files_o_verification "$option"
+		make_clean "$option"
 
-        # Check if File Exists
-        if [ -e "progc/Project_T1" ]; then
-            rm -f progc/Project_T1
-            # Handle errors if the removal command fails
-            if [ $? -ne 0 ]; then
-                echo "An error has occurred in the rm : exiting the program"
-                exit 9
-            fi
-        fi
-
-        # Compilation
-        make -C progc Project_T1
-        # Handle errors if the compilation command fails
-        if [ $? -ne 0 ]; then
-            echo "An error has occurred in the compilation : exiting the program"
-					# Displays the execution time
-					echo "==========================TIMER=========================="
-					echo "          The Option -t took ${execution_time} seconds to run."
-					echo "========================================================="
-            exit 10
-        fi
-        echo # Line break
-
-        # Check if File Exists
-        if [ -e "progc/Project_T2" ]; then
-            rm -f progc/Project_T2
-            # Handle errors if the removal command fails
-            if [ $? -ne 0 ]; then
-                echo "An error has occurred in the rm : exiting the program"
-                exit 11
-            fi
-        fi
-
-        # Compilation
-        make -C progc Project_T2
-        # Handle errors if the compilation command fails
-        if [ $? -ne 0 ]; then
-            echo "An error has occurred in the compilation : exiting the program"
-            		# Displays the execution time
-					echo "==========================TIMER=========================="
-					echo "          The Option -t took ${execution_time} seconds to run."
-					echo "========================================================="
-            exit 12
-        fi
-        echo # Line break
-
-        # Will count the number of times each city is crossed and the number of times they are departure city
-        make -C progc Project_T1
-        make -C progc Project_T2
 		
 		# Will count the number of times each city is crossed and the number of times they are departure city 
         awk -F';' 'BEGIN { OFS=";"; }
@@ -567,33 +612,9 @@ EOF
 		
         executable_verification "$option"
         files_o_verification "$option"
+		make_clean "$option"
 
 		echo -e "Option -s in progress...\n"
-
-        # Check if File Exists
-        if [ -e "progc/Project_S" ]; then
-            rm -f progc/Project_S    
-        # Handle errors if the removal command fails
-            if [ $? -ne 0 ]; then
-                echo "An error has occurred in the rm : exiting the program"
-                exit 13
-            fi
-        fi
-
-        # Compilation
-        make -C progc Project_S
-        # Handle errors if the compilation command fails
-        if [ $? -ne 0 ]; then
-        echo "An error has occurred in the compilation : exiting the program"
-        		# Displays the execution time
-				echo "==========================TIMER=========================="
-				echo "          The Option -s took ${execution_time} seconds to run."
-				echo "========================================================="
-        exit 14
-        fi
-        echo # Line break
-		
-		make -C progc Project_S
 		
 		# Extract Route_id, Step_id and Distance from the data file
 		cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
@@ -603,7 +624,7 @@ EOF
 		./progc/Project_S temp/secondtemp.csv
 		
 		# Recover the first 50
-		head -n 50 temp/secondtemp.csv > temp/finaltemp.csv
+		head -n 50 temp/thirdtemp.csv > temp/finaltemp.csv
 		
 		# Set the output
 		output_file="TreatmentS.png"
@@ -685,11 +706,11 @@ EOF
     esac
 done
 
-# Moves all charts to the demo folder and keeps the last two executions in hystory
-mv images/*.png demo/ 2>/dev/null 
+# Moves finaltemp.csv to the demo folder
+mv temp/finaltemp.csv demo/ 2>/dev/null 
 cd demo
-
-if [ -n "$(ls -A *.csv 2>/dev/null)" ]; then
-    ls -t *.csv | tail -n +6 | xargs -I {} find . -name {} -type f -delete
+# Keep the last two executions in history
+if [ -n "$(ls -A finaltemp*.csv 2>/dev/null)" ]; then
+    ls -t finaltemp*.csv | tail -n +3 | xargs -I {} rm --
 fi
 cd ..
