@@ -340,7 +340,7 @@ EOF
 			xdg-open "images/Treatment_1.png"
 			
 			# Clears temporary files needed for this option
-			rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+			rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv images/Treatment1.png 
 			
 			# Records the end time
 			end_time=$(date +%s)
@@ -416,13 +416,13 @@ EOF
 			convert -rotate 90 "$output_file" "temp_rotated.png"
 			
 			# Put the histogramm into the correct file
-			mv "temp_rotated.png" "images/Treatment_2.png"
+			mv "temp_rotated.png" "images/Treatment_2.png" 
 			
 			# Open the visualizer of graphics for the right .png
 			xdg-open "images/Treatment_2.png"
 			
 			# Clears temporary files needed for this treatment
-			rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
+			rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv images/Treatment2.png
 			
 			# Records the end time
 			end_time=$(date +%s)
