@@ -1,6 +1,6 @@
 # CY-TRUCK
 
-Ce projet a pour but de gérer un fichier `.csv` et le modifier selon différents traitements.
+Ce projet a pour but de gérer un fichier `.csv` et de le modifier selon différents traitements qui qont automatisés par un script `.sh`.
 
 ## Sommaire
 
@@ -14,7 +14,7 @@ Ce projet a pour but de gérer un fichier `.csv` et le modifier selon différent
 
 Une fois le programme lancé, l'utilisateur a le choix entre plusieurs traitements prédéfinis.
 
-L'utilisateur peut ensuite choisir un filtre à apposer sur l'image parmi la liste suivante :
+L'utilisateur peut ensuite choisir un ou plusieurs traitement par compilation parmi la liste suivante :
  
 | Traitement | Objectif | 
 |----------|:-------------:|
@@ -23,22 +23,23 @@ L'utilisateur peut ensuite choisir un filtre à apposer sur l'image parmi la lis
 | TRAITEMENT [L] | les 10 trajets les plus longs : option -l | 
 | TRAITEMENT [T] | les 10 villes les plus traversées : option -t  | 
 | TRAITEMENT [S] | statistiques sur les étapes : option -s | 
+| BONUS [I] | permet de récupérer les deux dernières commandes passées au terminal |
 
 ## Guides des commandes
 
 A partir du terminal:
 
-* Pour compiler : `make`. Permet d'initialiser/vérifier tous les répertoires et fichiers nécessaires à l'execution du programme, puis compile le code. 
-* Pour lancer le programme :  `make run`.
-* Pour nettoyer le programme : `make clean`. Permet de nettoyer tous les répertoires et fichiers nécessaires à l'execution du programme. 
-
+* Pour compiler :
+     1) Se placer dans le dossier CY-TRUCK grâce à la commande `cd CY-TRUCK`après avoir téléchargé le projet.
+     2) Compiler le projet grâce à `./script.sh FICHIER.CSV -h` ->  Cela vous permet de passer en revue tout les traitements possibles du projet.
+        (NB : lorsque l'argument vaut `-h` les autres arguments sont automatiquement ignorés) 
+     3) Une fois avoir choisi un ou plusieurs traitements veuillez réecrire la ligne précédente : `./script.sh FICHIER.CSV -TRAITEMENTS_CHOISIS`.
+     
 
 ## Technologies
 
-Ce projet a été réalisé sur les logiciel Visual Studio Code et VSCodium. Le langage utilisé est le shell principalement ainsi que le C.
-
+Ce projet a été réalisé sur le logiciel Visual Studio Code sur MacOS et gedit sur Linux. Le langage utilisé est principalement le shell ainsi que le C.
 Les différents fichiers utilisés sont enregistrés sur la plateforme Github et l'addresse de dépôt est : https://github.com/asmakaj/CY-TRUCK
-
 
 ## Auteurs
 
