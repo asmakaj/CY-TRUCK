@@ -684,3 +684,9 @@ EOF
             exit 15 ;;
     esac
 done
+
+# Moves all charts to the demo folder and keeps the last two executions in hystory
+mv images/*.png demo/
+cd demo
+ls -t *.png | tail -n +6 | xargs rm --
+cd ..
