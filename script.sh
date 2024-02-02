@@ -1,4 +1,4 @@
-#!/bin/bash
+	#!/bin/bash
 
 #				.|'''', '\\  //`     |''||''| '||'''|, '||   ||` .|'''', '||  //' 
 #				||        \\//          ||     ||   ||  ||   ||  ||       || //   
@@ -537,7 +537,7 @@ EOF
 		
 		#compilation of the programme_t.c thanks to the makefile and then recover the first 10 lines
 		./progc/Project_T1  temp/firsttemp.csv
-		head -n 11 temp/firsttemp.csv > temp/thirdtemp.csv
+		head -n 11 temp/secondtemp.csv > temp/thirdtemp.csv
 		
 		#compilation of the programme_t2.c thanks to the makefile who sort by alphabetical order
 		./progc/Project_T2 temp/thirdtemp.csv
@@ -573,7 +573,7 @@ EOF
 		set datafile separator ";"
 		
 		#enters the data from the end-of-processing file to draw the histogram
-		plot 'temp/thirdtemp.csv' using 2:xtic(1) lc rgb "#4b0082" title "Total routes", '' using 3 lc rgb "#800080" title "First Town"
+		plot 'temp/finaltemp.csv' using 2:xtic(1) lc rgb "#4b0082" title "Total routes", '' using 3 lc rgb "#800080" title "First Town"
 
 EOF
 
@@ -586,7 +586,7 @@ EOF
 		xdg-open "images/$output_file"
 		
 		# Clears temporary files
-		rm temp/firsttemp.csv temp/thirdtemp.csv
+		rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
 		
 		# Records the end time
 		end_time=$(date +%s)
@@ -661,8 +661,7 @@ EOF
 		xdg-open "images/TreatmentS.png"
 		
 		# Clears temporary files
-		rm temp/firsttemp.csv temp/secondtemp.csv 
-        # temp/output.csv temp/finaltemp.csv
+		rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
 		
 		# Records the end time
 		end_time=$(date +%s)
