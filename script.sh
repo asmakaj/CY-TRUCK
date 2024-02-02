@@ -21,27 +21,37 @@
 
 # Creation of temp and image folders
 create_directories(){
+directory="temp"
 
-    if [ -d "temp" ]
-    then
-        if [ -n "$(ls -A temp)" ]
-	then
-            rm -rf temp/*
-        fi
-    else
-        mkdir temp
-    fi
+if [ -d "$directory" ] && [ -z "$(ls -A "$directory")" ]
+then
+    # Code to execute if the directory exists and is empty
+    echo "The directory $directory exists and is empty."
+else
+    # Code to execute if the directory does not exist or is not empty
+    echo "The directory $directory either does not exist or is not empty."
+fi
 
-    if [ -d "images" ]
-    then
-        if [ -n "$(ls -A images)" ]
+directory2="images"
+
+if [ -d "$directory2" ] && [ -z "$(ls -A "$directory2")" ]
+then
+    # Code to execute if the directory exists and is empty
+    echo "The directory $directory2 exists and is empty."
+else
+    # Code to execute if the directory does not exist or is not empty
+    echo "The directory $directory2 either does not exist or is not empty."
+fi
+for directory in "temp" "images"
+do
+        if [ ! -d "$directory" ]
 	then
-            rm -rf images/*
+            mkdir "$directory"
         fi
-    else
-        mkdir images
-    fi
+    done
 }
+
+
 
 
 
