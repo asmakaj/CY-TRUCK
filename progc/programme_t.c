@@ -1,7 +1,6 @@
 
 /*
  * File Name: programme_t.c
- * Author:
  * Created on: January 6, 2024
  * Description:
     This program collects the different cities, the number of times they were crossed,
