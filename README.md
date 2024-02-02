@@ -55,11 +55,12 @@ A partir du terminal:
  * Pour l'utilisation :
     1) Après avoir compilé et essayé au moins un traitement toujours en tapant dans le terminal `./script.sh FICHIER.CSV -TRAITEMENTS_CHOISIS`, tous les dossiers   
        nécessaires au bon fonctionnement du projet seront crées.
-    2) Vous pouvez dès lors appliquer le ou les traitements de votre choix sur le fichier. A noter que les fichiers intermédiaires seront placés dans le dossier `temp` prévu à cet effet mais seront supprimés à la fin du traitement.
+    2) Vous pouvez dès lors appliquer le ou les traitements de votre choix sur le fichier. A noter que les fichiers intermédiaires seront placés dans le dossier `temp` prévu à cet effet mais seront supprimés        à la fin du traitement.
     3) A la fin de chacun des traitements (hormis le -h et -i) une fenêtre avec les résultats de traitement présenté sous forme de graphique sera automatiquement ouverte.
     4) A chaque nouveau traitement, tous les fichiers relevant du traitement précédent seront supprimés à l'exception des graphiques qui sont stockés dans le dossier     
        `images`.
     5)  Le dossier `demo` présente quant à lui les résultats d'executions pécédentes (`finaltemp.csv`) qui seront utilisés pour les graphiques.
+    6)  Pour supprimer les fichiers générés lors de la compilation du Makefile notament pourles traitement -s et -t, il faut se placer dans le dossier `progc` et utiliser la commande `make clean`.
        
 
 ## Technologies
