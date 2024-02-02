@@ -236,7 +236,7 @@ EOF
 		
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The option -D1 took ${execution_time} seconds to run."
+		echo "          The option -d1 took ${execution_time} seconds to run."
         echo "========================================================="
 
         ;;
@@ -246,7 +246,7 @@ EOF
 	    # Saves the start time
 		start_time=$(date +%s)
 		
-		echo -e "Option -D2 in progress...\n"
+		echo -e "Option -d2 in progress...\n"
 		
 		# Gets the total distance travelled by each driver
 		LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" > temp/firsttemp.csv
@@ -318,7 +318,7 @@ EOF
 		
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The Option -D2 took ${execution_time} seconds to run."
+		echo "          The Option -d2 took ${execution_time} seconds to run."
         echo "========================================================="
 		
         ;;
@@ -327,7 +327,7 @@ EOF
 		# Saves the start time
 		start_time=$(date +%s)
 		
-		echo -e "Option -L in progress...\n"
+		echo -e "Option -l in progress...\n"
 		
 		# Recovers the total distance of each journey
 		LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" > temp/firsttemp.csv
@@ -391,7 +391,7 @@ EOF
 		
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The Option -L took ${execution_time} seconds to run."
+		echo "          The Option -l took ${execution_time} seconds to run."
         echo "========================================================="
 		
         ;;
@@ -401,7 +401,7 @@ EOF
 		# Saves the start time
 		start_time=$(date +%s)
 		
-		echo -e "Option -T in progress...\n"
+		echo -e "Option -t in progress...\n"
 		
 		# Check the executable c
 		executable_verification "$option"
@@ -424,7 +424,7 @@ EOF
             echo "An error has occurred in the compilation : exiting the program"
 					# Displays the execution time
 					echo "==========================TIMER=========================="
-					echo "          The Option -T took ${execution_time} seconds to run."
+					echo "          The Option -t took ${execution_time} seconds to run."
 					echo "========================================================="
             exit 10
         fi
@@ -447,7 +447,7 @@ EOF
             echo "An error has occurred in the compilation : exiting the program"
             		# Displays the execution time
 					echo "==========================TIMER=========================="
-					echo "          The Option -T took ${execution_time} seconds to run."
+					echo "          The Option -t took ${execution_time} seconds to run."
 					echo "========================================================="
             exit 12
         fi
@@ -554,7 +554,7 @@ EOF
 		
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The Option -T took ${execution_time} seconds to run."
+		echo "          The Option -t took ${execution_time} seconds to run."
         echo "========================================================="
     
     ;;
@@ -568,7 +568,7 @@ EOF
         executable_verification "$option"
         files_o_verification "$option"
 
-		echo -e "Option -S in progress...\n"
+		echo -e "Option -s in progress...\n"
 
         # Check if File Exists
         if [ -e "progc/Project_S" ]; then
@@ -587,7 +587,7 @@ EOF
         echo "An error has occurred in the compilation : exiting the program"
         		# Displays the execution time
 				echo "==========================TIMER=========================="
-				echo "          The Option -S took ${execution_time} seconds to run."
+				echo "          The Option -s took ${execution_time} seconds to run."
 				echo "========================================================="
         exit 14
         fi
@@ -655,7 +655,7 @@ EOF
 		# Displays the execution time
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The Option -T took ${execution_time} seconds to run."
+		echo "          The Option -s took ${execution_time} seconds to run."
         echo "========================================================="
 		
 	;;
