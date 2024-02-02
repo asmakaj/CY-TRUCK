@@ -8,7 +8,7 @@ Ce projet a pour but de gérer un fichier `.csv` et de le modifier selon différ
 * [Présentation du projet et ses composants](#présentation-du-projet-et-ses-composants)
 * [Guides des commandes](#guides-des-commandes)
 * [Technologies](#technologies)
-* [Auteurs](#auteurs)
+* [Auteures](#auteures)
 
 
 ## Informations générales
