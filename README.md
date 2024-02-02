@@ -8,7 +8,7 @@ Ce projet a pour but de gérer un fichier `.csv` et de le modifier selon différ
 * [Présentation du projet et ses composants](#présentation-du-projet-et-ses-composants)
 * [Guides des commandes](#guides-des-commandes)
 * [Technologies](#technologies)
-* [Auteurs](#auteurs)
+* [Auteures](#auteures)
 
 
 ## Informations générales
@@ -46,7 +46,7 @@ NB : - le dossier `progc` supporte un sous dossier nécessaire au `makefile` qui
 A partir du terminal:
 
 * Pour compiler :
-     1) Se placer dans le dossier CY-TRUCK grâce à la commande `cd CY-TRUCK`après avoir téléchargé l'ensemble du composant du projet.
+     1) Se placer dans le dossier CY-TRUCK grâce à la commande `cd CY-TRUCK`après avoir téléchargé l'ensemble des composants du projet.
      2) Compiler *pour la première fois* le projet grâce à `./script.sh FICHIER.CSV -h` ->  Cela vous permet de passer en revue tout les traitements possibles du projet et à         noter que le FICHIER.CSV est aux choix de l'utilisateur.
         (NB : lorsque l'argument vaut `-h` les autres arguments sont automatiquement ignorés ainsi compiler des traitements en plus du -h n'est pas pertinent) 
      3) Une fois avoir choisi un ou plusieurs traitements veuillez réecrire la ligne précédente avec le traitement de votre choix (-d1, -d2, -l, -s et -t) : `./script.sh     
@@ -61,6 +61,7 @@ A partir du terminal:
        `images`.
     5)  Le dossier `demo` présente quant à lui les résultats d'executions pécédentes (`finaltemp.csv`) qui seront utilisés pour les graphiques.
     6)  Pour supprimer les fichiers générés lors de la compilation du Makefile notament pourles traitement -s et -t, il faut se placer dans le dossier `progc` et utiliser la commande `make clean`.
+    7)  L'option -i bonus ne s'utilise qu'après avoir réalisé aux moins 2 commandes dans le terminal.
        
 
 ## Technologies
