@@ -10,9 +10,7 @@
     Route_ID;min_distance;max_distance;average_distance;(max_distance-min_distance)
  */
 
-
 #include "programme_s.h"
-
 
 /*
     Function : createNodeABR
@@ -73,7 +71,7 @@ pTree insertABR(pTree abr, int route_ID, int step_ID, float distance){
     Description : Read data from CSV and add these data to the tree
     Returns : the updated ABR
  */
-pTree readCSV(const char* data, pTree abr) {
+pTree readCSV(const char* data, pTree abr){
     FILE* file = fopen(data, "r");
     if (file == NULL) {
         perror("Error opening the file");
@@ -114,7 +112,7 @@ int max2(int a, int b){
     Description : Find the minimum between 2 values
     Returns : the minimum value
  */
-int min2(int a, int b) {
+int min2(int a, int b){
     return (a < b) ? a : b;
 }
 
@@ -123,7 +121,7 @@ int min2(int a, int b) {
     Description : Find the maximum between 3 values
     Returns : the maximum value
  */
-int max3(int a, int b, int c) {
+int max3(int a, int b, int c){
     return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
 }
 
@@ -302,7 +300,7 @@ spTree fillAVL(pTree abr, spTree avl, int h){
     Function : infixreverse
     Description : Infix path of the AVL and print its values in the output_file
  */
-void infixreverse(spTree avl, FILE* file, int* i) {
+void infixreverse(spTree avl, FILE* file, int* i){
     if (avl != NULL) {
         infixreverse(avl->pRight, file, i);
         (*i)++;
@@ -315,7 +313,7 @@ void infixreverse(spTree avl, FILE* file, int* i) {
     Function : freeABR
     Description : Releases the memory allocated for the ABR
  */
-void freeABR(pTree abr) {
+void freeABR(pTree abr){
     if (abr == NULL) {
         return;
     }
