@@ -495,7 +495,7 @@ EOF
 		
 		# Check the executable c
 		executable_verification "$option"
-        files_o_verification "$option"
+		files_o_verification "$option"
 		make_clean "$option"
 
 		
@@ -607,11 +607,12 @@ EOF
 		# Saves the start time
 		start_time=$(date +%s)
 		
-        executable_verification "$option"
-        files_o_verification "$option"
+		echo -e "Option -s in progress...\n"
+		
+		executable_verification "$option"
+		files_o_verification "$option"
 		make_clean "$option"
 
-		echo -e "Option -s in progress...\n"
 		
 		# Extract Route_id, Step_id and Distance from the data file
 		cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
@@ -622,6 +623,8 @@ EOF
 		
 		# Recover the first 50
 		head -n 50 temp/thirdtemp.csv > temp/finaltemp.csv
+		
+		
 		
 		# Set the output
 		output_file="TreatmentS.png"
@@ -634,7 +637,7 @@ EOF
 		
 		# define the output style and the title
 		set terminal pngcairo enhanced font 'arial,10' size 1100,700
-		set output 'images/TreatmentS.png'
+		set output 'TreatmentS.png'
 		set datafile separator ";"
 		set title 'Option -s: Distance = f(Route)'
 		
@@ -655,13 +658,13 @@ EOF
 ###################################### END OF GNUPLOT ####################################
            
 		# put the histogramm into the correct file
-		mv "images/TreatmentS.png" images/
+		mv "TreatmentS.png" images/
 		
 		# Open the visualizer of graphics for the right .png
 		xdg-open "images/TreatmentS.png"
 		
 		# Clears temporary files
-		rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+		#rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
 		
 		# Records the end time
 		end_time=$(date +%s)
