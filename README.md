@@ -1,6 +1,6 @@
 # CY-TRUCK
 
-Ce projet a pour but de gérer un fichier `.csv` et de le modifier selon différents traitements qui qont automatisés par un script `.sh`.
+Ce projet a pour but de gérer un fichier `.csv` et de le modifier selon différents traitements qui sont automatisés par un script `.sh`.
 
 ## Sommaire
 
@@ -41,7 +41,7 @@ A partir du terminal:
 Ce projet a été réalisé sur le logiciel Visual Studio Code sur MacOS et gedit sur Linux. Le langage utilisé est principalement le shell ainsi que le C.
 Les différents fichiers utilisés sont enregistrés sur la plateforme Github et l'addresse de dépôt est : https://github.com/asmakaj/CY-TRUCK
 
-## Auteurs
+## Auteures
 
 - [@DeulyneDestin](https://github.com/Deulyne)
 - [@EmmaDosSantos](https://github.com/emmadsnt)
