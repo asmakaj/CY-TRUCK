@@ -89,6 +89,7 @@ files_o_verification(){
     fi
 }
 
+# Checks whether the paths specified in the makefile for compilation exist 
 make_clean() {
     case $1 in
         -t)
@@ -182,12 +183,10 @@ make_clean() {
 }
 
 
-###### MAIN #######
-
+############################## MAIN ###################################
 
 # Recovery of the CSV file passed as argument
 input_file=$1
-
 
 # Checking the existence of the file
 if [ ! -f "$input_file" ]
@@ -202,46 +201,44 @@ then
     exit 7
 fi
 
-
 # Creation of the "data" folder if it does not exist
 mkdir -p data
 # Copy the CSV file to the data folder
 cp "$input_file" data/ 
 
 
-# Option h
+# Help option 
 # Loop that scans all arguments by checking the presence of the -t
 for arg in "$@"
 do
     # If an argument is equal to "-h", then the help is displayed
     if [ "$arg" == "-h" ]
     then
-echo "------------------------------------------------------------ "
-echo "                     _   _      _       "
-echo "                    | | | | ___| |_ __  "
-echo "                    | |_| |/ _ \ | '_ \ "
-echo "                    |  _  |  __/ | |_) |"
-echo "                    |_| |_|\___|_| .__/ "
-echo "                                 |_|    "
-echo "-------------------------------------------------------------"
-echo -e "-> The various options <-"
-echo "   -d1 : Drivers with the most trips"
-echo "   -d2 : Drivers and the longest distance"
-echo "   -l : Top 10 longest trips"
-echo "   -t : Top 10 cities most traversed"
-echo "   -s : Statistics on the steps"
-echo "   -i : (bonus) Get the last two commands from the history"
-echo "-------------------------------------------------------------"
+	echo "------------------------------------------------------------ "
+	echo "                     _   _      _       "
+	echo "                    | | | | ___| |_ __  "
+	echo "                    | |_| |/ _ \ | '_ \ "
+	echo "                    |  _  |  __/ | |_) |"
+	echo "                    |_| |_|\___|_| .__/ "
+	echo "                                 |_|    "
+	echo "-------------------------------------------------------------"
+	echo -e "-> The various options <-"
+	echo "   -d1 : Drivers with the most trips"
+	echo "   -d2 : Drivers and the longest distance"
+	echo "   -l : Top 10 longest trips"
+	echo "   -t : Top 10 cities most traversed"
+	echo "   -s : Statistics on the steps"
+	echo "   -i : (bonus) Get the last two commands from the history"
+	echo "-------------------------------------------------------------"
 
     exit 8
     fi
 done
 
-
 # Check temp and image directories
 create_directories
 
-###### PROCESSING EXECUTION
+############# PROCESSING EXECUTION #####################
 
 # The first argument is the CSV file
 input_file=$1
