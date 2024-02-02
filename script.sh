@@ -18,26 +18,40 @@
 
 ###### FUNCTIONS #######
 
+
 # Creation of temp and image folders
 create_directories(){
-    temp_folder="temp"
-    images_folder="images"
-    
-    # Check if the temp directory exists
-    if [ -d "$temp_folder" ]; then
-        # Use rm to delete all files and subdirectories in temp
-        rm -rf "$temp_folder"/*
-    fi
+directory="temp"
 
-    # Check if the images directory exists
-    if [ -d "$images_folder" ]; then
-        # Use rm to delete all files and subdirectories in images
-        rm -rf "$images_folder"/*
-    fi
+if [ -d "$directory" ] && [ -z "$(ls -A "$directory")" ]
+then
+    # Code to execute if the directory exists and is empty
+    echo "The directory $directory exists and is empty."
+else
+    # Code to execute if the directory does not exist or is not empty
+    echo "The directory $directory either does not exist or is not empty."
+fi
 
-    # Create the temp and images directories
-    mkdir -p "$temp_folder" "$images_folder"
+directory2="images"
+
+if [ -d "$directory2" ] && [ -z "$(ls -A "$directory2")" ]
+then
+    # Code to execute if the directory exists and is empty
+    echo "The directory $directory2 exists and is empty."
+else
+    # Code to execute if the directory does not exist or is not empty
+    echo "The directory $directory2 either does not exist or is not empty."
+fi
+for directory in "temp" "images"
+do
+        if [ ! -d "$directory" ]
+	then
+            mkdir "$directory"
+        fi
+    done
 }
+
+
 
 
 
@@ -336,7 +350,7 @@ EOF
 			xdg-open "images/Treatment_1.png"
 			
 			# Clears temporary files needed for this option
-			rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+			rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv images/Treatment1.png 
 			
 			# Records the end time
 			end_time=$(date +%s)
@@ -412,13 +426,13 @@ EOF
 			convert -rotate 90 "$output_file" "temp_rotated.png"
 			
 			# Put the histogramm into the correct file
-			mv "temp_rotated.png" "images/Treatment_2.png"
+			mv "temp_rotated.png" "images/Treatment_2.png" 
 			
 			# Open the visualizer of graphics for the right .png
 			xdg-open "images/Treatment_2.png"
 			
 			# Clears temporary files needed for this treatment
-			rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
+			rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv images/Treatment2.png
 			
 			# Records the end time
 			end_time=$(date +%s)
