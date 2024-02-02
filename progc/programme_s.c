@@ -220,7 +220,7 @@ spTree equilibrageAVL(spTree avl){
 /*
     Function : createNodeAVL
     Description : Creates a new AVL node
-    Parameters : necessary information to initialize the new node
+    Parameters : necessary informations to initialize the new node
     Returns : the new node
  */
 spTree createNodeAVL(pTree abr){
@@ -355,7 +355,7 @@ int main(int argc, char *argv[]){
     int h = 0;
     avl = fillAVL(abr, avl, h);
 
-    // Write the information contained in the avl in an output csv file
+    // Write the informations contained in the avl in an output csv file
     FILE *file = fopen("temp/secondtemp.csv", "w");
     if (file == NULL) {
         perror("Error when opening the file...\n");
