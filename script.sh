@@ -109,13 +109,25 @@ do
     # If an argument is equal to "-h", then the help is displayed
     if [ "$arg" == "-h" ]
     then
+
     echo "---------------------------------------------------"
-    echo "Aide : Options possibles"
+    echo "---------------------------------------------------"
+    echo "/**      **  ********  **        ******* "
+    echo "/**     /** /**/////  /**       /**////**"
+    echo "/**     /** /**       /**       /**   /**"
+    echo "/********** /*******  /**       /******* "
+    echo "/**//////** /**////   /**       /**////  "
+    echo "/**     /** /**       /**       /**      "
+    echo "/**     /** /******** /******** /**      "
+    echo "//      // //////// //////// //        "
+    echo "  "
     echo "-d1 : Conducteurs avec le plus de trajets"
     echo "-d2 : Conducteurs et la plus grande distance"
     echo "-l : Les 10 trajets les plus longs"
     echo "-t : Les 10 villes les plus traversees "
     echo "-s : Statistiques sur les etapes"
+
+    echo "---------------------------------------------------"
     echo "---------------------------------------------------"
 
     exit 0
@@ -158,21 +170,31 @@ do
             ;;
         -d2)
             echo "Traitement D2..."
+            
+            # Saves the start time
+            start_time=$(date +%s)
 
             # Gets the total distance travelled by each driver
-            LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" > temp/firsttemp.csv
-
-            # Sorts the list in descending order according to total distances and gets the first 10
-            sort -t';' -k2,2 -n -r temp/firsttemp.csv > temp/secondtemp.csv 
-            head -n 10 temp/secondtemp.csv >> temp/finaltemp.csv
-            echo "Les 10 conducteurs avec les plus grandes distances sont : "
-            cat temp/finaltemp.csv
+            LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5; total += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]/total}' "$input_file" | sort -t';' -k2,2 -n -r | head -n 10 > temp/finaltemp.csv
 
             # Clears temporary files
-            rm temp/firsttemp.csv temp/finaltemp.csv temp/secondtemp.csv
+            rm temp/firsttemp.csv temp/finaltemp.csv
+
+            # Records the end time
+            end_time=$(date +%s)
+
+            # Computes the difference
+            execution_time=$((end_time - start_time))
+
+            # Displays the execution time
+            echo "The program took ${execution_time} seconds to run."
+
             ;;
         -l)
             echo "Traitement L..."
+
+            # Saves the start time
+            start_time=$(date +%s)
 
             # Recovers the total distance of each journey
             LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" > temp/firsttemp.csv
@@ -184,12 +206,17 @@ do
             # Sorts trips by increasing identification number
             sort -t ';' -k1,1 -n -r temp/thirdtemp.csv  > temp/finaltemp.csv
 
-            longest_10_trajects=$(head -n 10 temp/finaltemp.csv)
-            echo "Les 10 trajets les plus longs sont : "
-            echo "$longest_10_trajects"
-
             # Clears temporary files
             rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
+
+            # Records the end time
+            end_time=$(date +%s)
+
+            # Computes the difference
+            execution_time=$((end_time - start_time))
+
+            # Displays the execution time
+            echo "The program took ${execution_time} seconds to run."
            
             ;;
         -t)
@@ -234,11 +261,13 @@ do
             }' "$input_file" > temp/firsttemp.csv
 
             # Sort by descending order the cities according to the number of times they are crossed and get the first 10
-            ./progc/progt temp/firsttemp.csv
+            gcc -o progc/progt -fsanitize=address progc/programme_t.c 
+            ./progc/progt temp/firsttemp.csv 
             head -n 11 temp/secondtemp.csv > temp/thirdtemp.csv
 
             # Alphabetize the top 10 cities 
-            ./progc/progt2 temp/thirdtemp.csv
+            gcc -o progc/progt2 -fsanitize=address progc/programme_t2.c
+            ./progc/progt2 temp/thirdtemp.csv 
             cat temp/finaltemp.csv
 
             # Clears temporary files
@@ -251,20 +280,21 @@ do
             executable_verification "$option"
 
             # Extract Route_id, Step_id and Distance from the data file
-            cut -d';' -f1,2,5 "$input_file" >> temp/firsttemp.csv
+            cut -d';' -f1,2,5 "$input_file" > temp/firsttemp.csv
             tail -n +2 temp/firsttemp.csv >> temp/secondtemp.csv
 
             # Start processing via the c program
             echo "Les statistiques sur les étapes sont : "
+            gcc -o progc/progs -fsanitize=address progc/programme_s.c
             ./progc/progs temp/secondtemp.csv
 
             # Recover the first 50 
-            head -n 50 temp/output.csv >> temp/finaltemp.csv
+            head -n 50 temp/output.csv > temp/finaltemp.csv
             echo "Les 50 premiers sont : "
             cat temp/finaltemp.csv
             
             # Clears temporary files
-            rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
+            #rm temp/output.csv temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
             ;;
 
         *)
