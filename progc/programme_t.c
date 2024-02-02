@@ -264,7 +264,7 @@ int main(int argc, char *argv[]){
     avl = fillAVL(argv[1], avl);
 
     // Write the information contained in the avl in an output csv file
-    FILE *file = fopen("temp/firsttemp.csv", "w");
+    FILE *file = fopen("temp/secondtemp.csv", "w");
     if (file == NULL) {
         perror("Error when opening the file...\n");
         exit(36);
