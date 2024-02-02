@@ -46,7 +46,7 @@ NB : - le dossier `progc` supporte un sous dossier nécessaire au `makefile` qui
 A partir du terminal:
 
 * Pour compiler :
-     1) Se placer dans le dossier CY-TRUCK grâce à la commande `cd CY-TRUCK`après avoir téléchargé l'ensemble du composant du projet.
+     1) Se placer dans le dossier CY-TRUCK grâce à la commande `cd CY-TRUCK`après avoir téléchargé l'ensemble des composants du projet.
      2) Compiler *pour la première fois* le projet grâce à `./script.sh FICHIER.CSV -h` ->  Cela vous permet de passer en revue tout les traitements possibles du projet et à         noter que le FICHIER.CSV est aux choix de l'utilisateur.
         (NB : lorsque l'argument vaut `-h` les autres arguments sont automatiquement ignorés ainsi compiler des traitements en plus du -h n'est pas pertinent) 
      3) Une fois avoir choisi un ou plusieurs traitements veuillez réecrire la ligne précédente avec le traitement de votre choix (-d1, -d2, -l, -s et -t) : `./script.sh     
