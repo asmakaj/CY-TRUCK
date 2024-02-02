@@ -12,7 +12,7 @@
 # Author: Deulyne DESTIN, Asma KAJEIOU, Emma DOS SANTOS
 # Created on: December 15, 2023
 # Description:
-#  This program will allow to perform different treatments in order to manage a csv file using programs c
+# This program will allow to perform different treatments in order to manage a csv file using programs c
 
 ###################################################################################################################################
 
