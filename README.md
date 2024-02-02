@@ -5,6 +5,7 @@ Ce projet a pour but de gérer un fichier `.csv` et de le modifier selon différ
 ## Sommaire
 
 * [Informations générales](#informations-générales)
+* [Présentation du projet et ses composants](#présentation-du-projet-et-ses-composants)
 * [Guides des commandes](#guides-des-commandes)
 * [Technologies](#technologies)
 * [Auteurs](#auteurs)
@@ -25,16 +26,37 @@ L'utilisateur peut ensuite choisir un ou plusieurs traitement par compilation pa
 | TRAITEMENT [S] | statistiques sur les étapes : option -s | 
 | BONUS [I] | permet de récupérer les deux dernières commandes passées au terminal |
 
+## Présentation du projet et ses composants
+
+Le projet se compose de cinq dossiers :
+| Dossier | Usage | 
+|----------|:-------------:|
+| data | stocke le fichier `.csv` | 
+| demo | stocke les résultats d'opérations précédentes | 
+| images | stocke les graphiques propres à chaque traitement  | 
+| progc | stocke tous les fichiers relatifs au makefile donc les fichiers de type `.c` `.h` `.o` ainsi que les éxecutables  | 
+| temp | stocke les fichiers intermédiaires utiles au bon fonctionnement du traitement |
+
+NB : le dossier `progc` supporte un sous dossier nécessaire au `makefile` qui est `files.o`
+
 ## Guides des commandes
 
 A partir du terminal:
 
 * Pour compiler :
      1) Se placer dans le dossier CY-TRUCK grâce à la commande `cd CY-TRUCK`après avoir téléchargé le projet.
-     2) Compiler le projet grâce à `./script.sh FICHIER.CSV -h` ->  Cela vous permet de passer en revue tout les traitements possibles du projet.
+     2) Compiler pour la première fois le projet grâce à `./script.sh FICHIER.CSV -h` ->  Cela vous permet de passer en revue tout les traitements possibles du projet.
         (NB : lorsque l'argument vaut `-h` les autres arguments sont automatiquement ignorés) 
      3) Une fois avoir choisi un ou plusieurs traitements veuillez réecrire la ligne précédente : `./script.sh FICHIER.CSV -TRAITEMENTS_CHOISIS`.
-     
+
+ * Pour l'utilisation :
+    1) Après avoir compilé et essayer au moins un traitement toujours en tapant dans le terminal `./script.sh FICHIER.CSV -TRAITEMENTS_CHOISIS`, tous les dossiers   
+       nécessaires au bon fonctionnement du projet seront crées.
+    2) Vous pouvez dès lors appliquer le ou les traitements de votre choix sur le fichier. A noter que les fichiers intermédiaires seront placés dans le dossier temp prévu à        cet effet mais seront supprimés à la fin du traitement.
+    3) A la fin de chacun des traitements (hormis le -h et -i) une fenêtre avec les résultats de traitement présentés sous forme de graphique sera automatiquement ouverte.
+    4) A chaque nouveau traitement, tous les fichiers relevant du traitement précédent seront supprimés à l'exception des graphiques.
+    5)  Le dossier `demo` présente quant à lui les résultats de traitement qui seront utilisés pour les graphique.
+       
 
 ## Technologies
 
