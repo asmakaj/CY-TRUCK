@@ -1,7 +1,6 @@
 
 /*
  * File Name: programme_s.c
- * Author:
  * Created on: December 25, 2023
  * Description:
     This program collects all the stages of the journeys made by different drivers.
