@@ -1,17 +1,17 @@
 #!/bin/bash
 
-#				.|'''', '\\  //`     |''||''| '||'''|, '||   ||` .|'''', '||  //' 
-#				||        \\//          ||     ||   ||  ||   ||  ||       || //   
-#				||         ||    ---    ||     ||...|'  ||   ||  ||       ||<<    
-#				||         ||           ||     || \\    ||   ||  ||       || \\   
-#				`|....'   .||.         .||.   .||  \\.  `|...|'  `|....' .||  \\.
+#								.|'''', '\\  //`     |''||''| '||'''|, '||   ||` .|'''', '||  //' 
+#								||        \\//          ||     ||   ||  ||   ||  ||       || //   
+#								||         ||    ---    ||     ||...|'  ||   ||  ||       ||<<    
+#								||         ||           ||     || \\    ||   ||  ||       || \\   
+#								`|....'   .||.         .||.   .||  \\.  `|...|'  `|....' .||  \\.
 
 ###################################################################################################################################
 
 # File Name: script.sh
 # Author: Deulyne DESTIN, Asma KAJEIOU, Emma DOS SANTOS
 # Created on: December 15, 2023
-# Description: This program will allow to perform different treatments in order to manage a csv file using programs c
+# Description: This program will allow to perform different options in order to manage a csv file using programs c
 
 ###################################################################################################################################
 
@@ -98,7 +98,7 @@ input_file=$1
 # Checking the existence of the file
 if [ ! -f "$input_file" ]
 then
-    echo "Le fichier $input_file n'existe pas."
+    echo -e "The file $input_file does not exist... \nPlease add the CSV file as follows :\n ./script.sh file.csv -options "
     exit 5
 fi
 # Checking the file extension
@@ -115,7 +115,7 @@ mkdir -p data
 cp "$input_file" data/ 
 
 
-# Treatment h
+# Option h
 # Loop that scans all arguments by checking the presence of the -t
 for arg in "$@"
 do
@@ -130,7 +130,7 @@ echo "                    |  _  |  __/ | |_) |"
 echo "                    |_| |_|\___|_| .__/ "
 echo "                                 |_|    "
 echo "-------------------------------------------------------------"
-echo -e "-> Possible Options of treatments"
+echo -e "-> The various options <-"
 echo "   -d1 : Drivers with the most trips"
 echo "   -d2 : Drivers and the longest distance"
 echo "   -l : Top 10 longest trips"
@@ -147,7 +147,7 @@ done
 # Check temp and image directories
 create_directories
 
-# PROCESSING EXECUTION
+###### PROCESSING EXECUTION
 
 # The first argument is the CSV file
 input_file=$1
@@ -163,7 +163,7 @@ do
 		# Saves the start time
 		start_time=$(date +%s)
 		
-		echo -e "Treatment -d1 in progress...\n"
+		echo -e "Option -d1 in progress...\n"
 		
 		# Collects the first stages of each journey and count the number of tajects per driver
 		grep ";1;" "$input_file" > temp/firsttemp.csv
@@ -224,7 +224,7 @@ EOF
 		# Open the visualizer of graphics for the right .png
 		xdg-open "images/Treatment_1.png"
 		
-		# Clears temporary files needed for this treatment
+		# Clears temporary files needed for this option
 		rm temp/firsttemp.csv temp/secondtemp.csv temp/thirdtemp.csv temp/finaltemp.csv
 		
 		# Records the end time
@@ -235,7 +235,7 @@ EOF
 		
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The Treatment -D1 took ${execution_time} seconds to run."
+		echo "          The option -D1 took ${execution_time} seconds to run."
         echo "========================================================="
 
         ;;
@@ -245,7 +245,7 @@ EOF
 	    # Saves the start time
 		start_time=$(date +%s)
 		
-		echo -e "Treatment -D2 in progress...\n"
+		echo -e "Option -D2 in progress...\n"
 		
 		# Gets the total distance travelled by each driver
 		LC_NUMERIC="en_US.UTF-8" awk -F';' '{count[$6] += $5} END {for (driver in count) printf "%s;%.6f\n", driver, count[driver]}' "$input_file" > temp/firsttemp.csv
@@ -306,8 +306,8 @@ EOF
 		# Open the visualizer of graphics for the right .png
 		xdg-open "images/Treatment_2.png"
 		
-		# Nettoyer les fichiers temporaires
-		rm temp/firsttemp.csv temp/secondtemp.csv  temp/finaltemp.csv
+		# Clears temporary files needed for this treatment
+		rm temp/firsttemp.csv temp/secondtemp.csv temp/finaltemp.csv
 		
 		# Records the end time
 		end_time=$(date +%s)
@@ -317,7 +317,7 @@ EOF
 		
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The Treatment -D2 took ${execution_time} seconds to run."
+		echo "          The Option -D2 took ${execution_time} seconds to run."
         echo "========================================================="
 		
         ;;
@@ -326,7 +326,7 @@ EOF
 		# Saves the start time
 		start_time=$(date +%s)
 		
-		echo -e "Treatment -L in progress...\n"
+		echo -e "Option -L in progress...\n"
 		
 		# Recovers the total distance of each journey
 		LC_NUMERIC="en_US.UTF-8" awk -F';' '{ sum[$1] += $5 } END { for (traject in sum) { formatted_value=sprintf("%.6f", sum[traject]); print traject ";" formatted_value } }' "$input_file" > temp/firsttemp.csv
@@ -390,7 +390,7 @@ EOF
 		
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The Treatment -L took ${execution_time} seconds to run."
+		echo "          The Option -L took ${execution_time} seconds to run."
         echo "========================================================="
 		
         ;;
@@ -400,7 +400,7 @@ EOF
 		# Saves the start time
 		start_time=$(date +%s)
 		
-		echo -e "Treatment -T in progress...\n"
+		echo -e "Option -T in progress...\n"
 		
 		# Check the executable c
 		executable_verification "$option"
@@ -423,7 +423,7 @@ EOF
             echo "An error has occurred in the compilation : exiting the program"
 					# Displays the execution time
 					echo "==========================TIMER=========================="
-					echo "          The Treatment -T took ${execution_time} seconds to run."
+					echo "          The Option -T took ${execution_time} seconds to run."
 					echo "========================================================="
             exit 53
         fi
@@ -446,7 +446,7 @@ EOF
             echo "An error has occurred in the compilation : exiting the program"
             		# Displays the execution time
 					echo "==========================TIMER=========================="
-					echo "          The Treatment -T took ${execution_time} seconds to run."
+					echo "          The Option -T took ${execution_time} seconds to run."
 					echo "========================================================="
             exit 53
         fi
@@ -553,7 +553,7 @@ EOF
 		
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The Treatment -T took ${execution_time} seconds to run."
+		echo "          The Option -T took ${execution_time} seconds to run."
         echo "========================================================="
     
     ;;
@@ -567,7 +567,7 @@ EOF
         executable_verification "$option"
         files_o_verification "$option"
 
-		echo -e "Treatment -S in progress...\n"
+		echo -e "Option -S in progress...\n"
 
         # Check if File Exists
         if [ -e "progc/Project_S" ]; then
@@ -586,7 +586,7 @@ EOF
         echo "An error has occurred in the compilation : exiting the program"
         		# Displays the execution time
 				echo "==========================TIMER=========================="
-				echo "          The Treatment -S took ${execution_time} seconds to run."
+				echo "          The Option -S took ${execution_time} seconds to run."
 				echo "========================================================="
         exit 61
         fi
@@ -604,7 +604,7 @@ EOF
 		# Recover the first 50
 		head -n 50 temp/secondtemp.csv > temp/finaltemp.csv
 		
-		# Configuration du graphique
+		# Set the output
 		output_file="TreatmentS.png"
 		
 
@@ -654,7 +654,7 @@ EOF
 		# Displays the execution time
 		# Displays the execution time
         echo "==========================TIMER=========================="
-		echo "          The Treatment -T took ${execution_time} seconds to run."
+		echo "          The Option -T took ${execution_time} seconds to run."
         echo "========================================================="
 		
 	;;
@@ -671,7 +671,7 @@ EOF
 			echo -e "*****COMMAND HISTORY*****\nThe two previous command writed in the terminal were :"
 			tail -n 2 "$inventory_file"
 		else
-			echo "The command history is not available."
+			echo "The command history is not available... Try again later."
 		fi
 		}
 		
