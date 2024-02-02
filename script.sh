@@ -71,7 +71,8 @@ executable_verification(){
         ;;
          *)
             echo "The option $option is not recognized... Please try again."
-            exit 4 ;;
+            exit 4 
+		;;
     esac
 }
 
@@ -82,7 +83,7 @@ files_o_verification(){
         # Handle errors if the removal command fails
         if [ $? -ne 0 ]; then
             echo "An error has occurred in the rm : exiting the program"
-            exit 10
+            exit 5
         fi
     fi
 }
@@ -99,13 +100,13 @@ input_file=$1
 if [ ! -f "$input_file" ]
 then
     echo -e "The file $input_file does not exist... \nPlease add the CSV file as follows :\n ./script.sh file.csv -options "
-    exit 5
+    exit 6
 fi
 # Checking the file extension
 if [[ ! "$input_file" =~ \.csv$ ]]
 then
     echo "The file $input_file is not a CSV. Please try again..."
-    exit 6
+    exit 7
 fi
 
 
@@ -139,7 +140,7 @@ echo "   -s : Statistics on the steps"
 echo "   -i : (bonus) Get the last two commands from the history"
 echo "-------------------------------------------------------------"
 
-    exit 7
+    exit 8
     fi
 done
 
@@ -412,7 +413,7 @@ EOF
             # Handle errors if the removal command fails
             if [ $? -ne 0 ]; then
                 echo "An error has occurred in the rm : exiting the program"
-                exit 23
+                exit 9
             fi
         fi
 
@@ -425,7 +426,7 @@ EOF
 					echo "==========================TIMER=========================="
 					echo "          The Option -T took ${execution_time} seconds to run."
 					echo "========================================================="
-            exit 53
+            exit 10
         fi
         echo # Line break
 
@@ -435,7 +436,7 @@ EOF
             # Handle errors if the removal command fails
             if [ $? -ne 0 ]; then
                 echo "An error has occurred in the rm : exiting the program"
-                exit 23
+                exit 11
             fi
         fi
 
@@ -448,7 +449,7 @@ EOF
 					echo "==========================TIMER=========================="
 					echo "          The Option -T took ${execution_time} seconds to run."
 					echo "========================================================="
-            exit 53
+            exit 12
         fi
         echo # Line break
 
@@ -575,7 +576,7 @@ EOF
         # Handle errors if the removal command fails
             if [ $? -ne 0 ]; then
                 echo "An error has occurred in the rm : exiting the program"
-                exit 8
+                exit 13
             fi
         fi
 
@@ -588,7 +589,7 @@ EOF
 				echo "==========================TIMER=========================="
 				echo "          The Option -S took ${execution_time} seconds to run."
 				echo "========================================================="
-        exit 61
+        exit 14
         fi
         echo # Line break
 		
@@ -680,6 +681,6 @@ EOF
 
 	 *)
             echo "The option $option is not recognized... Please try again."
-            exit 8 ;;
+            exit 15 ;;
     esac
 done

@@ -25,7 +25,7 @@ pTree createNodeABR(int route_ID, int step_ID, float distance, float min_distanc
     pTree pNew = malloc(sizeof(ABR_Tree));
     if (pNew == NULL) {
         printf("The malloc of the new ABR node failed... Please try again\n");
-        exit(1);
+        exit(16);
     }
 
     pNew->route_ID = route_ID;
@@ -78,7 +78,7 @@ pTree readCSV(const char* data, pTree abr) {
     FILE* file = fopen(data, "r");
     if (file == NULL) {
         perror("Error opening the file");
-        exit(EXIT_FAILURE);
+        exit(17);
     }
 
     int route_ID, step_ID;
@@ -132,7 +132,7 @@ int max3(int a, int b, int c) {
 spTree leftRotation(spTree avl){
     if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(2);
+        exit(18);
     }
     spTree pivot;
     int eq_a, eq_p;
@@ -154,7 +154,7 @@ spTree leftRotation(spTree avl){
 spTree rightRotation(spTree avl){
     if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(3);
+        exit(19);
     }
     spTree pivot;
     int eq_a, eq_p;
@@ -176,7 +176,7 @@ spTree rightRotation(spTree avl){
 spTree doubleLeftRotation(spTree avl){
     if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(4);
+        exit(20);
     }
     avl->pRight = rightRotation(avl->pRight);
     return leftRotation(avl);
@@ -186,7 +186,7 @@ spTree doubleLeftRotation(spTree avl){
 spTree doubleRightRotation(spTree avl){
         if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(5);
+        exit(21);
     }
     avl->pLeft = leftRotation(avl->pLeft);
     return rightRotation(avl);
@@ -196,7 +196,7 @@ spTree doubleRightRotation(spTree avl){
 spTree equilibrageAVL(spTree avl){
         if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(6);
+        exit(22);
     }
     if(avl->eq > 1){
         if(avl->pRight->eq >= 0){
@@ -227,7 +227,7 @@ spTree createNodeAVL(pTree abr){
     spTree new = malloc(sizeof(AVL_Tree));
     if (new == NULL) {
         printf("The malloc of the new AVL node failed... Please try again\n");
-        exit(7);
+        exit(23);
     }
 
     new->route_ID = abr->route_ID;
@@ -252,7 +252,7 @@ spTree insertAVL(spTree avl, int* h, pTree abr){
 
     if(new == NULL){
         printf("The malloc of the new AVL node failed... Please try again\n");
-        exit(8);
+        exit(24);
     }
 
     if(avl ==  NULL){
@@ -343,7 +343,7 @@ int main(int argc, char *argv[]){
     // Check if the number of arguments is correct
     if (argc != 2) {
         printf("There is more than two argument for the program. c\n");
-        exit (9);
+        exit (25);
     }
 
     // Retrieves the csv data for analysis and storage in an ABR
@@ -359,7 +359,7 @@ int main(int argc, char *argv[]){
     FILE *file = fopen("temp/secondtemp.csv", "w");
     if (file == NULL) {
         perror("Error when opening the file...\n");
-        exit(EXIT_FAILURE);
+        exit(26);
     }
     // initializing the count
     int i=0;

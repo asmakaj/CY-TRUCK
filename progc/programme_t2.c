@@ -22,7 +22,7 @@ spTree createNodeAVL(const char* city, int crossed, int departure_city){
     spTree new = malloc(sizeof(AVL_Tree));
     if (new == NULL) {
         printf("The malloc of the new AVL node failed... Please try again\n");
-        exit(1);
+        exit(37);
     }
 
     new->city = strdup(city); // Allocates memory and copies the city
@@ -76,7 +76,7 @@ int max3(int a, int b, int c) {
 spTree leftRotation(spTree avl){
     if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(2);
+        exit(38);
     }
     spTree pivot;
     int eq_a, eq_p;
@@ -98,7 +98,7 @@ spTree leftRotation(spTree avl){
 spTree rightRotation(spTree avl){
     if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(3);
+        exit(39);
     }
     spTree pivot;
     int eq_a, eq_p;
@@ -120,7 +120,7 @@ spTree rightRotation(spTree avl){
 spTree doubleLeftRotation(spTree avl){
     if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(4);
+        exit(40);
     }
     avl->pRight = rightRotation(avl->pRight);
     return leftRotation(avl);
@@ -130,7 +130,7 @@ spTree doubleLeftRotation(spTree avl){
 spTree doubleRightRotation(spTree avl){
         if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(5);
+        exit(41);
     }
     avl->pLeft = leftRotation(avl->pLeft);
     return rightRotation(avl);
@@ -140,7 +140,7 @@ spTree doubleRightRotation(spTree avl){
 spTree equilibrageAVL(spTree avl){
         if(avl == NULL){
         printf("The AVL is NULL... Please try again\n");
-        exit(6);
+        exit(42);
     }
     if(avl->eq > 1){
         if(avl->pRight->eq >= 0){
@@ -171,7 +171,7 @@ spTree insertAVL(spTree avl, int* h, const char* city, int crossed, int departur
 
     if(new == NULL){
         printf("The malloc of the new AVL node failed... Please try again\n");
-        exit(7);
+        exit(43);
     }
 
     if(avl ==  NULL){
@@ -216,7 +216,7 @@ spTree fillAVL(const char* data, spTree avl) {
     FILE* file1 = fopen(data, "r");
     if (file1 == NULL) {
         perror("Error opening the file...\n");
-        exit(EXIT_FAILURE);
+        exit(44);
     }
 
     char* city = malloc(30);
@@ -262,7 +262,7 @@ int main(int argc, char *argv[]){
     // Check if the number of arguments is correct
     if (argc != 2) {
         printf("There is more than one argument for the program. c\n");
-        exit (8);
+        exit (45);
     }
 
     // Sort cities by alphabetical order
@@ -273,7 +273,7 @@ int main(int argc, char *argv[]){
     FILE *file = fopen("temp/thirdtemp.csv", "w");
     if (file == NULL){
         perror("Error when opening the file...\n");
-        exit(EXIT_FAILURE);
+        exit(46);
     }
     infixreverse(avl, file);
     fclose(file);
