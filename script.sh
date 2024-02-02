@@ -1,16 +1,18 @@
 #!/bin/bash
 
+#				.|'''', '\\  //`     |''||''| '||'''|, '||   ||` .|'''', '||  //' 
+#				||        \\//          ||     ||   ||  ||   ||  ||       || //   
+#				||         ||    ---    ||     ||...|'  ||   ||  ||       ||<<    
+#				||         ||           ||     || \\    ||   ||  ||       || \\   
+#				`|....'   .||.         .||.   .||  \\.  `|...|'  `|....' .||  \\.
+
 ###################################################################################################################################
 
 # File Name: script.sh
 # Author: Deulyne DESTIN, Asma KAJEIOU, Emma DOS SANTOS
-# Created on: December ..., 2023
-# Description: (à mettre à jour)
-#   This program collects all the stages of the journeys made by different drivers.
-#   It will then sum the distances of the different steps while storing the min and max distances of the trips.
-#   These data will be sorted in descending order of "max distance - min distance",
-#   and then written to a csv output file as: 
-#   Route_ID;min_distance;max_distance;average_distance;(max_distance-min_distance)
+# Created on: December 15, 2023
+# Description:
+#  This program will allow to perform different treatments in order to manage a csv file using programs c
 
 ###################################################################################################################################
 
