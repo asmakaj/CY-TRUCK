@@ -18,25 +18,29 @@
 
 ###### FUNCTIONS #######
 
+
 # Creation of temp and image folders
 create_directories(){
-    temp_folder="temp"
-    images_folder="images"
-    
-    # Check if the temp directory exists
-    if [ -d "$temp_folder" ]; then
-        # Use rm to delete all files and subdirectories in temp
-        rm -rf "$temp_folder"/*
+
+    if [ -d "temp" ]
+    then
+        if [ -n "$(ls -A temp)" ]
+	then
+            rm -rf temp/*
+        fi
+    else
+        mkdir temp
     fi
 
-    # Check if the images directory exists
-    if [ -d "$images_folder" ]; then
-        # Use rm to delete all files and subdirectories in images
-        rm -rf "$images_folder"/*
+    if [ -d "images" ]
+    then
+        if [ -n "$(ls -A images)" ]
+	then
+            rm -rf images/*
+        fi
+    else
+        mkdir images
     fi
-
-    # Create the temp and images directories
-    mkdir -p "$temp_folder" "$images_folder"
 }
 
 
