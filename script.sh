@@ -316,7 +316,9 @@ EOF
 		execution_time=$((end_time - start_time))
 		
 		# Displays the execution time
-		echo -e "-----------------TIMER-----------------\nThe Treatment -D2 took ${execution_time} seconds to run.\n"
+        echo "==========================TIMER=========================="
+		echo "          The Treatment -D2 took ${execution_time} seconds to run."
+        echo "========================================================="
 		
         ;;
 
@@ -387,7 +389,9 @@ EOF
 		execution_time=$((end_time - start_time))
 		
 		# Displays the execution time
-		echo -e "-----------------TIMER-----------------\nThe Treatment -L took ${execution_time} seconds to run.\n"
+        echo "==========================TIMER=========================="
+		echo "          The Treatment -L took ${execution_time} seconds to run."
+        echo "========================================================="
 		
         ;;
            
@@ -417,7 +421,10 @@ EOF
         # Handle errors if the compilation command fails
         if [ $? -ne 0 ]; then
             echo "An error has occurred in the compilation : exiting the program"
-            echo -e "********TIME******\nThe Treatment T took 0s"
+					# Displays the execution time
+					echo "==========================TIMER=========================="
+					echo "          The Treatment -T took ${execution_time} seconds to run."
+					echo "========================================================="
             exit 53
         fi
         echo # Line break
@@ -437,7 +444,10 @@ EOF
         # Handle errors if the compilation command fails
         if [ $? -ne 0 ]; then
             echo "An error has occurred in the compilation : exiting the program"
-            echo -e "********TIME******\nThe Treatment T took 0s"
+            		# Displays the execution time
+					echo "==========================TIMER=========================="
+					echo "          The Treatment -T took ${execution_time} seconds to run."
+					echo "========================================================="
             exit 53
         fi
         echo # Line break
@@ -542,7 +552,9 @@ EOF
 		execution_time=$((end_time - start_time))
 		
 		# Displays the execution time
-		echo -e "-----------------TIMER-----------------\nThe Treatment -T took ${execution_time} seconds to run.\n"
+        echo "==========================TIMER=========================="
+		echo "          The Treatment -T took ${execution_time} seconds to run."
+        echo "========================================================="
     
     ;;
 
@@ -572,7 +584,10 @@ EOF
         # Handle errors if the compilation command fails
         if [ $? -ne 0 ]; then
         echo "An error has occurred in the compilation : exiting the program"
-        echo -e "********TIME******\nThe Treatment S took 0s"
+        		# Displays the execution time
+				echo "==========================TIMER=========================="
+				echo "          The Treatment -S took ${execution_time} seconds to run."
+				echo "========================================================="
         exit 61
         fi
         echo # Line break
@@ -637,7 +652,10 @@ EOF
 		execution_time=$((end_time - start_time))
 		
 		# Displays the execution time
-		echo -e "-----------------TIMER-----------------\nThe Treatment -S took ${execution_time} seconds to run.\n"
+		# Displays the execution time
+        echo "==========================TIMER=========================="
+		echo "          The Treatment -T took ${execution_time} seconds to run."
+        echo "========================================================="
 		
 	;;
 
